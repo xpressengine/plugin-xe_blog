@@ -1,6 +1,6 @@
 <?php
 
-namespace Post\XePlugin\Post;
+namespace Xpressengine\Plugins\Post;
 
 use Route;
 use Xpressengine\Plugin\AbstractPlugin;
@@ -27,7 +27,7 @@ class Plugin extends AbstractPlugin
             $this->getId(),
             function () {
                 Route::get('/', [
-                    'as' => 'post::index','uses' => 'Post\XePlugin\Post\Controller@index'
+                    'as' => 'post::index','uses' => 'Xpressengine\\Plugins\\Post\\Controllers\\Controller@index'
                 ]);
             }
         );

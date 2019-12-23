@@ -9,19 +9,19 @@
   "version": "1.0.0",
   "type": "xpressengine-plugin",
   "support": {
-    "email": "input@your.email"
+    "email": "developers@xpressengine.com"
   },
   "authors": [
     {
-      "name": "input your name",
-      "email": "input@your.email",
-      "homepage": "http://input.your.site",
+      "name": "XE Developers",
+      "email": "developers@xpressengine.com",
+      "homepage": "http://xpressengine.com",
       "role": "Developer"
     }
   ],
   "extra": {
     "xpressengine": {
-      "title": "Post plugin",
+      "title": "Post",
       "component": {}
     }
   },
@@ -30,7 +30,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Post\\XePlugin\\Post\\": "src/"
+      "Xpressengine\\Plugins\\Post\\": "src/"
     }
   }
 }

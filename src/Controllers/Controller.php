@@ -1,16 +1,17 @@
 <?php
 
-namespace Post\XePlugin\Post;
+namespace Xpressengine\Plugins\Post\Controllers;
 
 use XeFrontend;
 use XePresenter;
 use App\Http\Controllers\Controller as BaseController;
+use Xpressengine\Plugins\Post\Plugin;
 
 class Controller extends BaseController
 {
     public function index()
     {
-        $title = 'Post plugin';
+        $title = 'Post';
 
         // set browser title
         XeFrontend::title($title);
