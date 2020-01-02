@@ -3,7 +3,9 @@
 namespace Xpressengine\Plugins\Post;
 
 use Route;
+use XeInterception;
 use Xpressengine\Plugin\AbstractPlugin;
+use Xpressengine\Plugins\Post\Handlers\Handler;
 
 class Plugin extends AbstractPlugin
 {
@@ -14,9 +16,19 @@ class Plugin extends AbstractPlugin
      */
     public function boot()
     {
-        // implement code
-
         $this->route();
+
+        app()->singleton(Handler::class, function () {
+            $proxyHandler = XeInterception::proxy(Handler::class);
+
+            return new $proxyHandler(
+                app('xe.db')->connection(),
+                app('xe.document.config'),
+                app('xe.document.instance'),
+                app('request')
+            );
+        });
+        app()->alias(Handler::class, 'xe.post.handler');
     }
 
     protected function route()

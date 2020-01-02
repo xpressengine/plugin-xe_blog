@@ -22,7 +22,13 @@
   "extra": {
     "xpressengine": {
       "title": "Post",
-      "component": {}
+      "component": {
+        "module/post@post": {
+          "class": "Xpressengine\\Plugins\\Post\\Components\\Modules\\PostModule\\PostModule",
+          "name": "Post",
+          "description": "Post 모듈"
+        }
+      }
     }
   },
   "require": {
