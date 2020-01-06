@@ -33,4 +33,17 @@ class Handler extends DocumentHandler
 
         return $query->get();
     }
+
+    public function update($post, $inputs)
+    {
+        $attributes = $post->getAttributes();
+
+        foreach ($inputs as $name => $value) {
+            if (array_key_exists($name, $attributes)) {
+                $post->{$name} = $value;
+            }
+        }
+
+        return parent::put($post);
+    }
 }

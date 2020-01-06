@@ -14,6 +14,8 @@ class PostModule extends AbstractModule
             Route::get('/create', ['as' => 'create', 'uses' => 'ModuleController@create']);
             Route::post('/store', ['as' => 'store', 'uses' => 'ModuleController@store']);
             Route::get('/show/{id}', ['as' => 'show', 'uses' => 'ModuleController@show']);
+            Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'ModuleController@edit']);
+            Route::post('/update', ['as' => 'update', 'uses' => 'ModuleController@update']);
         }, ['namespace' => 'Xpressengine\Plugins\Post\Components\Modules\PostModule\Controllers']);
     }
 

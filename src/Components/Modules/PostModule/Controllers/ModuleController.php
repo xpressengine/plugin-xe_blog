@@ -41,7 +41,7 @@ class ModuleController extends Controller
 
     public function store(Request $request)
     {
-        $this->handler->store($request->all(), $this->instanceId);
+        $this->handler->store($request->originAll(), $this->instanceId);
 
         return redirect(instance_route('index', [], $this->instanceId));
     }
@@ -51,5 +51,22 @@ class ModuleController extends Controller
         $item = $this->handler->get($id, $this->instanceId);
 
         return XePresenter::make('post::src.Components.Modules.PostModule.views.show', compact('item'));
+    }
+
+    public function edit(Request $request, $instance, $id)
+    {
+        $item = $this->handler->get($id, $this->instanceId);
+
+        return XePresenter::make('post::src.Components.Modules.PostModule.views.edit', compact('item'));
+    }
+
+    public function update(Request $request, $instance)
+    {
+        $id = $request->get('postId');
+        $item = $this->handler->get($id, $this->instanceId);
+
+        $this->handler->update($item, $request->originAll());
+
+        return redirect(instance_route('show', ['id' => $id], $this->instanceId));
     }
 }
