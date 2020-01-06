@@ -30,6 +30,7 @@ class Handler extends DocumentHandler
     {
         $model = Post::division($attributes['instanceId']);
         $query = $model->where('instance_id', $attributes['instanceId']);
+        $query = $query->visible();
 
         return $query->get();
     }
