@@ -3,7 +3,6 @@
 namespace Xpressengine\Plugins\Post\Components\Modules\PostModule;
 
 use XeDB;
-use Xpressengine\Document\ConfigHandler;
 use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Plugins\Post\Handlers\PostConfigHandler;
 

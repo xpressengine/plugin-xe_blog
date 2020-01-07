@@ -70,7 +70,7 @@ class PostMetaDataHandler
 
     protected function saveSubTitle($post, $inputs)
     {
-        if (isset($inputs['sub_title']) === true) {
+        if (isset($inputs['sub_title']) === true && $inputs['sub_title'] !== '') {
             $subTitle = $post->getMetaDataQuery(MetaData::TYPE_SUB_TITLE)->get()->first();
 
             if ($subTitle === null) {
@@ -129,7 +129,7 @@ class PostMetaDataHandler
 
     protected function saveBackgroundColor($post, $inputs)
     {
-        if (isset($inputs['background_color']) === true) {
+        if (isset($inputs['background_color']) === true && $inputs['background_color'] !== '') {
             $backgroundColorMetaData = $post->getMetaDataQuery(MetaData::TYPE_BACKGROUND_COLOR)->get()->first();
 
             if ($backgroundColorMetaData === null) {
