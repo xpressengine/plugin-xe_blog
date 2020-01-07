@@ -27,4 +27,20 @@ class Post extends Document
                     ->orWhere('published_at', '<=', date('Y-m-d H:i:s'));
             });
     }
+
+    public function metaData()
+    {
+        return $this->hasMany(MetaData::class, 'post_id', 'id');
+    }
+
+    public function getSubTitle()
+    {
+        $subTitle = $this->metaData()->where('type', MetaData::TYPE_SUB_TITLE)->get()->first();
+
+        if ($subTitle !== null) {
+            return $subTitle['meta_data'];
+        }
+
+        return '';
+    }
 }

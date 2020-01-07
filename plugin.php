@@ -5,7 +5,9 @@ namespace Xpressengine\Plugins\Post;
 use Route;
 use XeInterception;
 use Xpressengine\Plugin\AbstractPlugin;
-use Xpressengine\Plugins\Post\Handlers\Handler;
+use Xpressengine\Plugins\Post\Handlers\PostHandler;
+use Xpressengine\Plugins\Post\Handlers\PostMetaDataHandler;
+use Xpressengine\Plugins\Post\Services\PostService;
 
 class Plugin extends AbstractPlugin
 {
@@ -18,8 +20,8 @@ class Plugin extends AbstractPlugin
     {
         $this->route();
 
-        app()->singleton(Handler::class, function () {
-            $proxyHandler = XeInterception::proxy(Handler::class);
+        app()->singleton(PostHandler::class, function () {
+            $proxyHandler = XeInterception::proxy(PostHandler::class);
 
             return new $proxyHandler(
                 app('xe.db')->connection(),
@@ -28,7 +30,15 @@ class Plugin extends AbstractPlugin
                 app('request')
             );
         });
-        app()->alias(Handler::class, 'xe.post.handler');
+        app()->alias(PostHandler::class, 'xe.post.handler');
+
+        app()->singleton(PostService::class, function () {
+            $postHandler = app('xe.post.handler');
+            $postMetaDataHandler = new PostMetaDataHandler();
+
+            return new PostService($postHandler, $postMetaDataHandler);
+        });
+        app()->alias(PostService::class, 'xe.post.service');
     }
 
     protected function route()
@@ -64,7 +74,10 @@ class Plugin extends AbstractPlugin
      */
     public function install()
     {
-        // implement code
+        $migration = new Migrations();
+        if ($migration->checkInstalled() === false) {
+            $migration->install();
+        }
     }
 
     /**
@@ -75,9 +88,12 @@ class Plugin extends AbstractPlugin
      */
     public function checkInstalled()
     {
-        // implement code
+        $migration = new Migrations();
+        if ($migration->checkInstalled() === false) {
+            return false;
+        }
 
-        return parent::checkInstalled();
+        return true;
     }
 
     /**
@@ -87,7 +103,11 @@ class Plugin extends AbstractPlugin
      */
     public function update()
     {
-        // implement code
+        //TODO update 소스로 변경
+        $migration = new Migrations();
+        if ($migration->checkInstalled() === false) {
+            $migration->install();
+        }
     }
 
     /**
@@ -98,8 +118,12 @@ class Plugin extends AbstractPlugin
      */
     public function checkUpdated()
     {
-        // implement code
+        //TODO update 소스로 변경
+        $migration = new Migrations();
+        if ($migration->checkInstalled() === false) {
+            return false;
+        }
 
-        return parent::checkUpdated();
+        return true;
     }
 }

@@ -1,4 +1,5 @@
 {{ $item->title }}
+{{ $item->getSubTitle() }}
 
 {!! $item->content() !!}
 
