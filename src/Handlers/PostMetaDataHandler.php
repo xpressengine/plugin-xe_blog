@@ -9,8 +9,6 @@ use Xpressengine\Plugins\Post\Models\MetaData;
 class PostMetaDataHandler
 {
     const UPLOAD_PATH = 'public/post';
-    const THUMBNAIL_UPLOAD_PATH = 'public/post/thumbnail';
-    const COVER_UPLOAD_PATH = 'public/post/cover';
 
     public function getSubTitle($post)
     {
@@ -39,10 +37,35 @@ class PostMetaDataHandler
         return $thumbnail;
     }
 
+    public function getCoverImage($post)
+    {
+        $coverMetaData = $post->getMetaDataQuery(MetaData::TYPE_COVER_IMAGE)->get()->first();
+
+        if ($coverMetaData === null) {
+             return null;
+        }
+
+        $coverImage = XeStorage::find($coverMetaData['meta_data']);
+
+        return $coverImage;
+    }
+
+    public function getBackgroundColor($post)
+    {
+        $backgroundColorMetaData = $post->getMetaDataQuery(MetaData::TYPE_BACKGROUND_COLOR)->get()->first();
+        if ($backgroundColorMetaData === null) {
+            return '';
+        }
+
+        return $backgroundColorMetaData['meta_data'];
+    }
+
     public function saveMetaData($post, $inputs)
     {
         $this->saveSubTitle($post, $inputs);
         $this->saveThumbnail($post, $inputs);
+        $this->saveCoverImage($post, $inputs);
+        $this->saveBackgroundColor($post, $inputs);
     }
 
     protected function saveSubTitle($post, $inputs)
@@ -84,6 +107,43 @@ class PostMetaDataHandler
                 'meta_data' => $file->id
             ]);
             $thumbnailMetaData->save();
+        }
+    }
+
+    protected function saveCoverImage($post, $inputs)
+    {
+        if (isset($inputs['cover_image']) === true) {
+            $coverImageFile = $inputs['cover_image'];
+
+            $file = XeStorage::upload($coverImageFile, self::UPLOAD_PATH);
+
+            $coverImageMetaData = new MetaData();
+            $coverImageMetaData->fill([
+                'post_id' => $post->id,
+                'type' => MetaData::TYPE_COVER_IMAGE,
+                'meta_data' => $file->id
+            ]);
+            $coverImageMetaData->save();
+        }
+    }
+
+    protected function saveBackgroundColor($post, $inputs)
+    {
+        if (isset($inputs['background_color']) === true) {
+            $backgroundColorMetaData = $post->getMetaDataQuery(MetaData::TYPE_BACKGROUND_COLOR)->get()->first();
+
+            if ($backgroundColorMetaData === null) {
+                $backgroundColorMetaData = new MetaData();
+                $backgroundColorMetaData->fill([
+                    'post_id' => $post->id,
+                    'type' => MetaData::TYPE_BACKGROUND_COLOR,
+                    'meta_data' => $inputs['background_color']
+                ]);
+            } else {
+                $backgroundColorMetaData['meta_data'] = $inputs['background_color'];
+            }
+
+            $backgroundColorMetaData->save();
         }
     }
 }

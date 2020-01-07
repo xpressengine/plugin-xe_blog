@@ -10,5 +10,9 @@
 
     <input type="text" name="published_at" value="{{ $item->published_at }}" placeholder="예약 발행(Y-m-d H:i:s)">
 
+    <hr>
+    <span>배경 컬러</span>
+    <input type="text" name="background_color" value="{{ $metaDataHandler->getBackgroundColor($item) }}">
+
     <button type="submit" class="xe-btn">저장</button>
 </form>

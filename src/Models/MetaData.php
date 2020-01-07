@@ -7,7 +7,7 @@ use Xpressengine\Database\Eloquent\DynamicModel;
 class MetaData extends DynamicModel
 {
     const TYPE_SUB_TITLE = 'sub_title';
-    const TYPE_COVER_TEXT = 'cover_text';
+    const TYPE_BACKGROUND_COLOR = 'background_color';
     const TYPE_COVER_THUMBNAIL = 'cover_thumbnail';
     const TYPE_COVER_IMAGE = 'cover_image';
 

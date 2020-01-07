@@ -1,7 +1,7 @@
 <table class="xe-table">
     @foreach ($items as $item)
         <tr>
-            <td>
+            <td @if ($metaDataHandler->getBackgroundColor($item) !== null) style="background-color: {{ $metaDataHandler->getBackgroundColor($item) }}" @endif>
                 <a href="{{ instance_route('show', ['id' => $item->id], $instanceId) }}">
                     @if ($metaDataHandler->getThumbnail($item) !== null)
                         <img src="{{ $metaDataHandler->getThumbnail($item, 'spill', 'S')->url() }}">
