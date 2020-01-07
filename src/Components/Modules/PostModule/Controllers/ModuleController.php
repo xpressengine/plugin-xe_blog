@@ -77,4 +77,13 @@ class ModuleController extends Controller
 
         return redirect(instance_route('show', ['id' => $id], $this->instanceId));
     }
+
+    public function delete(Request $request, $instance, $id)
+    {
+        $item = $this->handler->get($id, $this->instanceId);
+
+        $this->postService->delete($item, $this->instanceId);
+
+        return redirect(instance_route('index', [], $this->instanceId));
+    }
 }

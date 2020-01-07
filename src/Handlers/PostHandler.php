@@ -39,4 +39,14 @@ class PostHandler extends DocumentHandler
 
         return parent::put($post);
     }
+
+    public function trashPost($post)
+    {
+        $post->delete();
+    }
+
+    public function dropPost($post)
+    {
+        $post->forceDelete();
+    }
 }

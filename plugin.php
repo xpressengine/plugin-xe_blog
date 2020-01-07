@@ -36,8 +36,9 @@ class Plugin extends AbstractPlugin
         app()->singleton(PostService::class, function () {
             $postHandler = app('xe.post.handler');
             $postMetaDataHandler = new PostMetaDataHandler();
+            $postConfigHandler = app('xe.post.configHandler');
 
-            return new PostService($postHandler, $postMetaDataHandler);
+            return new PostService($postHandler, $postMetaDataHandler, $postConfigHandler);
         });
         app()->alias(PostService::class, 'xe.post.service');
 

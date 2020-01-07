@@ -4,6 +4,7 @@ namespace Xpressengine\Plugins\Post\Services;
 
 use XeDB;
 use Xpressengine\Http\Request;
+use Xpressengine\Plugins\Post\Handlers\PostConfigHandler;
 use Xpressengine\Plugins\Post\Handlers\PostHandler;
 use Xpressengine\Plugins\Post\Handlers\PostMetaDataHandler;
 
@@ -15,10 +16,14 @@ class PostService
     /** @var PostMetaDataHandler $metaDataHandler */
     protected $metaDataHandler;
 
-    public function __construct(PostHandler $postHandler, PostMetaDataHandler $metaDataHandler)
+    /** @var PostConfigHandler $postConfigHandler */
+    protected $postConfigHandler;
+
+    public function __construct(PostHandler $postHandler, PostMetaDataHandler $metaDataHandler, PostConfigHandler $postConfigHandler)
     {
         $this->postHandler = $postHandler;
         $this->metaDataHandler = $metaDataHandler;
+        $this->postConfigHandler = $postConfigHandler;
     }
 
     public function store(Request $request, $instanceId)
@@ -55,6 +60,25 @@ class PostService
         try {
             $this->postHandler->update($post, $inputs);
             $this->metaDataHandler->saveMetaData($post, $inputs);
+        } catch (\Exception $e) {
+            XeDB::rollback();
+
+            throw $e;
+        }
+        XeDB::commit();
+    }
+
+    public function delete($post, $instanceId)
+    {
+        XeDB::beginTransaction();
+        try {
+            $postConfig = $this->postConfigHandler->get($instanceId);
+            if ($postConfig->get('deleteToTrash') === true) {
+                $this->postHandler->trashPost($post);
+            } else {
+                $this->metaDataHandler->deleteMetaData($post);
+                $this->postHandler->dropPost($post);
+            }
         } catch (\Exception $e) {
             XeDB::rollback();
 

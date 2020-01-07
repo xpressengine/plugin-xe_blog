@@ -146,4 +146,48 @@ class PostMetaDataHandler
             $backgroundColorMetaData->save();
         }
     }
+
+    public function deleteMetaData($post)
+    {
+        $this->deleteSubTitle($post);
+        $this->deleteThumbnail($post);
+        $this->deleteCoverImage($post);
+        $this->deleteBackgroundColor($post);
+    }
+
+    protected function deleteSubTitle($post)
+    {
+        $post->getMetaDataQuery(MetaData::TYPE_SUB_TITLE)->delete();
+    }
+
+    protected function deleteThumbnail($post)
+    {
+        $thumbnailMetaData = $post->getMetaDataQuery(MetaData::TYPE_COVER_THUMBNAIL)->get()->first();
+        if ($thumbnailMetaData === null) {
+            return;
+        }
+
+        $file = XeStorage::find($thumbnailMetaData['meta_data']);
+        XeStorage::delete($file);
+
+        $post->getMetaDataQuery(MetaData::TYPE_COVER_THUMBNAIL)->delete();
+    }
+
+    protected function deleteCoverImage($post)
+    {
+        $coverImageMetaData = $post->getMetaDataQuery(MetaData::TYPE_COVER_IMAGE)->get()->first();
+        if ($coverImageMetaData === null) {
+            return;
+        }
+
+        $file = XeStorage::find($coverImageMetaData['meta_data']);
+        XeStorage::delete($file);
+
+        $post->getMetaDataQuery(MetaData::TYPE_COVER_IMAGE)->delete();
+    }
+
+    protected function deleteBackgroundColor($post)
+    {
+        $post->getMetaDataQuery(MetaData::TYPE_BACKGROUND_COLOR)->delete();
+    }
 }

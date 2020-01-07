@@ -32,6 +32,7 @@ class PostModule extends AbstractModule
             Route::get('/show/{id}', ['as' => 'show', 'uses' => 'ModuleController@show']);
             Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'ModuleController@edit']);
             Route::post('/update', ['as' => 'update', 'uses' => 'ModuleController@update']);
+            Route::post('/delete/{id}', ['as' => 'delete', 'uses' => 'ModuleController@delete']);
         }, ['namespace' => 'Xpressengine\Plugins\Post\Components\Modules\PostModule\Controllers']);
     }
 
