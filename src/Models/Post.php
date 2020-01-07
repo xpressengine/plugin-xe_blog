@@ -28,19 +28,8 @@ class Post extends Document
             });
     }
 
-    public function metaData()
+    public function getMetaDataQuery($metaDataType)
     {
-        return $this->hasMany(MetaData::class, 'post_id', 'id');
-    }
-
-    public function getSubTitle()
-    {
-        $subTitle = $this->metaData()->where('type', MetaData::TYPE_SUB_TITLE)->get()->first();
-
-        if ($subTitle !== null) {
-            return $subTitle['meta_data'];
-        }
-
-        return '';
+        return $this->hasMany(MetaData::class, 'post_id', 'id')->where('type', $metaDataType);
     }
 }

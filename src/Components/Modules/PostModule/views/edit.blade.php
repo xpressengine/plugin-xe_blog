@@ -1,7 +1,7 @@
 <form method="post" action="{{ instance_route('update', [], $instanceId) }}">
     <input type="hidden" name="postId" value="{{ $item->id }}">
     <input type="text" name="title" value="{{ $item->title }}">
-    <input type="text" name="sub_title" value="{{ $item->getSubTitle() }}">
+    <input type="text" name="sub_title" value="{{ $metaDataHandler->getSubTitle($item) }}">
 
     {!! editor($instanceId, [
         'content' => $item->content,

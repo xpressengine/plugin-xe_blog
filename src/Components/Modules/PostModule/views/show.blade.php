@@ -1,5 +1,5 @@
 {{ $item->title }}
-{{ $item->getSubTitle() }}
+{{ $metaDataHandler->getSubTitle($item) }}
 
 {!! $item->content() !!}
 

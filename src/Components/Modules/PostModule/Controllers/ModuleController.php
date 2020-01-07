@@ -6,6 +6,7 @@ use XePresenter;
 use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugins\Post\Handlers\PostHandler;
+use Xpressengine\Plugins\Post\Handlers\PostMetaDataHandler;
 use Xpressengine\Plugins\Post\Services\PostService;
 use Xpressengine\Routing\InstanceConfig;
 
@@ -31,6 +32,7 @@ class ModuleController extends Controller
 
         XePresenter::share('instanceId', $instanceId);
         XePresenter::share('handler', $handler);
+        XePresenter::share('metaDataHandler', new PostMetaDataHandler());
     }
 
     public function index()

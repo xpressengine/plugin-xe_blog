@@ -13,5 +13,7 @@
 
     <hr>
 
+    <input type="file" name="thumbnail">
+
     <button type="submit" class="xe-btn">저장</button>
 </form>
