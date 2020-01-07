@@ -7,7 +7,23 @@ use Xpressengine\Menu\AbstractModule;
 
 class PostModule extends AbstractModule
 {
+    /** @var InstanceManager $instanceManager */
+    protected $instanceManager;
+
+    public function __construct()
+    {
+        $documentConfigHandler = app('xe.document');
+        $postConfigHandler = app('xe.post.configHandler');
+
+        $this->instanceManager = new InstanceManager($documentConfigHandler, $postConfigHandler);
+    }
+
     public static function boot()
+    {
+        self::registerInstanceRoute();
+    }
+
+    protected static function registerInstanceRoute()
     {
         Route::instance(self::getId(), function () {
             Route::get('/', ['as' => 'index', 'uses' => 'ModuleController@index']);
@@ -26,7 +42,7 @@ class PostModule extends AbstractModule
 
     public function storeMenu($instanceId, $menuTypeParams, $itemParams)
     {
-        app('xe.editor')->setInstance($instanceId, 'editor/blockeditor@blockeditor');
+        $this->instanceManager->createModule($itemParams);
     }
 
     public function editMenuForm($instanceId)
@@ -46,7 +62,7 @@ class PostModule extends AbstractModule
 
     public function deleteMenu($instanceId)
     {
-
+        $this->instanceManager->deleteModule($instanceId);
     }
 
     public function getTypeItem($id)

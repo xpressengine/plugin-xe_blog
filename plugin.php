@@ -5,6 +5,7 @@ namespace Xpressengine\Plugins\Post;
 use Route;
 use XeInterception;
 use Xpressengine\Plugin\AbstractPlugin;
+use Xpressengine\Plugins\Post\Handlers\PostConfigHandler;
 use Xpressengine\Plugins\Post\Handlers\PostHandler;
 use Xpressengine\Plugins\Post\Handlers\PostMetaDataHandler;
 use Xpressengine\Plugins\Post\Services\PostService;
@@ -39,6 +40,13 @@ class Plugin extends AbstractPlugin
             return new PostService($postHandler, $postMetaDataHandler);
         });
         app()->alias(PostService::class, 'xe.post.service');
+
+        app()->singleton(PostConfigHandler::class, function () {
+            $configManager = app('xe.config');
+
+            return new PostConfigHandler($configManager);
+        });
+        app()->alias(PostConfigHandler::class, 'xe.post.configHandler');
     }
 
     protected function route()
