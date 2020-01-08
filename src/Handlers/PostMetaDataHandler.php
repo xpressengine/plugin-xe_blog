@@ -45,7 +45,8 @@ class PostMetaDataHandler
              return null;
         }
 
-        $coverImage = XeStorage::find($coverMetaData['meta_data']);
+        $coverImageFile = XeStorage::find($coverMetaData['meta_data']);
+        $coverImage = XeMedia::make($coverImageFile);
 
         return $coverImage;
     }

@@ -66,6 +66,8 @@ class ModuleController extends Controller
     {
         $item = $this->handler->get($id, $this->instanceId);
 
+        $item->setCanonical(instance_route('show', ['id' => $id], $this->instanceId));
+
         return XePresenter::make('post::src.Components.Modules.PostModule.views.show', compact('item'));
     }
 

@@ -4,11 +4,82 @@ namespace Xpressengine\Plugins\Post\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Xpressengine\Document\Models\Document;
+use Xpressengine\Plugins\Post\Handlers\PostMetaDataHandler;
+use Xpressengine\Seo\SeoUsable;
 use Xpressengine\Tag\Tag;
+use Xpressengine\User\Models\Guest;
+use Xpressengine\User\Models\UnknownUser;
 
-class Post extends Document
+class Post extends Document implements SeoUsable
 {
     use SoftDeletes;
+
+    protected $canonical;
+
+    public function getTitle()
+    {
+        $title = str_replace('"', '\"', $this->getAttribute('title'));
+
+        return $title;
+    }
+
+    public function getDescription()
+    {
+        return str_replace(
+            ['"', "\n"],
+            ['\"', ''],
+            $this->getAttribute('pure_content')
+        );
+    }
+
+    public function getKeyword()
+    {
+        return [];
+    }
+
+    public function getUrl()
+    {
+        return $this->canonical;
+    }
+
+    public function getAuthor()
+    {
+        if ($this->user !== null) {
+            return $this->user;
+        } elseif ($this->isGuest() === true) {
+            return new Guest;
+        } else {
+            return new UnknownUser;
+        }
+    }
+
+    public function getImages()
+    {
+        $images = [];
+        $postMetaData = new PostMetaDataHandler();
+
+        if ($thumbnail = $postMetaData->getThumbnail($this)) {
+            $images[] = $thumbnail;
+        }
+
+        if ($coverImage = $postMetaData->getCoverImage($this)) {
+            $images[] = $coverImage;
+        }
+
+        return $images;
+    }
+
+    public function setCanonical($url)
+    {
+        $this->canonical = $url;
+
+        return $this;
+    }
+
+    public function isGuest()
+    {
+        return $this->getAttribute('user_type') === self::USER_TYPE_GUEST;
+    }
 
     public function content()
     {
