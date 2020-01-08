@@ -2,13 +2,16 @@
 
 namespace Xpressengine\Plugins\Post\Components\Modules\PostModule\Controllers;
 
+use Auth;
 use XePresenter;
 use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
+use Xpressengine\Plugins\Post\Handlers\PostFavoriteHandler;
 use Xpressengine\Plugins\Post\Handlers\PostHandler;
 use Xpressengine\Plugins\Post\Handlers\PostMetaDataHandler;
 use Xpressengine\Plugins\Post\Services\PostService;
 use Xpressengine\Routing\InstanceConfig;
+use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
 
 class ModuleController extends Controller
 {
@@ -20,6 +23,9 @@ class ModuleController extends Controller
     /** @var PostService $postService */
     protected $postService;
 
+    /** @var PostFavoriteHandler $postFavoriteHandler */
+    protected $postFavoriteHandler;
+
     public function __construct()
     {
         $instanceId = InstanceConfig::instance()->getInstanceId();
@@ -29,6 +35,8 @@ class ModuleController extends Controller
         $this->handler = $handler;
 
         $this->postService = app('xe.post.service');
+
+        $this->postFavoriteHandler = new PostFavoriteHandler();
 
         XePresenter::share('instanceId', $instanceId);
         XePresenter::share('handler', $handler);
@@ -85,5 +93,26 @@ class ModuleController extends Controller
         $this->postService->delete($item, $this->instanceId);
 
         return redirect(instance_route('index', [], $this->instanceId));
+    }
+
+    public function setFavoriteState(Request $request)
+    {
+        if (Auth::check() === false) {
+            throw new AccessDeniedHttpException;
+        }
+
+        $user = Auth::user();
+        $postId = $request->get('postId');
+        $postItem = $this->handler->get($postId, $this->instanceId);
+
+        $favorite = false;
+        if ($this->postFavoriteHandler->isFavoritePost($postItem, $user) === false) {
+            $this->postFavoriteHandler->setFavoritePost($postItem, $user);
+            $favorite = true;
+        } else {
+            $this->postFavoriteHandler->unsetFavoritePost($postItem, $user);
+        }
+
+        return XePresenter::makeApi(['favorite' => $favorite]);
     }
 }

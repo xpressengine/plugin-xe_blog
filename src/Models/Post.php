@@ -32,4 +32,9 @@ class Post extends Document
     {
         return $this->hasMany(MetaData::class, 'post_id', 'id')->where('type', $metaDataType);
     }
+
+    public function favorite()
+    {
+        return $this->hasMany(PostFavorite::class, 'post_id', 'id');
+    }
 }

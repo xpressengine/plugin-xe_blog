@@ -24,6 +24,10 @@ class PostHandler extends DocumentHandler
         $query = $model->where('instance_id', $attributes['instanceId']);
         $query = $query->visible();
 
+        $query->with(['favorite' => function ($query) {
+            $query->where('user_id', auth()->user()->getId());
+        }]);
+
         return $query->get();
     }
 

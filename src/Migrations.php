@@ -64,6 +64,10 @@ class Migrations
 
             $table->string('post_id', 36);
             $table->string('user_id', 36);
+
+            $table->timestamps();
+
+            $table->index(['post_id', 'user_id']);
         });
     }
 }
