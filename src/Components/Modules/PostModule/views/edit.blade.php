@@ -14,5 +14,11 @@
     <span>배경 컬러</span>
     <input type="text" name="background_color" value="{{ $metaDataHandler->getBackgroundColor($item) }}">
 
+    <hr>
+    <span>태그</span>
+    {!! uio('uiobject/board@tag', [
+        'tags' => $item->tags->toArray()
+    ]) !!}
+
     <button type="submit" class="xe-btn">저장</button>
 </form>

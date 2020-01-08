@@ -4,6 +4,7 @@ namespace Xpressengine\Plugins\Post\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Xpressengine\Document\Models\Document;
+use Xpressengine\Tag\Tag;
 
 class Post extends Document
 {
@@ -36,5 +37,10 @@ class Post extends Document
     public function favorite()
     {
         return $this->hasMany(PostFavorite::class, 'post_id', 'id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'taggables', 'taggable_id', 'tag_id');
     }
 }

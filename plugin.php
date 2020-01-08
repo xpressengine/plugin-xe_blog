@@ -37,8 +37,9 @@ class Plugin extends AbstractPlugin
             $postHandler = app('xe.post.handler');
             $postMetaDataHandler = new PostMetaDataHandler();
             $postConfigHandler = app('xe.post.configHandler');
+            $tagHandler = app('xe.tag');
 
-            return new PostService($postHandler, $postMetaDataHandler, $postConfigHandler);
+            return new PostService($postHandler, $postMetaDataHandler, $postConfigHandler, $tagHandler);
         });
         app()->alias(PostService::class, 'xe.post.service');
 

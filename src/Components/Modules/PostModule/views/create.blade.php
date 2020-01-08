@@ -22,5 +22,9 @@
     <span>배경 컬러</span>
     <input type="text" name="background_color">
 
+    <hr>
+    <span>태그</span>
+    {!! uio('uiobject/board@tag') !!}
+
     <button type="submit" class="xe-btn">저장</button>
 </form>

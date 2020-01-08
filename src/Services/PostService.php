@@ -7,6 +7,7 @@ use Xpressengine\Http\Request;
 use Xpressengine\Plugins\Post\Handlers\PostConfigHandler;
 use Xpressengine\Plugins\Post\Handlers\PostHandler;
 use Xpressengine\Plugins\Post\Handlers\PostMetaDataHandler;
+use Xpressengine\Tag\TagHandler;
 
 class PostService
 {
@@ -19,11 +20,15 @@ class PostService
     /** @var PostConfigHandler $postConfigHandler */
     protected $postConfigHandler;
 
-    public function __construct(PostHandler $postHandler, PostMetaDataHandler $metaDataHandler, PostConfigHandler $postConfigHandler)
+    /** @var TagHandler $tagHandler */
+    protected $tagHandler;
+
+    public function __construct(PostHandler $postHandler, PostMetaDataHandler $metaDataHandler, PostConfigHandler $postConfigHandler, TagHandler $tagHandler)
     {
         $this->postHandler = $postHandler;
         $this->metaDataHandler = $metaDataHandler;
         $this->postConfigHandler = $postConfigHandler;
+        $this->tagHandler = $tagHandler;
     }
 
     public function store(Request $request, $instanceId)
@@ -42,6 +47,10 @@ class PostService
         try {
             $post = $this->postHandler->store($inputs, $instanceId);
             $this->metaDataHandler->saveMetaData($post, $inputs);
+
+            if (isset($inputs['_tags']) && empty($inputs['_tags']) === false) {
+                $this->tagHandler->set($post->id, $inputs['_tags']);
+            }
         } catch (\Exception $e) {
             XeDB::rollback();
 
@@ -60,6 +69,10 @@ class PostService
         try {
             $this->postHandler->update($post, $inputs);
             $this->metaDataHandler->saveMetaData($post, $inputs);
+
+            if (isset($inputs['_tags']) && empty($inputs['_tags']) === false) {
+                $this->tagHandler->set($post->id, $inputs['_tags']);
+            }
         } catch (\Exception $e) {
             XeDB::rollback();
 
