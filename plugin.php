@@ -19,6 +19,7 @@ class Plugin extends AbstractPlugin
      */
     public function boot()
     {
+        $this->registerSettingMenu();
         $this->route();
 
         app()->singleton(PostHandler::class, function () {
@@ -53,16 +54,48 @@ class Plugin extends AbstractPlugin
 
     protected function route()
     {
-        // implement code
-
-        Route::fixed(
-            $this->getId(),
-            function () {
+        Route::settings(Plugin::getId(), function () {
+            Route::group(['namespace' => 'Xpressengine\Plugins\Post\Controllers'], function () {
                 Route::get('/', [
-                    'as' => 'post::index','uses' => 'Xpressengine\\Plugins\\Post\\Controllers\\Controller@index'
+                    'as' => 'posts',
+                    'uses' => 'PostSettingController@posts',
+                    'settings_menu' => 'contents.post.posts'
                 ]);
-            }
-        );
+                Route::get('/setting', [
+                    'as' => 'setting',
+                    'uses' => 'PostSettingController@editSetting',
+                    'settings_menu' => 'contents.post.setting'
+                ]);
+            });
+        });
+    }
+
+    protected function registerSettingMenu()
+    {
+        $menus = [
+            'contents.post' => [
+                'title' => 'post::post',
+                'display' => true,
+                'description' => '',
+                'ordering' => 600
+            ],
+            'contents.post.posts' => [
+                'title' => 'post::postManage',
+                'display' => true,
+                'description' => '',
+                'ordering' => 100
+            ],
+            'contents.post.setting' => [
+                'title' => 'post::setting',
+                'display' => true,
+                'description' => '',
+                'ordering' => 9999
+            ]
+        ];
+
+        foreach ($menus as $id => $menu) {
+            \XeRegister::push('settings/menu', $id, $menu);
+        }
     }
 
     /**
