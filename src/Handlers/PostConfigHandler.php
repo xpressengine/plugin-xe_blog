@@ -65,6 +65,7 @@ class PostConfigHandler
 
     public function get($postInstanceId)
     {
-        return $this->configManager->get($this->getConfigName($postInstanceId));
+        //TODO config 구조 변경
+        return $this->configManager->get(self::CONFIG_NAME);
     }
 }

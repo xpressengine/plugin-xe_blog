@@ -50,10 +50,26 @@ class Plugin extends AbstractPlugin
             return new PostConfigHandler($configManager);
         });
         app()->alias(PostConfigHandler::class, 'xe.post.configHandler');
+
+        app('xe.editor')->setInstance(Plugin::getId(), 'editor/blockeditor@blockeditor');
     }
 
     protected function route()
     {
+        Route::group([
+            'prefix' => Plugin::getId(),
+            'as' => 'post.',
+            'namespace' => 'Xpressengine\Plugins\Post\Controllers',
+            'middleware' => ['web']
+        ], function () {
+            Route::get('/create', ['as' => 'create', 'uses' => 'PostController@create']);
+            Route::post('/store', ['as' => 'store', 'uses' => 'PostController@store']);
+            Route::get('/show/{postId}', ['as' => 'show', 'uses' => 'PostController@show']);
+            Route::get('/edit/{postId}', ['as' => 'edit', 'uses' => 'PostController@edit']);
+            Route::post('/update', ['as' => 'update', 'uses' => 'PostController@update']);
+            Route::post('/delete/{postId}', ['as' => 'delete', 'uses' => 'PostController@delete']);
+        });
+
         Route::settings(Plugin::getId(), function () {
             Route::group(['namespace' => 'Xpressengine\Plugins\Post\Controllers'], function () {
                 Route::get('/', [
