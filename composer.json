@@ -25,8 +25,18 @@
       "component": {
         "module/post@post": {
           "class": "Xpressengine\\Plugins\\Post\\Components\\Modules\\PostModule\\PostModule",
-          "name": "Post",
+          "name": "Post 모듈",
           "description": "Post 모듈"
+        },
+        "widget/post@post": {
+          "class": "Xpressengine\\Plugins\\Post\\Components\\Widgets\\PostWidget\\PostWidget",
+          "name": "Post 위젯",
+          "description": "Post 모듈"
+        },
+        "widget/post@post/skin/post_skin@default":{
+          "class": "Xpressengine\\Plugins\\Post\\Components\\Skins\\Widget\\PostWidgetSkin\\PostWidgetSkin",
+          "name": "Post 위젯 스킨",
+          "description": "Post 위젯 스킨"
         }
       }
     }
