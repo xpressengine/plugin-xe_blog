@@ -2,6 +2,8 @@
 
 namespace Xpressengine\Plugins\Post\Components\Widgets\PostWidget;
 
+use Xpressengine\Plugins\Post\Handlers\PostHandler;
+use Xpressengine\Plugins\Post\Plugin;
 use Xpressengine\Widget\AbstractWidget;
 
 class PostWidget extends AbstractWidget
@@ -10,7 +12,12 @@ class PostWidget extends AbstractWidget
 
     public function render()
     {
-        // TODO: Implement render() method.
+        /** @var PostHandler $postHandler */
+        $postHandler = app('xe.post.handler');
+
+        $posts = $postHandler->getItems(['instanceId' => Plugin::getId()]);
+
+        return $this->renderSkin(['posts' => $posts]);
     }
 
     public function renderSetting(array $args = [])
