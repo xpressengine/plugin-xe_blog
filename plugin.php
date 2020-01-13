@@ -51,7 +51,7 @@ class Plugin extends AbstractPlugin
         });
         app()->alias(PostConfigHandler::class, 'xe.post.configHandler');
 
-        app('xe.editor')->setInstance(Plugin::getId(), 'editor/blockeditor@blockeditor');
+        app('xe.editor')->setInstance(Plugin::getId(), 'editor/xe_blockeditor@xe_blockeditor');
     }
 
     protected function route()

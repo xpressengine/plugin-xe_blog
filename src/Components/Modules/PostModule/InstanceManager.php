@@ -26,7 +26,7 @@ class InstanceManager
 
         XeDB::beginTransaction();
         try {
-            app('xe.editor')->setInstance($postModuleInstanceId, 'editor/blockeditor@blockeditor');
+            app('xe.editor')->setInstance($postModuleInstanceId, 'editor/xe_blockeditor@xe_blockeditor');
 
             $this->documentHandler->createInstance($postModuleInstanceId, $itemParams);
 
