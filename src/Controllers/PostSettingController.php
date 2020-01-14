@@ -4,6 +4,7 @@ namespace Xpressengine\Plugins\Post\Controllers;
 
 use XePresenter;
 use App\Http\Controllers\Controller;
+use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugins\Post\Handlers\PostHandler;
 use Xpressengine\Plugins\Post\Handlers\PostMetaDataHandler;
@@ -13,9 +14,14 @@ class PostSettingController extends Controller
 {
     protected $postHandler;
 
-    public function __construct(PostHandler $postHandler)
+    /** @var CategoryHandler $categoryHandler */
+    protected $categoryHandler;
+
+    public function __construct(PostHandler $postHandler, CategoryHandler $categoryHandler)
     {
         $this->postHandler = $postHandler;
+
+        $this->categoryHandler = $categoryHandler;
 
         XePresenter::share('metaDataHandler', new PostMetaDataHandler());
     }
@@ -39,5 +45,22 @@ class PostSettingController extends Controller
     public function storeSetting(Request $request)
     {
 
+    }
+
+    public function storeTaxonomy(Request $request)
+    {
+        $taxonomyAttribute = $request->except('_token');
+
+        \XeDB::beginTransaction();
+        try {
+            $taxonomyItem = $this->categoryHandler->createCate($taxonomyAttribute);
+        } catch (\Exception $e) {
+            \XeDB::rollback();
+
+            throw $e;
+        }
+        \XeDB::commit();
+
+        return redirect()->route('manage.category.show', ['id' => $taxonomyItem->id]);
     }
 }

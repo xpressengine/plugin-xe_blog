@@ -71,7 +71,10 @@ class Plugin extends AbstractPlugin
         });
 
         Route::settings(Plugin::getId(), function () {
-            Route::group(['namespace' => 'Xpressengine\Plugins\Post\Controllers'], function () {
+            Route::group([
+                'namespace' => 'Xpressengine\Plugins\Post\Controllers',
+                'as' => 'blog.setting.'
+            ], function () {
                 Route::get('/', [
                     'as' => 'posts',
                     'uses' => 'PostSettingController@posts',
@@ -82,6 +85,7 @@ class Plugin extends AbstractPlugin
                     'uses' => 'PostSettingController@editSetting',
                     'settings_menu' => 'contents.manageBlog.blogSetting'
                 ]);
+                Route::post('/store_taxonomy', ['as' => 'store_taxonomy', 'uses' => 'PostSettingController@storeTaxonomy']);
             });
         });
     }

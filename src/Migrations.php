@@ -9,6 +9,7 @@ class Migrations
 {
     const META_TABLE_NAME = 'post_meta_data';
     const FAVORITE_TABLE_NAME = 'post_favorites';
+    const TAXONOMY_TABLE_NAME = 'blog_taxonomy';
 
     public function checkInstalled()
     {
@@ -17,6 +18,10 @@ class Migrations
         }
 
         if ($this->checkExistFavoriteTable() === false) {
+            return false;
+        }
+
+        if ($this->checkExistTaxonomyTable() === false) {
             return false;
         }
 
@@ -31,6 +36,10 @@ class Migrations
 
         if ($this->checkExistFavoriteTable() === false) {
             $this->createFavoriteTable();
+        }
+
+        if ($this->checkExistTaxonomyTable() === false) {
+            $this->createTaxonomyTable();
         }
     }
 
@@ -59,7 +68,7 @@ class Migrations
 
     protected function createFavoriteTable()
     {
-        return Schema::create(self::FAVORITE_TABLE_NAME, function (Blueprint $table) {
+        Schema::create(self::FAVORITE_TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
 
             $table->string('post_id', 36);
@@ -68,6 +77,23 @@ class Migrations
             $table->timestamps();
 
             $table->index(['post_id', 'user_id']);
+        });
+    }
+
+    protected function checkExistTaxonomyTable()
+    {
+        return Schema::hasTable(self::TAXONOMY_TABLE_NAME);
+    }
+
+    protected function createTaxonomyTable()
+    {
+        Schema::create(self::TAXONOMY_TABLE_NAME, function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->string('blog_id', 36);
+            $table->integer('taxonomy_item_id');
+
+            $table->index('blog_id');
         });
     }
 }
