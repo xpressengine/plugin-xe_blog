@@ -75,12 +75,12 @@ class Plugin extends AbstractPlugin
                 Route::get('/', [
                     'as' => 'posts',
                     'uses' => 'PostSettingController@posts',
-                    'settings_menu' => 'contents.post.posts'
+                    'settings_menu' => 'contents.manageBlog.manageBlog'
                 ]);
                 Route::get('/setting', [
                     'as' => 'setting',
                     'uses' => 'PostSettingController@editSetting',
-                    'settings_menu' => 'contents.post.setting'
+                    'settings_menu' => 'contents.manageBlog.blogSetting'
                 ]);
             });
         });
@@ -89,20 +89,20 @@ class Plugin extends AbstractPlugin
     protected function registerSettingMenu()
     {
         $menus = [
-            'contents.post' => [
-                'title' => 'post::post',
+            'contents.manageBlog' => [
+                'title' => 'post::manageBlog',
                 'display' => true,
                 'description' => '',
                 'ordering' => 600
             ],
-            'contents.post.posts' => [
-                'title' => 'post::postManage',
+            'contents.manageBlog.manageBlog' => [
+                'title' => 'post::manageBlog',
                 'display' => true,
                 'description' => '',
                 'ordering' => 100
             ],
-            'contents.post.setting' => [
-                'title' => 'post::setting',
+            'contents.manageBlog.blogSetting' => [
+                'title' => 'post::blogSetting',
                 'display' => true,
                 'description' => '',
                 'ordering' => 9999
