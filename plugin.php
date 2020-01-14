@@ -4,6 +4,7 @@ namespace Xpressengine\Plugins\Post;
 
 use Route;
 use XeInterception;
+use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Plugin\AbstractPlugin;
 use Xpressengine\Plugins\Post\Handlers\PostConfigHandler;
@@ -13,16 +14,8 @@ use Xpressengine\Plugins\Post\Services\PostService;
 
 class Plugin extends AbstractPlugin
 {
-    /**
-     * 이 메소드는 활성화(activate) 된 플러그인이 부트될 때 항상 실행됩니다.
-     *
-     * @return void
-     */
-    public function boot()
+    public function register()
     {
-        $this->registerSettingMenu();
-        $this->route();
-
         app()->singleton(PostHandler::class, function () {
             $proxyHandler = XeInterception::proxy(PostHandler::class);
 
@@ -51,6 +44,17 @@ class Plugin extends AbstractPlugin
             return new PostConfigHandler($configManager);
         });
         app()->alias(PostConfigHandler::class, 'xe.post.configHandler');
+    }
+
+    /**
+     * 이 메소드는 활성화(activate) 된 플러그인이 부트될 때 항상 실행됩니다.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->registerSettingMenu();
+        $this->route();
 
         app('xe.editor')->setInstance(Plugin::getId(), 'editor/xe_blockeditor@xe_blockeditor');
     }
@@ -87,6 +91,15 @@ class Plugin extends AbstractPlugin
                     'settings_menu' => 'contents.manageBlog.blogSetting'
                 ]);
                 Route::post('/store_taxonomy', ['as' => 'store_taxonomy', 'uses' => 'PostSettingController@storeTaxonomy']);
+
+                $taxonomies = $this->getTaxonomyItems();
+                foreach ($taxonomies as $taxonomy) {
+                    Route::get('/taxonomy/' . $taxonomy->id, [
+                        'as' => 'setting_taxonomy_' . $taxonomy->id,
+                        'uses' => 'PostSettingController@connectTaxonomySetting',
+                        'settings_menu' => 'contents.manageBlog.' . $taxonomy->id
+                    ]);
+                }
             });
         });
     }
@@ -114,9 +127,41 @@ class Plugin extends AbstractPlugin
             ]
         ];
 
+        $taxonomies = $this->getTaxonomyItems();
+        $taxonomyMenus = [];
+        foreach ($taxonomies as $index => $taxonomy) {
+            $key = 'contents.manageBlog.' . $taxonomy->id;
+
+            $taxonomyMenus[$key] = [
+                'title' => xe_trans($taxonomy->name),
+                'display' => true,
+                'description' => '',
+                'ordering' => ($index + 1) * 100
+            ];
+        }
+
+        $menus = array_merge($menus, $taxonomyMenus);
+
         foreach ($menus as $id => $menu) {
             \XeRegister::push('settings/menu', $id, $menu);
         }
+    }
+
+    private function getTaxonomyItems()
+    {
+        /** @var PostConfigHandler $blogConfigHandler */
+        $blogConfigHandler = app('xe.post.configHandler');
+
+        /** @var CategoryHandler $categoryHandler */
+        $categoryHandler = app('xe.category');
+
+        $taxonomyIds = $blogConfigHandler->getBlogConfig()->getPure('taxonomy', []);
+        $taxonomies = [];
+        foreach ($taxonomyIds as $taxonomyId) {
+            $taxonomies[] = $categoryHandler->cates()->find($taxonomyId);
+        }
+
+        return $taxonomies;
     }
 
     /**
