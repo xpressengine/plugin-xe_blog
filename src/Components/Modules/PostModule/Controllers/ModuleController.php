@@ -38,9 +38,7 @@ class ModuleController extends Controller
 
         $this->postFavoriteHandler = new PostFavoriteHandler();
 
-        XePresenter::share('instanceId', $instanceId);
         XePresenter::share('handler', $handler);
-        XePresenter::share('metaDataHandler', new PostMetaDataHandler());
     }
 
     public function index()
@@ -50,18 +48,6 @@ class ModuleController extends Controller
         return XePresenter::make('post::src.Components.Modules.PostModule.views.index', compact('items'));
     }
 
-    public function create()
-    {
-        return XePresenter::make('post::src.Components.Modules.PostModule.views.create');
-    }
-
-    public function store(Request $request)
-    {
-        $this->postService->store($request, $this->instanceId);
-
-        return redirect(instance_route('index', [], $this->instanceId));
-    }
-
     public function show(Request $request, $instance, $id)
     {
         $item = $this->handler->get($id, $this->instanceId);
@@ -69,52 +55,5 @@ class ModuleController extends Controller
         $item->setCanonical(instance_route('show', ['id' => $id], $this->instanceId));
 
         return XePresenter::make('post::src.Components.Modules.PostModule.views.show', compact('item'));
-    }
-
-    public function edit(Request $request, $instance, $id)
-    {
-        $item = $this->handler->get($id, $this->instanceId);
-
-        return XePresenter::make('post::src.Components.Modules.PostModule.views.edit', compact('item'));
-    }
-
-    public function update(Request $request)
-    {
-        $id = $request->get('postId');
-        $item = $this->handler->get($id, $this->instanceId);
-
-        $this->postService->update($request, $item);
-
-        return redirect(instance_route('show', ['id' => $id], $this->instanceId));
-    }
-
-    public function delete(Request $request, $instance, $id)
-    {
-        $item = $this->handler->get($id, $this->instanceId);
-
-        $this->postService->delete($item, $this->instanceId);
-
-        return redirect(instance_route('index', [], $this->instanceId));
-    }
-
-    public function setFavoriteState(Request $request)
-    {
-        if (Auth::check() === false) {
-            throw new AccessDeniedHttpException;
-        }
-
-        $user = Auth::user();
-        $postId = $request->get('postId');
-        $postItem = $this->handler->get($postId, $this->instanceId);
-
-        $favorite = false;
-        if ($this->postFavoriteHandler->isFavoritePost($postItem, $user) === false) {
-            $this->postFavoriteHandler->setFavoritePost($postItem, $user);
-            $favorite = true;
-        } else {
-            $this->postFavoriteHandler->unsetFavoritePost($postItem, $user);
-        }
-
-        return XePresenter::makeApi(['favorite' => $favorite]);
     }
 }

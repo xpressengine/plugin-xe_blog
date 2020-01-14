@@ -7,20 +7,18 @@ use Xpressengine\Config\ConfigManager;
 
 class PostConfigHandler
 {
-    const CONFIG_NAME = 'module/post@post';
+    const CONFIG_NAME = 'blog';
 
     /** @var ConfigManager $configManager */
     protected $configManager;
 
     protected $defaultConfig = [
-        'postInstanceId' => null,
         'skinId' => '',
-        'perPage' => 10,
-        'pageCount' => 10,
-        'newPostTime' => 1,
+        'newPostTime' => 24,
         'assent' => true,
         'dissent' => false,
         'deleteToTrash' => false,
+        'taxonomy' => []
     ];
 
     public function __construct($configManager)
@@ -28,37 +26,45 @@ class PostConfigHandler
         $this->configManager = $configManager;
     }
 
-    public function getDefaultConfigAttributes()
+    public function storeBlogConfig()
     {
-        return $this->defaultConfig;
+        $this->configManager->add(self::CONFIG_NAME, $this->defaultConfig);
     }
 
-    public function getConfigName($postInstanceId)
+    public function getBlogConfig()
     {
-        return sprintf('%s.%s', self::CONFIG_NAME, $postInstanceId);
+        return $this->configManager->get(self::CONFIG_NAME);
     }
 
-    public function addConfig($attributes)
+    public function getConfigName($instanceId)
     {
-        $defaultConfig = $this->configManager->get(self::CONFIG_NAME);
-        if ($defaultConfig === null) {
-            $this->configManager->add(self::CONFIG_NAME, $this->defaultConfig);
+        return sprintf('%s.%s', self::CONFIG_NAME, $instanceId);
+    }
+
+    public function addConfig($attributes, $configName = self::CONFIG_NAME)
+    {
+        if ($configName !== self::CONFIG_NAME) {
+            $configName = $this->getConfigName($configName);
         }
 
-        return $this->configManager->add($this->getConfigName($attributes['postInstanceId']), $attributes);
+        return $this->configManager->add($configName, $attributes);
     }
 
-    public function putConfig($attributes)
+    public function putConfig($attributes, $configName = self::CONFIG_NAME)
     {
-        return $this->configManager->put($this->getConfigName($attributes['postInstanceId']), $attributes);
+        if ($configName !== self::CONFIG_NAME) {
+            $configName = $this->getConfigName($configName);
+        }
+
+        return $this->configManager->put($configName, $attributes);
     }
 
-    public function modify(ConfigEntity $config)
+    public function modifyConfig(ConfigEntity $config)
     {
         return $this->configManager->modify($config);
     }
 
-    public function remove(ConfigEntity $config)
+    public function removeConfig(ConfigEntity $config)
     {
         $this->configManager->remove($config);
     }

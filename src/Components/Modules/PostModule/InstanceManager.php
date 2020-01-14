@@ -22,17 +22,9 @@ class InstanceManager
 
     public function createModule($itemParams)
     {
-        $postModuleInstanceId = $itemParams['id'];
-
         XeDB::beginTransaction();
         try {
-            app('xe.editor')->setInstance($postModuleInstanceId, 'editor/xe_blockeditor@xe_blockeditor');
 
-            $this->documentHandler->createInstance($postModuleInstanceId, $itemParams);
-
-            $defaultPostConfig = $this->postConfigHandler->getDefaultConfigAttributes();
-            $defaultPostConfig['postInstanceId'] = $postModuleInstanceId;
-            $this->postConfigHandler->addConfig($defaultPostConfig);
         } catch (\Exception $e) {
             XeDB::rollback();
 
@@ -45,10 +37,7 @@ class InstanceManager
     {
         XeDB::beginTransaction();
         try {
-            $this->documentHandler->destroyInstance($postInstanceId);
 
-            $postConfigEntity = $this->postConfigHandler->get($postInstanceId);
-            $this->postConfigHandler->remove($postConfigEntity);
         } catch (\Exception $e) {
             XeDB::rollback();
 

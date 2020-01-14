@@ -4,6 +4,7 @@ namespace Xpressengine\Plugins\Post;
 
 use Route;
 use XeInterception;
+use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Plugin\AbstractPlugin;
 use Xpressengine\Plugins\Post\Handlers\PostConfigHandler;
 use Xpressengine\Plugins\Post\Handlers\PostHandler;
@@ -141,6 +142,14 @@ class Plugin extends AbstractPlugin
         if ($migration->checkInstalled() === false) {
             $migration->install();
         }
+
+        /** @var PostConfigHandler $configHandler */
+        $configHandler = app('xe.post.configHandler');
+        $configHandler->storeBlogConfig();
+
+        /** @var DocumentHandler $documentConfigHandler */
+        $documentConfigHandler = app('xe.document');
+        $documentConfigHandler->createInstance(Plugin::getId());
     }
 
     /**
