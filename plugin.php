@@ -4,12 +4,12 @@ namespace Xpressengine\Plugins\XeBlog;
 
 use Route;
 use XeInterception;
-use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Plugin\AbstractPlugin;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
 
 class Plugin extends AbstractPlugin
@@ -33,8 +33,9 @@ class Plugin extends AbstractPlugin
             $blogMetaDataHandler = new BlogMetaDataHandler();
             $blogConfigHandler = app('xe.blog.configHandler');
             $tagHandler = app('xe.tag');
+            $taxonomyHandler = app('xe.blog.taxonomyHandler');
 
-            return new BlogService($blogHandler, $blogMetaDataHandler, $blogConfigHandler, $tagHandler);
+            return new BlogService($blogHandler, $blogMetaDataHandler, $blogConfigHandler, $tagHandler, $taxonomyHandler);
         });
         app()->alias(BlogService::class, 'xe.blog.service');
 
@@ -44,6 +45,11 @@ class Plugin extends AbstractPlugin
             return new BlogConfigHandler($configManager);
         });
         app()->alias(BlogConfigHandler::class, 'xe.blog.configHandler');
+
+        app()->singleton(BlogTaxonomyHandler::class, function () {
+            return new BlogTaxonomyHandler();
+        });
+        app()->alias(BlogTaxonomyHandler::class, 'xe.blog.taxonomyHandler');
     }
 
     /**
@@ -92,7 +98,7 @@ class Plugin extends AbstractPlugin
                 ]);
                 Route::post('/store_taxonomy', ['as' => 'store_taxonomy', 'uses' => 'BlogSettingController@storeTaxonomy']);
 
-                $taxonomies = $this->getTaxonomyItems();
+                $taxonomies = app('xe.blog.taxonomyHandler')->getTaxonomies();
                 foreach ($taxonomies as $taxonomy) {
                     Route::get('/taxonomy/' . $taxonomy->id, [
                         'as' => 'setting_taxonomy_' . $taxonomy->id,
@@ -127,7 +133,7 @@ class Plugin extends AbstractPlugin
             ]
         ];
 
-        $taxonomies = $this->getTaxonomyItems();
+        $taxonomies = app('xe.blog.taxonomyHandler')->getTaxonomies();
         $taxonomyMenus = [];
         foreach ($taxonomies as $index => $taxonomy) {
             $key = 'contents.manageBlog.' . $taxonomy->id;
@@ -145,23 +151,6 @@ class Plugin extends AbstractPlugin
         foreach ($menus as $id => $menu) {
             \XeRegister::push('settings/menu', $id, $menu);
         }
-    }
-
-    private function getTaxonomyItems()
-    {
-        /** @var BlogConfigHandler $blogConfigHandler */
-        $blogConfigHandler = app('xe.blog.configHandler');
-
-        /** @var CategoryHandler $categoryHandler */
-        $categoryHandler = app('xe.category');
-
-        $taxonomyIds = $blogConfigHandler->getBlogConfig()->getPure('taxonomy', []);
-        $taxonomies = [];
-        foreach ($taxonomyIds as $taxonomyId) {
-            $taxonomies[] = $categoryHandler->cates()->find($taxonomyId);
-        }
-
-        return $taxonomies;
     }
 
     /**

@@ -43,7 +43,9 @@ class BlogController extends Controller
             $request->session()->put('url.intended', $redirectUrl);
         }
 
-        return XePresenter::make('xe_blog::views.blog.create');
+        $taxonomyGroups = app('xe.blog.taxonomyHandler')->getTaxonomyGroups();
+
+        return XePresenter::make('xe_blog::views.blog.create', compact('taxonomyGroups'));
     }
 
     public function store(Request $request)

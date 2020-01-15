@@ -41,21 +41,13 @@ class BlogConfigHandler
         return sprintf('%s.%s', self::CONFIG_NAME, $instanceId);
     }
 
-    public function addConfig($attributes, $configName = self::CONFIG_NAME)
+    public function addConfig($attributes, $configName)
     {
-        if ($configName !== self::CONFIG_NAME) {
-            $configName = $this->getConfigName($configName);
-        }
-
         return $this->configManager->add($configName, $attributes);
     }
 
-    public function putConfig($attributes, $configName = self::CONFIG_NAME)
+    public function putConfig($attributes, $configName)
     {
-        if ($configName !== self::CONFIG_NAME) {
-            $configName = $this->getConfigName($configName);
-        }
-
         return $this->configManager->put($configName, $attributes);
     }
 
@@ -69,9 +61,8 @@ class BlogConfigHandler
         $this->configManager->remove($config);
     }
 
-    public function get($blogInstanceId)
+    public function get($configName)
     {
-        //TODO config 구조 변경
-        return $this->configManager->get(self::CONFIG_NAME);
+        return $this->configManager->get($configName);
     }
 }

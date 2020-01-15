@@ -4,11 +4,11 @@ namespace Xpressengine\Plugins\XeBlog\Controllers;
 
 use XePresenter;
 use App\Http\Controllers\Controller;
-use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
 use Xpressengine\Plugins\XeBlog\Plugin;
 
 class BlogSettingController extends Controller
@@ -16,17 +16,20 @@ class BlogSettingController extends Controller
     /** @var BlogHandler $blogHandler */
     protected $blogHandler;
 
-    /** @var CategoryHandler $categoryHandler */
-    protected $categoryHandler;
-
     /** @var BlogConfigHandler $configHandler */
     protected $configHandler;
 
-    public function __construct(BlogHandler $blogHandler, CategoryHandler $categoryHandler, BlogConfigHandler $configHandler)
-    {
+    /** @var BlogTaxonomyHandler $taxonomyHandler */
+    protected $taxonomyHandler;
+
+    public function __construct(
+        BlogHandler $blogHandler,
+        BlogConfigHandler $configHandler,
+        BlogTaxonomyHandler $taxonomyHandler
+    ) {
         $this->blogHandler = $blogHandler;
-        $this->categoryHandler = $categoryHandler;
         $this->configHandler = $configHandler;
+        $this->taxonomyHandler = $taxonomyHandler;
 
         XePresenter::share('metaDataHandler', new BlogMetaDataHandler());
     }
@@ -56,19 +59,7 @@ class BlogSettingController extends Controller
     {
         $taxonomyAttribute = $request->except('_token');
 
-        \XeDB::beginTransaction();
-        try {
-            $taxonomyItem = $this->categoryHandler->createCate($taxonomyAttribute);
-
-            $blogConfig = $this->configHandler->getBlogConfig()->getPureAll();
-            $blogConfig['taxonomy'][] = $taxonomyItem->id;
-            $this->configHandler->putConfig($blogConfig);
-        } catch (\Exception $e) {
-            \XeDB::rollback();
-
-            throw $e;
-        }
-        \XeDB::commit();
+        $taxonomyItem = $this->taxonomyHandler->createTaxonomy($taxonomyAttribute);
 
         return redirect()->route('manage.category.show', ['id' => $taxonomyItem->id]);
     }
