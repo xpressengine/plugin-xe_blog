@@ -1,11 +1,11 @@
 <?php
 
-namespace Xpressengine\Plugins\Post\Components\Modules\PostModule;
+namespace Xpressengine\Plugins\XeBlog\Components\Modules\BlogModule;
 
 use Route;
 use Xpressengine\Menu\AbstractModule;
 
-class PostModule extends AbstractModule
+class BlogModule extends AbstractModule
 {
     /** @var InstanceManager $instanceManager */
     protected $instanceManager;
@@ -13,9 +13,9 @@ class PostModule extends AbstractModule
     public function __construct()
     {
         $documentConfigHandler = app('xe.document');
-        $postConfigHandler = app('xe.post.configHandler');
+        $blogConfigHandler = app('xe.blog.configHandler');
 
-        $this->instanceManager = new InstanceManager($documentConfigHandler, $postConfigHandler);
+        $this->instanceManager = new InstanceManager($documentConfigHandler, $blogConfigHandler);
     }
 
     public static function boot()
@@ -28,7 +28,7 @@ class PostModule extends AbstractModule
         Route::instance(self::getId(), function () {
             Route::get('/', ['as' => 'index', 'uses' => 'ModuleController@index']);
             Route::get('/show/{id}', ['as' => 'show', 'uses' => 'ModuleController@show']);
-        }, ['namespace' => 'Xpressengine\Plugins\Post\Components\Modules\PostModule\Controllers']);
+        }, ['namespace' => 'Xpressengine\Plugins\XeBlog\Components\Modules\BlogModule\Controllers']);
     }
 
     public function createMenuForm()

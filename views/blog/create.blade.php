@@ -1,8 +1,8 @@
-<form method="post" action="{{ route('post.store') }}" enctype="multipart/form-data">
+<form method="post" action="{{ route('blog.store') }}" enctype="multipart/form-data">
     <input type="text" name="title" value="{{ Request::old('title') }}" placeholder="title">
     <input type="text" name="sub_title" value="{{ Request::old('sub_title') }}" placeholder="sub_title">
 
-    {!! editor('post', [
+    {!! editor('xe_blog', [
         'content' => Request::old('content'),
         'cover' => true,
     ]) !!}

@@ -1,6 +1,6 @@
 <?php
 
-namespace Xpressengine\Plugins\Post\Models;
+namespace Xpressengine\Plugins\XeBlog\Models;
 
 use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\Database\Eloquent\DynamicModel;

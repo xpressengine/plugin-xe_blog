@@ -1,23 +1,23 @@
 <?php
 
-namespace Xpressengine\Plugins\Post;
+namespace Xpressengine\Plugins\XeBlog;
 
 use Route;
 use XeInterception;
 use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Plugin\AbstractPlugin;
-use Xpressengine\Plugins\Post\Handlers\PostConfigHandler;
-use Xpressengine\Plugins\Post\Handlers\PostHandler;
-use Xpressengine\Plugins\Post\Handlers\PostMetaDataHandler;
-use Xpressengine\Plugins\Post\Services\PostService;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Services\BlogService;
 
 class Plugin extends AbstractPlugin
 {
     public function register()
     {
-        app()->singleton(PostHandler::class, function () {
-            $proxyHandler = XeInterception::proxy(PostHandler::class);
+        app()->singleton(BlogHandler::class, function () {
+            $proxyHandler = XeInterception::proxy(BlogHandler::class);
 
             return new $proxyHandler(
                 app('xe.db')->connection(),
@@ -26,24 +26,24 @@ class Plugin extends AbstractPlugin
                 app('request')
             );
         });
-        app()->alias(PostHandler::class, 'xe.post.handler');
+        app()->alias(BlogHandler::class, 'xe.blog.handler');
 
-        app()->singleton(PostService::class, function () {
-            $postHandler = app('xe.post.handler');
-            $postMetaDataHandler = new PostMetaDataHandler();
-            $postConfigHandler = app('xe.post.configHandler');
+        app()->singleton(BlogService::class, function () {
+            $blogHandler = app('xe.blog.handler');
+            $blogMetaDataHandler = new BlogMetaDataHandler();
+            $blogConfigHandler = app('xe.blog.configHandler');
             $tagHandler = app('xe.tag');
 
-            return new PostService($postHandler, $postMetaDataHandler, $postConfigHandler, $tagHandler);
+            return new BlogService($blogHandler, $blogMetaDataHandler, $blogConfigHandler, $tagHandler);
         });
-        app()->alias(PostService::class, 'xe.post.service');
+        app()->alias(BlogService::class, 'xe.blog.service');
 
-        app()->singleton(PostConfigHandler::class, function () {
+        app()->singleton(BlogConfigHandler::class, function () {
             $configManager = app('xe.config');
 
-            return new PostConfigHandler($configManager);
+            return new BlogConfigHandler($configManager);
         });
-        app()->alias(PostConfigHandler::class, 'xe.post.configHandler');
+        app()->alias(BlogConfigHandler::class, 'xe.blog.configHandler');
     }
 
     /**
@@ -63,40 +63,40 @@ class Plugin extends AbstractPlugin
     {
         Route::group([
             'prefix' => Plugin::getId(),
-            'as' => 'post.',
-            'namespace' => 'Xpressengine\Plugins\Post\Controllers',
+            'as' => 'blog.',
+            'namespace' => 'Xpressengine\Plugins\XeBlog\Controllers',
             'middleware' => ['web']
         ], function () {
-            Route::get('/create', ['as' => 'create', 'uses' => 'PostController@create']);
-            Route::post('/store', ['as' => 'store', 'uses' => 'PostController@store']);
-            Route::get('/show/{postId}', ['as' => 'show', 'uses' => 'PostController@show']);
-            Route::get('/edit/{postId}', ['as' => 'edit', 'uses' => 'PostController@edit']);
-            Route::post('/update', ['as' => 'update', 'uses' => 'PostController@update']);
-            Route::post('/delete/{postId}', ['as' => 'delete', 'uses' => 'PostController@delete']);
+            Route::get('/create', ['as' => 'create', 'uses' => 'BlogController@create']);
+            Route::post('/store', ['as' => 'store', 'uses' => 'BlogController@store']);
+            Route::get('/show/{blogId}', ['as' => 'show', 'uses' => 'BlogController@show']);
+            Route::get('/edit/{blogId}', ['as' => 'edit', 'uses' => 'BlogController@edit']);
+            Route::post('/update', ['as' => 'update', 'uses' => 'BlogController@update']);
+            Route::post('/delete/{blogId}', ['as' => 'delete', 'uses' => 'BlogController@delete']);
         });
 
         Route::settings(Plugin::getId(), function () {
             Route::group([
-                'namespace' => 'Xpressengine\Plugins\Post\Controllers',
+                'namespace' => 'Xpressengine\Plugins\XeBlog\Controllers',
                 'as' => 'blog.setting.'
             ], function () {
                 Route::get('/', [
-                    'as' => 'posts',
-                    'uses' => 'PostSettingController@posts',
+                    'as' => 'blogs',
+                    'uses' => 'BlogSettingController@blogs',
                     'settings_menu' => 'contents.manageBlog.manageBlog'
                 ]);
                 Route::get('/setting', [
                     'as' => 'setting',
-                    'uses' => 'PostSettingController@editSetting',
+                    'uses' => 'BlogSettingController@editSetting',
                     'settings_menu' => 'contents.manageBlog.blogSetting'
                 ]);
-                Route::post('/store_taxonomy', ['as' => 'store_taxonomy', 'uses' => 'PostSettingController@storeTaxonomy']);
+                Route::post('/store_taxonomy', ['as' => 'store_taxonomy', 'uses' => 'BlogSettingController@storeTaxonomy']);
 
                 $taxonomies = $this->getTaxonomyItems();
                 foreach ($taxonomies as $taxonomy) {
                     Route::get('/taxonomy/' . $taxonomy->id, [
                         'as' => 'setting_taxonomy_' . $taxonomy->id,
-                        'uses' => 'PostSettingController@connectTaxonomySetting',
+                        'uses' => 'BlogSettingController@connectTaxonomySetting',
                         'settings_menu' => 'contents.manageBlog.' . $taxonomy->id
                     ]);
                 }
@@ -108,19 +108,19 @@ class Plugin extends AbstractPlugin
     {
         $menus = [
             'contents.manageBlog' => [
-                'title' => 'post::manageBlog',
+                'title' => 'xe_blog::manageBlog',
                 'display' => true,
                 'description' => '',
                 'ordering' => 600
             ],
             'contents.manageBlog.manageBlog' => [
-                'title' => 'post::manageBlog',
+                'title' => 'xe_blog::manageBlog',
                 'display' => true,
                 'description' => '',
                 'ordering' => 100
             ],
             'contents.manageBlog.blogSetting' => [
-                'title' => 'post::blogSetting',
+                'title' => 'xe_blog::blogSetting',
                 'display' => true,
                 'description' => '',
                 'ordering' => 9999
@@ -149,8 +149,8 @@ class Plugin extends AbstractPlugin
 
     private function getTaxonomyItems()
     {
-        /** @var PostConfigHandler $blogConfigHandler */
-        $blogConfigHandler = app('xe.post.configHandler');
+        /** @var BlogConfigHandler $blogConfigHandler */
+        $blogConfigHandler = app('xe.blog.configHandler');
 
         /** @var CategoryHandler $categoryHandler */
         $categoryHandler = app('xe.category');
@@ -188,8 +188,8 @@ class Plugin extends AbstractPlugin
             $migration->install();
         }
 
-        /** @var PostConfigHandler $configHandler */
-        $configHandler = app('xe.post.configHandler');
+        /** @var BlogConfigHandler $configHandler */
+        $configHandler = app('xe.blog.configHandler');
         $configHandler->storeBlogConfig();
 
         /** @var DocumentHandler $documentConfigHandler */

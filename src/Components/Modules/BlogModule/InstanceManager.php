@@ -1,23 +1,23 @@
 <?php
 
-namespace Xpressengine\Plugins\Post\Components\Modules\PostModule;
+namespace Xpressengine\Plugins\XeBlog\Components\Modules\BlogModule;
 
 use XeDB;
 use Xpressengine\Document\DocumentHandler;
-use Xpressengine\Plugins\Post\Handlers\PostConfigHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 
 class InstanceManager
 {
     /** @var DocumentHandler $documentHandler */
     protected $documentHandler;
 
-    /** @var PostConfigHandler $postConfigHandler */
-    protected $postConfigHandler;
+    /** @var BlogConfigHandler $blogConfigHandler */
+    protected $blogConfigHandler;
 
-    public function __construct($documentHandler, $postConfigHandler)
+    public function __construct($documentHandler, $blogConfigHandler)
     {
         $this->documentHandler = $documentHandler;
-        $this->postConfigHandler = $postConfigHandler;
+        $this->blogConfigHandler = $blogConfigHandler;
     }
 
     public function createModule($itemParams)
@@ -33,7 +33,7 @@ class InstanceManager
         XeDB::commit();
     }
 
-    public function deleteModule($postInstanceId)
+    public function deleteModule($blogInstanceId)
     {
         XeDB::beginTransaction();
         try {

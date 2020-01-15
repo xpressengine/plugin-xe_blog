@@ -5,10 +5,10 @@
             <th>작성일</th>
         </tr>
 
-        @foreach ($posts as $post)
+        @foreach ($blogs as $blog)
             <tr>
-                <td>{{ $post->title }}</td>
-                <td>{{ $post->created_at->format('Y-m-d H:i:s') }}</td>
+                <td>{{ $blog->title }}</td>
+                <td>{{ $blog->created_at->format('Y-m-d H:i:s') }}</td>
             </tr>
         @endforeach
     </table>

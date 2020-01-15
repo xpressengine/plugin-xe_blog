@@ -1,50 +1,50 @@
 <?php
 
-namespace Xpressengine\Plugins\Post\Controllers;
+namespace Xpressengine\Plugins\XeBlog\Controllers;
 
 use XePresenter;
 use App\Http\Controllers\Controller;
 use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Http\Request;
-use Xpressengine\Plugins\Post\Handlers\PostConfigHandler;
-use Xpressengine\Plugins\Post\Handlers\PostHandler;
-use Xpressengine\Plugins\Post\Handlers\PostMetaDataHandler;
-use Xpressengine\Plugins\Post\Plugin;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Plugin;
 
-class PostSettingController extends Controller
+class BlogSettingController extends Controller
 {
-    /** @var PostHandler $postHandler */
-    protected $postHandler;
+    /** @var BlogHandler $blogHandler */
+    protected $blogHandler;
 
     /** @var CategoryHandler $categoryHandler */
     protected $categoryHandler;
 
-    /** @var PostConfigHandler $configHandler */
+    /** @var BlogConfigHandler $configHandler */
     protected $configHandler;
 
-    public function __construct(PostHandler $postHandler, CategoryHandler $categoryHandler, PostConfigHandler $configHandler)
+    public function __construct(BlogHandler $blogHandler, CategoryHandler $categoryHandler, BlogConfigHandler $configHandler)
     {
-        $this->postHandler = $postHandler;
+        $this->blogHandler = $blogHandler;
         $this->categoryHandler = $categoryHandler;
         $this->configHandler = $configHandler;
 
-        XePresenter::share('metaDataHandler', new PostMetaDataHandler());
+        XePresenter::share('metaDataHandler', new BlogMetaDataHandler());
     }
 
-    public function posts(Request $request)
+    public function blogs(Request $request)
     {
         $tempAttributes = $request->all();
         if (isset($tempAttributes['instanceId']) === false) {
             $tempAttributes['instanceId'] = Plugin::getId();
         }
-        $posts = $this->postHandler->getItems($tempAttributes);
+        $blogs = $this->blogHandler->getItems($tempAttributes);
 
-        return XePresenter::make('post::views.setting.posts', compact('posts'));
+        return XePresenter::make('xe_blog::views.setting.blogs', compact('blogs'));
     }
 
     public function editSetting(Request $request)
     {
-        return XePresenter::make('post::views.setting.setting');
+        return XePresenter::make('xe_blog::views.setting.setting');
     }
 
     public function storeSetting(Request $request)

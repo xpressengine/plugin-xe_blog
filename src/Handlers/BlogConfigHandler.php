@@ -1,11 +1,11 @@
 <?php
 
-namespace Xpressengine\Plugins\Post\Handlers;
+namespace Xpressengine\Plugins\XeBlog\Handlers;
 
 use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Config\ConfigManager;
 
-class PostConfigHandler
+class BlogConfigHandler
 {
     const CONFIG_NAME = 'blog';
 
@@ -14,7 +14,7 @@ class PostConfigHandler
 
     protected $defaultConfig = [
         'skinId' => '',
-        'newPostTime' => 24,
+        'newBlogTime' => 24,
         'assent' => true,
         'dissent' => false,
         'deleteToTrash' => false,
@@ -69,7 +69,7 @@ class PostConfigHandler
         $this->configManager->remove($config);
     }
 
-    public function get($postInstanceId)
+    public function get($blogInstanceId)
     {
         //TODO config 구조 변경
         return $this->configManager->get(self::CONFIG_NAME);

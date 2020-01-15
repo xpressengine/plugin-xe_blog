@@ -1,14 +1,14 @@
 <?php
 
-namespace Xpressengine\Plugins\Post;
+namespace Xpressengine\Plugins\XeBlog;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class Migrations
 {
-    const META_TABLE_NAME = 'post_meta_data';
-    const FAVORITE_TABLE_NAME = 'post_favorites';
+    const META_TABLE_NAME = 'blog_meta_data';
+    const FAVORITE_TABLE_NAME = 'blog_favorites';
     const TAXONOMY_TABLE_NAME = 'blog_taxonomy';
 
     public function checkInstalled()
@@ -53,11 +53,11 @@ class Migrations
         Schema::create(self::META_TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('post_id', 36);
+            $table->string('blog_id', 36);
             $table->string('type');
             $table->text('meta_data');
 
-            $table->index('post_id');
+            $table->index('blog_id');
         });
     }
 
@@ -71,12 +71,12 @@ class Migrations
         Schema::create(self::FAVORITE_TABLE_NAME, function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('post_id', 36);
+            $table->string('blog_id', 36);
             $table->string('user_id', 36);
 
             $table->timestamps();
 
-            $table->index(['post_id', 'user_id']);
+            $table->index(['blog_id', 'user_id']);
         });
     }
 

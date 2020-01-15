@@ -1,26 +1,26 @@
 <?php
 
-namespace Xpressengine\Plugins\Post\Handlers;
+namespace Xpressengine\Plugins\XeBlog\Handlers;
 
 use Xpressengine\Document\DocumentHandler;
-use Xpressengine\Plugins\Post\Components\Modules\PostModule\PostModule;
-use Xpressengine\Plugins\Post\Models\Post;
+use Xpressengine\Plugins\XeBlog\Components\Modules\BlogModule\BlogModule;
+use Xpressengine\Plugins\XeBlog\Models\Blog;
 
-class PostHandler extends DocumentHandler
+class BlogHandler extends DocumentHandler
 {
-    protected $model = Post::class;
+    protected $model = Blog::class;
 
     public function store($attributes, $instanceId)
     {
         $attributes['instance_id'] = $instanceId;
-        $attributes['type'] = PostModule::getId();
+        $attributes['type'] = BlogModule::getId();
 
         return parent::add($attributes);
     }
 
     public function getItems($attributes)
     {
-        $model = Post::division($attributes['instanceId']);
+        $model = Blog::division($attributes['instanceId']);
         $query = $model->where('instance_id', $attributes['instanceId']);
         $query = $query->visible();
 
@@ -31,26 +31,26 @@ class PostHandler extends DocumentHandler
         return $query->get();
     }
 
-    public function update($post, $inputs)
+    public function update($blog, $inputs)
     {
-        $attributes = $post->getAttributes();
+        $attributes = $blog->getAttributes();
 
         foreach ($inputs as $name => $value) {
             if (array_key_exists($name, $attributes)) {
-                $post->{$name} = $value;
+                $blog->{$name} = $value;
             }
         }
 
-        return parent::put($post);
+        return parent::put($blog);
     }
 
-    public function trashPost($post)
+    public function trashBlog($blog)
     {
-        $post->delete();
+        $blog->delete();
     }
 
-    public function dropPost($post)
+    public function dropBlog($blog)
     {
-        $post->forceDelete();
+        $blog->forceDelete();
     }
 }

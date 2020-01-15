@@ -1,16 +1,16 @@
 <?php
 
-namespace Xpressengine\Plugins\Post\Models;
+namespace Xpressengine\Plugins\XeBlog\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Xpressengine\Document\Models\Document;
-use Xpressengine\Plugins\Post\Handlers\PostMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Seo\SeoUsable;
 use Xpressengine\Tag\Tag;
 use Xpressengine\User\Models\Guest;
 use Xpressengine\User\Models\UnknownUser;
 
-class Post extends Document implements SeoUsable
+class Blog extends Document implements SeoUsable
 {
     use SoftDeletes;
 
@@ -56,13 +56,13 @@ class Post extends Document implements SeoUsable
     public function getImages()
     {
         $images = [];
-        $postMetaData = new PostMetaDataHandler();
+        $blogMetaData = new BlogMetaDataHandler();
 
-        if ($thumbnail = $postMetaData->getThumbnail($this)) {
+        if ($thumbnail = $blogMetaData->getThumbnail($this)) {
             $images[] = $thumbnail;
         }
 
-        if ($coverImage = $postMetaData->getCoverImage($this)) {
+        if ($coverImage = $blogMetaData->getCoverImage($this)) {
             $images[] = $coverImage;
         }
 
@@ -102,12 +102,12 @@ class Post extends Document implements SeoUsable
 
     public function getMetaDataQuery($metaDataType)
     {
-        return $this->hasMany(MetaData::class, 'post_id', 'id')->where('type', $metaDataType);
+        return $this->hasMany(BlogMetaData::class, 'blog_id', 'id')->where('type', $metaDataType);
     }
 
     public function favorite()
     {
-        return $this->hasMany(PostFavorite::class, 'post_id', 'id');
+        return $this->hasMany(BlogFavorite::class, 'blog_id', 'id');
     }
 
     public function tags()

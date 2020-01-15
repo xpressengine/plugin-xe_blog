@@ -1,18 +1,18 @@
 <?php
 
-namespace Xpressengine\Plugins\Post\Handlers;
+namespace Xpressengine\Plugins\XeBlog\Handlers;
 
 use XeMedia;
 use XeStorage;
-use Xpressengine\Plugins\Post\Models\MetaData;
+use Xpressengine\Plugins\XeBlog\Models\BlogMetaData;
 
-class PostMetaDataHandler
+class BlogMetaDataHandler
 {
-    const UPLOAD_PATH = 'public/post';
+    const UPLOAD_PATH = 'public/blog';
 
-    public function getSubTitle($post)
+    public function getSubTitle($blog)
     {
-        $subTitleMetaData = $post->getMetaDataQuery(MetaData::TYPE_SUB_TITLE)->get()->first();
+        $subTitleMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_SUB_TITLE)->get()->first();
         if ($subTitleMetaData === null) {
             return '';
         }
@@ -20,9 +20,9 @@ class PostMetaDataHandler
         return $subTitleMetaData['meta_data'];
     }
 
-    public function getThumbnail($post, $thumbnailType = 'spill', $dimension = 'L')
+    public function getThumbnail($blog, $thumbnailType = 'spill', $dimension = 'L')
     {
-        $thumbnailMetaData = $post->getMetaDataQuery(MetaData::TYPE_COVER_THUMBNAIL)->get()->first();
+        $thumbnailMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_THUMBNAIL)->get()->first();
         if ($thumbnailMetaData === null) {
             return null;
         }
@@ -37,9 +37,9 @@ class PostMetaDataHandler
         return $thumbnail;
     }
 
-    public function getCoverImage($post)
+    public function getCoverImage($blog)
     {
-        $coverMetaData = $post->getMetaDataQuery(MetaData::TYPE_COVER_IMAGE)->get()->first();
+        $coverMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_IMAGE)->get()->first();
 
         if ($coverMetaData === null) {
              return null;
@@ -51,9 +51,9 @@ class PostMetaDataHandler
         return $coverImage;
     }
 
-    public function getBackgroundColor($post)
+    public function getBackgroundColor($blog)
     {
-        $backgroundColorMetaData = $post->getMetaDataQuery(MetaData::TYPE_BACKGROUND_COLOR)->get()->first();
+        $backgroundColorMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_BACKGROUND_COLOR)->get()->first();
         if ($backgroundColorMetaData === null) {
             return '';
         }
@@ -61,24 +61,24 @@ class PostMetaDataHandler
         return $backgroundColorMetaData['meta_data'];
     }
 
-    public function saveMetaData($post, $inputs)
+    public function saveMetaData($blog, $inputs)
     {
-        $this->saveSubTitle($post, $inputs);
-        $this->saveThumbnail($post, $inputs);
-        $this->saveCoverImage($post, $inputs);
-        $this->saveBackgroundColor($post, $inputs);
+        $this->saveSubTitle($blog, $inputs);
+        $this->saveThumbnail($blog, $inputs);
+        $this->saveCoverImage($blog, $inputs);
+        $this->saveBackgroundColor($blog, $inputs);
     }
 
-    protected function saveSubTitle($post, $inputs)
+    protected function saveSubTitle($blog, $inputs)
     {
         if (isset($inputs['sub_title']) === true && $inputs['sub_title'] !== '') {
-            $subTitle = $post->getMetaDataQuery(MetaData::TYPE_SUB_TITLE)->get()->first();
+            $subTitle = $blog->getMetaDataQuery(BlogMetaData::TYPE_SUB_TITLE)->get()->first();
 
             if ($subTitle === null) {
-                $subTitle = new MetaData();
+                $subTitle = new BlogMetaData();
                 $subTitle->fill([
-                    'post_id' => $post->id,
-                    'type' => MetaData::TYPE_SUB_TITLE,
+                    'blog_id' => $blog->id,
+                    'type' => BlogMetaData::TYPE_SUB_TITLE,
                     'meta_data' => $inputs['sub_title']
                 ]);
             } else {
@@ -89,7 +89,7 @@ class PostMetaDataHandler
         }
     }
 
-    protected function saveThumbnail($post, $inputs, $thumbnailType = 'spill')
+    protected function saveThumbnail($blog, $inputs, $thumbnailType = 'spill')
     {
         if (isset($inputs['thumbnail']) === true) {
             $thumbnailFile = $inputs['thumbnail'];
@@ -101,43 +101,43 @@ class PostMetaDataHandler
                 $thumbnail = XeMedia::createThumbnails($media, $thumbnailType);
             }
 
-            $thumbnailMetaData = new MetaData();
+            $thumbnailMetaData = new BlogMetaData();
             $thumbnailMetaData->fill([
-                'post_id' => $post->id,
-                'type' => MetaData::TYPE_COVER_THUMBNAIL,
+                'blog_id' => $blog->id,
+                'type' => BlogMetaData::TYPE_COVER_THUMBNAIL,
                 'meta_data' => $file->id
             ]);
             $thumbnailMetaData->save();
         }
     }
 
-    protected function saveCoverImage($post, $inputs)
+    protected function saveCoverImage($blog, $inputs)
     {
         if (isset($inputs['cover_image']) === true) {
             $coverImageFile = $inputs['cover_image'];
 
             $file = XeStorage::upload($coverImageFile, self::UPLOAD_PATH);
 
-            $coverImageMetaData = new MetaData();
+            $coverImageMetaData = new BlogMetaData();
             $coverImageMetaData->fill([
-                'post_id' => $post->id,
-                'type' => MetaData::TYPE_COVER_IMAGE,
+                'blog_id' => $blog->id,
+                'type' => BlogMetaData::TYPE_COVER_IMAGE,
                 'meta_data' => $file->id
             ]);
             $coverImageMetaData->save();
         }
     }
 
-    protected function saveBackgroundColor($post, $inputs)
+    protected function saveBackgroundColor($blog, $inputs)
     {
         if (isset($inputs['background_color']) === true && $inputs['background_color'] !== '') {
-            $backgroundColorMetaData = $post->getMetaDataQuery(MetaData::TYPE_BACKGROUND_COLOR)->get()->first();
+            $backgroundColorMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_BACKGROUND_COLOR)->get()->first();
 
             if ($backgroundColorMetaData === null) {
-                $backgroundColorMetaData = new MetaData();
+                $backgroundColorMetaData = new BlogMetaData();
                 $backgroundColorMetaData->fill([
-                    'post_id' => $post->id,
-                    'type' => MetaData::TYPE_BACKGROUND_COLOR,
+                    'blog_id' => $blog->id,
+                    'type' => BlogMetaData::TYPE_BACKGROUND_COLOR,
                     'meta_data' => $inputs['background_color']
                 ]);
             } else {
@@ -148,22 +148,22 @@ class PostMetaDataHandler
         }
     }
 
-    public function deleteMetaData($post)
+    public function deleteMetaData($blog)
     {
-        $this->deleteSubTitle($post);
-        $this->deleteThumbnail($post);
-        $this->deleteCoverImage($post);
-        $this->deleteBackgroundColor($post);
+        $this->deleteSubTitle($blog);
+        $this->deleteThumbnail($blog);
+        $this->deleteCoverImage($blog);
+        $this->deleteBackgroundColor($blog);
     }
 
-    protected function deleteSubTitle($post)
+    protected function deleteSubTitle($blog)
     {
-        $post->getMetaDataQuery(MetaData::TYPE_SUB_TITLE)->delete();
+        $blog->getMetaDataQuery(BlogMetaData::TYPE_SUB_TITLE)->delete();
     }
 
-    protected function deleteThumbnail($post)
+    protected function deleteThumbnail($blog)
     {
-        $thumbnailMetaData = $post->getMetaDataQuery(MetaData::TYPE_COVER_THUMBNAIL)->get()->first();
+        $thumbnailMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_THUMBNAIL)->get()->first();
         if ($thumbnailMetaData === null) {
             return;
         }
@@ -171,12 +171,12 @@ class PostMetaDataHandler
         $file = XeStorage::find($thumbnailMetaData['meta_data']);
         XeStorage::delete($file);
 
-        $post->getMetaDataQuery(MetaData::TYPE_COVER_THUMBNAIL)->delete();
+        $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_THUMBNAIL)->delete();
     }
 
-    protected function deleteCoverImage($post)
+    protected function deleteCoverImage($blog)
     {
-        $coverImageMetaData = $post->getMetaDataQuery(MetaData::TYPE_COVER_IMAGE)->get()->first();
+        $coverImageMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_IMAGE)->get()->first();
         if ($coverImageMetaData === null) {
             return;
         }
@@ -184,11 +184,11 @@ class PostMetaDataHandler
         $file = XeStorage::find($coverImageMetaData['meta_data']);
         XeStorage::delete($file);
 
-        $post->getMetaDataQuery(MetaData::TYPE_COVER_IMAGE)->delete();
+        $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_IMAGE)->delete();
     }
 
-    protected function deleteBackgroundColor($post)
+    protected function deleteBackgroundColor($blog)
     {
-        $post->getMetaDataQuery(MetaData::TYPE_BACKGROUND_COLOR)->delete();
+        $blog->getMetaDataQuery(BlogMetaData::TYPE_BACKGROUND_COLOR)->delete();
     }
 }

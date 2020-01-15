@@ -1,6 +1,6 @@
 {
-  "name": "xpressengine-plugin/post",
-  "description": "This Package is Xpressengine Plugin - Post plugin.",
+  "name": "xpressengine-plugin/xe_blog",
+  "description": "This Package is Xpressengine Plugin - XeBlog plugin.",
   "keywords": [
     "xpressengine",
     "plugin"
@@ -21,22 +21,22 @@
   ],
   "extra": {
     "xpressengine": {
-      "title": "Post",
+      "title": "XeBlog",
       "component": {
-        "module/post@post": {
-          "class": "Xpressengine\\Plugins\\Post\\Components\\Modules\\PostModule\\PostModule",
-          "name": "Post 모듈",
-          "description": "Post 모듈"
+        "module/xe_blog@xe_blog": {
+          "class": "Xpressengine\\Plugins\\XeBlog\\Components\\Modules\\BlogModule\\BlogModule",
+          "name": "XeBlog 모듈",
+          "description": "XeBlog 모듈"
         },
-        "widget/post@post": {
-          "class": "Xpressengine\\Plugins\\Post\\Components\\Widgets\\PostWidget\\PostWidget",
-          "name": "Post 위젯",
-          "description": "Post 모듈"
+        "widget/xe_blog@xe_blog": {
+          "class": "Xpressengine\\Plugins\\XeBlog\\Components\\Widgets\\BlogWidget\\BlogWidget",
+          "name": "XeBlog 위젯",
+          "description": "XeBlog 위젯"
         },
-        "widget/post@post/skin/post_skin@default":{
-          "class": "Xpressengine\\Plugins\\Post\\Components\\Skins\\Widget\\PostWidgetSkin\\PostWidgetSkin",
-          "name": "Post 위젯 스킨",
-          "description": "Post 위젯 스킨"
+        "widget/xe_blog@xe_blog/skin/blog_skin@default":{
+          "class": "Xpressengine\\Plugins\\XeBlog\\Components\\Skins\\Widget\\BlogWidgetSkin\\BlogWidgetSkin",
+          "name": "XeBlog 위젯 스킨",
+          "description": "XeBlog 위젯 스킨"
         }
       }
     }
@@ -46,7 +46,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Xpressengine\\Plugins\\Post\\": "src/"
+      "Xpressengine\\Plugins\\XeBlog\\": "src/"
     }
   }
 }
