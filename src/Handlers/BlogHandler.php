@@ -3,8 +3,8 @@
 namespace Xpressengine\Plugins\XeBlog\Handlers;
 
 use Xpressengine\Document\DocumentHandler;
-use Xpressengine\Plugins\XeBlog\Components\Modules\BlogModule\BlogModule;
 use Xpressengine\Plugins\XeBlog\Models\Blog;
+use Xpressengine\Plugins\XeBlog\Plugin;
 
 class BlogHandler extends DocumentHandler
 {
@@ -13,7 +13,7 @@ class BlogHandler extends DocumentHandler
     public function store($attributes, $instanceId)
     {
         $attributes['instance_id'] = $instanceId;
-        $attributes['type'] = BlogModule::getId();
+        $attributes['type'] = Plugin::getId();
 
         return parent::add($attributes);
     }
