@@ -36,6 +36,8 @@ class BlogController extends Controller
 
     public function create(Request $request)
     {
+        app('xe.theme')->selectBlankTheme();
+
         $redirectUrl = $request->session()->pull('url.intended') ?: url()->previous();
         if ($redirectUrl !== $request->url()) {
             $request->session()->put('url.intended', $redirectUrl);
@@ -67,6 +69,8 @@ class BlogController extends Controller
 
     public function edit(Request $request, $blogId)
     {
+        app('xe.theme')->selectBlankTheme();
+
         $redirectUrl = $request->session()->pull('url.intended') ?: url()->previous();
         if ($redirectUrl !== $request->url()) {
             $request->session()->put('url.intended', $redirectUrl);
