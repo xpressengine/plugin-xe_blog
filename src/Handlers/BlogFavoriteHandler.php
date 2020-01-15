@@ -2,9 +2,10 @@
 
 namespace Xpressengine\Plugins\XeBlog\Handlers;
 
+use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
 use Xpressengine\Plugins\XeBlog\Models\BlogFavorite;
 
-class BlogFavoriteHandler
+class BlogFavoriteHandler implements Searchable
 {
     public function isFavoriteBlog($blog, $user)
     {
@@ -26,5 +27,16 @@ class BlogFavoriteHandler
     public function unsetFavoriteBlog($blog, $user)
     {
         $blog->favorite()->where('user_id', $user->getId())->delete();
+    }
+
+    public function getItems($query, array $attributes)
+    {
+        \Log::info(__METHOD__);
+
+        $query->with(['favorite' => function ($query) {
+            $query->where('user_id', auth()->user()->getId());
+        }]);
+
+        return $query;
     }
 }

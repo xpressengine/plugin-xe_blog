@@ -4,11 +4,19 @@ namespace Xpressengine\Plugins\XeBlog\Handlers;
 
 use XeMedia;
 use XeStorage;
+use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
 use Xpressengine\Plugins\XeBlog\Models\BlogMetaData;
 
-class BlogMetaDataHandler
+class BlogMetaDataHandler implements Searchable
 {
     const UPLOAD_PATH = 'public/blog';
+
+    public function getItems($query, array $attributes)
+    {
+        \Log::info(__METHOD__);
+
+        return $query;
+    }
 
     public function getSubTitle($blog)
     {

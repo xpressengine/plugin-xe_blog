@@ -8,6 +8,9 @@ use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
+use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
+use Xpressengine\Plugins\XeBlog\Models\Blog;
+use Xpressengine\Plugins\XeBlog\Plugin;
 use Xpressengine\Tag\TagHandler;
 
 class BlogService
@@ -27,6 +30,8 @@ class BlogService
     /** @var BlogTaxonomyHandler $taxonomyHandler */
     protected $taxonomyHandler;
 
+    protected $handlers = [];
+
     public function __construct(
         BlogHandler $blogHandler,
         BlogMetaDataHandler $metaDataHandler,
@@ -39,6 +44,26 @@ class BlogService
         $this->blogConfigHandler = $blogConfigHandler;
         $this->tagHandler = $tagHandler;
         $this->taxonomyHandler = $taxonomyHandler;
+    }
+
+    public function addHandlers($handler)
+    {
+        $this->handlers[] = $handler;
+    }
+
+    public function getItems(Request $request)
+    {
+        $attributes = $request->all();
+
+        $query = Blog::division(Plugin::getId())->where('instance_id', Plugin::getId());
+
+        foreach ($this->handlers as $handler) {
+            if ($handler instanceof Searchable) {
+                $query = $handler->getItems($query, $attributes);
+            }
+        }
+
+        return $query->get();
     }
 
     public function store(Request $request, $instanceId)

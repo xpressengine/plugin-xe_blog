@@ -7,6 +7,7 @@ use XeInterception;
 use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Plugin\AbstractPlugin;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogFavoriteHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
@@ -35,7 +36,15 @@ class Plugin extends AbstractPlugin
             $tagHandler = app('xe.tag');
             $taxonomyHandler = app('xe.blog.taxonomyHandler');
 
-            return new BlogService($blogHandler, $blogMetaDataHandler, $blogConfigHandler, $tagHandler, $taxonomyHandler);
+            $boardService = new BlogService($blogHandler, $blogMetaDataHandler, $blogConfigHandler, $tagHandler, $taxonomyHandler);
+            $boardService->addHandlers($blogHandler);
+            $boardService->addHandlers($blogMetaDataHandler);
+            $boardService->addHandlers($blogConfigHandler);
+            $boardService->addHandlers($tagHandler);
+            $boardService->addHandlers($taxonomyHandler);
+            $boardService->addHandlers(new BlogFavoriteHandler());
+
+            return $boardService;
         });
         app()->alias(BlogService::class, 'xe.blog.service');
 

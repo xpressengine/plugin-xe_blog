@@ -4,9 +4,10 @@ namespace Xpressengine\Plugins\XeBlog\Handlers;
 
 use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Category\Models\CategoryItem;
+use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
 use Xpressengine\Plugins\XeBlog\Models\BlogTaxonomy;
 
-class BlogTaxonomyHandler
+class BlogTaxonomyHandler implements Searchable
 {
     const TAXONOMY_CONFIG_NAME = 'taxonomy';
 
@@ -28,6 +29,13 @@ class BlogTaxonomyHandler
         if ($this->blogConfigHandler->get($this->blogConfigHandler->getConfigName(self::TAXONOMY_CONFIG_NAME)) === null) {
             $this->createTaxonomyDefaultConfig();
         }
+    }
+
+    public function getItems($query, array $attributes)
+    {
+        \Log::info(__METHOD__);
+
+        return $query;
     }
 
     private function createTaxonomyDefaultConfig()

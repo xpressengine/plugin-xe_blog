@@ -3,10 +3,11 @@
 namespace Xpressengine\Plugins\XeBlog\Handlers;
 
 use Xpressengine\Document\DocumentHandler;
+use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
 use Xpressengine\Plugins\XeBlog\Models\Blog;
 use Xpressengine\Plugins\XeBlog\Plugin;
 
-class BlogHandler extends DocumentHandler
+class BlogHandler extends DocumentHandler implements Searchable
 {
     protected $model = Blog::class;
 
@@ -18,17 +19,17 @@ class BlogHandler extends DocumentHandler
         return parent::add($attributes);
     }
 
-    public function getItems($attributes)
+    public function getItems($query, $attributes)
     {
-        $model = Blog::division($attributes['instanceId']);
-        $query = $model->where('instance_id', $attributes['instanceId']);
-        $query = $query->visible();
+        if (isset($attributes['force']) === true && $attributes['force'] === true) {
+            $query = $query->visible();
+        }
 
-        $query->with(['favorite' => function ($query) {
-            $query->where('user_id', auth()->user()->getId());
-        }]);
+        if (isset($attributes['title']) === true) {
+            $query = $query->where('title', 'like', '%' . $attributes['title']);
+        }
 
-        return $query->get();
+        return $query;
     }
 
     public function update($blog, $inputs)

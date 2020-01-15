@@ -6,15 +6,14 @@ use XePresenter;
 use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
-use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
-use Xpressengine\Plugins\XeBlog\Plugin;
+use Xpressengine\Plugins\XeBlog\Services\BlogService;
 
 class BlogSettingController extends Controller
 {
-    /** @var BlogHandler $blogHandler */
-    protected $blogHandler;
+    /** @var BlogService $blogService */
+    protected $blogService;
 
     /** @var BlogConfigHandler $configHandler */
     protected $configHandler;
@@ -23,11 +22,11 @@ class BlogSettingController extends Controller
     protected $taxonomyHandler;
 
     public function __construct(
-        BlogHandler $blogHandler,
+        BlogService $blogService,
         BlogConfigHandler $configHandler,
         BlogTaxonomyHandler $taxonomyHandler
     ) {
-        $this->blogHandler = $blogHandler;
+        $this->blogService = $blogService;
         $this->configHandler = $configHandler;
         $this->taxonomyHandler = $taxonomyHandler;
 
@@ -36,11 +35,7 @@ class BlogSettingController extends Controller
 
     public function blogs(Request $request)
     {
-        $tempAttributes = $request->all();
-        if (isset($tempAttributes['instanceId']) === false) {
-            $tempAttributes['instanceId'] = Plugin::getId();
-        }
-        $blogs = $this->blogHandler->getItems($tempAttributes);
+        $blogs = $this->blogService->getItems($request);
 
         return XePresenter::make('xe_blog::views.setting.blogs', compact('blogs'));
     }
