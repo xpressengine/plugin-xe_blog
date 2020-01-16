@@ -1,5 +1,5 @@
 {{ \XeFrontend::css([
-    'plugins/boldjournal/Components/Themes/assets/css/xe-blog-plugin.css'
+    'plugins/xe_blog/src/Components/Skins/Widget/BlogWidgetSkin/assets/css/widget-xe-blog-list.css'
 ])->load() }}
 
 <section class="section-widget-bold-xe-blog-list-story">
