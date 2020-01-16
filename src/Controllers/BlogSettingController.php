@@ -36,7 +36,7 @@ class BlogSettingController extends Controller
 
     public function blogs(Request $request)
     {
-        $blogs = $this->blogService->getItems($request);
+        $blogs = $this->blogService->getItems($request->all());
         $taxonomies = $this->taxonomyHandler->getTaxonomies();
 
         return XePresenter::make('xe_blog::views.setting.blogs', compact('blogs', 'taxonomies'));

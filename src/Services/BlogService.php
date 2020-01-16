@@ -51,10 +51,8 @@ class BlogService
         $this->handlers[] = $handler;
     }
 
-    public function getItems(Request $request)
+    public function getItems(array $attributes)
     {
-        $attributes = $request->all();
-
         $query = Blog::division(Plugin::getId())->where('instance_id', Plugin::getId());
 
         foreach ($this->handlers as $handler) {
