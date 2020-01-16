@@ -1,0 +1,179 @@
+// post 플러그인 게시물 타이틀 위젯
+.section-widget-bold-xe-blog-board-title {
+
+}
+
+.widget-bold-xe-blog-board-title {
+
+}
+
+.widget-bold-xe-blog-board-title__category {
+  display: inline-block;
+  padding-bottom: 24px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: $brown-grey;
+}
+
+.widget-bold-xe-blog-board-title__title {
+  margin: 0;
+  padding: 0 0 16px;
+  font-size: 40px;
+  line-height: 60px;
+  font-weight: 400;
+  color: $black;
+}
+
+.widget-bold-xe-blog-board-title__text {
+  margin: 0;
+  padding: 0 0 60px;
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 600;
+  color: $black;
+}
+
+.widget-bold-xe-blog-board-title-meta {
+  position: absolute;
+  top: 0;
+  z-index: 10;
+}
+
+.widget-bold-xe-blog-board-title-meta--more-info {
+  display: none;
+  left: 110.3%;
+  width: 160px;
+  top: 48px;
+}
+
+.widget-bold-xe-blog-board-title-meta-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  > li {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 400;
+    list-style: none;
+    color: $dark-khaki;
+
+    &.date {
+      padding-bottom: 24px;
+    }
+  }
+}
+
+.widget-bold-xe-blog-board-title-meta--sns {
+  display: none;
+  left: -9.3%;
+
+  .widget-bold-xe-blog-board-title-meta-list {
+    > li {
+      margin-bottom: 12px;
+
+      &:first-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.widget-bold-xe-blog-board-title-meta__item {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 4px 0;
+  border: 0 none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: 16px 16px;
+  vertical-align: top;
+
+  &.widget-bold-xe-blog-board-title-meta__item--bookmark {
+    background-image: url(../img/icon-bookmark-gray.png);
+
+    &.on {
+      background-image: url(../img/icon-bookmark-red.png);
+    }
+
+    &.widget-bold-xe-blog-board-title-meta__item--mobile {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 28px;
+      height: 28px;
+      background-size: 28px 28px;
+    }
+  }
+
+  &.widget-bold-xe-blog-board-title-meta__item--twitter {
+    background-image: url(../img/icon-sns-twitter.png);
+
+    &:hover,
+    &:focus {
+      background-image: url(../img/icon-sns-twitter-hover.png);
+    }
+  }
+
+  &.widget-bold-xe-blog-board-title-meta__item--facebook {
+    background-image: url(../img/icon-sns-facebook.png);
+
+    &:hover,
+    &:focus {
+      background-image: url(../img/icon-sns-facebook-hover.png);
+    }
+  }
+
+  &.widget-bold-xe-blog-board-title-meta__item--kakaotalk {
+    background-image: url(../img/icon-sns-kakaotalk.png);
+
+    &:hover,
+    &:focus {
+      background-image: url(../img/icon-sns-kakaotalk-hover.png);
+    }
+  }
+
+  &.widget-bold-xe-blog-board-title-meta__item--share {
+    background-image: url(../img/icon-sns-share.png);
+
+    &:hover,
+    &:focus {
+      background-image: url(../img/icon-sns-share-hover.png);
+    }
+  }
+}
+
+.widget-bold-xe-blog-board-title-meta__bar {
+  position: relative;
+  display: block;
+  width: 16px;
+  padding: 16px 0;
+  vertical-align: top;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    margin-top: -1px;
+    width: 10px;
+    height: 1px;
+    background-color: $very-light-pink-two;
+  }
+}
+
+@include pc {
+  .widget-bold-xe-blog-board-title-meta--sns{
+    display: block;
+  }
+
+  .widget-bold-xe-blog-board-title-meta--more-info {
+    display: block;
+  }
+}
