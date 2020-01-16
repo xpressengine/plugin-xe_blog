@@ -114,4 +114,9 @@ class Blog extends Document implements SeoUsable
     {
         return $this->belongsToMany(Tag::class, 'taggables', 'taggable_id', 'tag_id');
     }
+
+    public function taxonomy()
+    {
+        return $this->hasMany(BlogTaxonomy::class, 'blog_id', 'id');
+    }
 }

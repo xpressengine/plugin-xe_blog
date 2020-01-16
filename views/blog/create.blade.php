@@ -26,5 +26,15 @@
     <span>태그</span>
     {!! uio('uiobject/board@tag') !!}
 
+    <hr>
+    <span>Taxonomy</span>
+    @foreach ($taxonomyGroups as $taxonomyName => $taxonomy)
+        {!! uio('uiobject/board@select', [
+            'name' => 'taxonomy_item_id[]',
+            'label' => xe_trans($taxonomyName),
+            'items' => $taxonomy,
+        ]) !!}
+    @endforeach
+
     <button type="submit" class="xe-btn">저장</button>
 </form>

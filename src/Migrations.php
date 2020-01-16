@@ -91,6 +91,7 @@ class Migrations
             $table->increments('id');
 
             $table->string('blog_id', 36);
+            $table->integer('taxonomy_id');
             $table->integer('taxonomy_item_id');
 
             $table->index('blog_id');

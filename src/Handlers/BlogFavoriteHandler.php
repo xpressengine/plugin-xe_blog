@@ -31,8 +31,6 @@ class BlogFavoriteHandler implements Searchable
 
     public function getItems($query, array $attributes)
     {
-        \Log::info(__METHOD__);
-
         $query->with(['favorite' => function ($query) {
             $query->where('user_id', auth()->user()->getId());
         }]);

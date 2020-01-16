@@ -31,13 +31,15 @@ class BlogSettingController extends Controller
         $this->taxonomyHandler = $taxonomyHandler;
 
         XePresenter::share('metaDataHandler', new BlogMetaDataHandler());
+        XePresenter::share('taxonomyHandler', $taxonomyHandler);
     }
 
     public function blogs(Request $request)
     {
         $blogs = $this->blogService->getItems($request);
+        $taxonomies = $this->taxonomyHandler->getTaxonomies();
 
-        return XePresenter::make('xe_blog::views.setting.blogs', compact('blogs'));
+        return XePresenter::make('xe_blog::views.setting.blogs', compact('blogs', 'taxonomies'));
     }
 
     public function editSetting(Request $request)

@@ -5,6 +5,9 @@
     <tr>
         <th>제목</th>
         <th>작성자</th>
+        @foreach ($taxonomies as $taxonomy)
+            <th>{{ xe_trans($taxonomy->name) }}</th>
+        @endforeach
         <th>생성일</th>
     </tr>
     </thead>
@@ -27,6 +30,13 @@
                         guest
                     @endif
                 </td>
+                @foreach ($taxonomies as $taxonomy)
+                    @if ($taxonomyHandler->getBlogTaxonomyItem($blog, $taxonomy->id) !== null)
+                        <td>{{ xe_trans($taxonomyHandler->getBlogTaxonomyItem($blog, $taxonomy->id)->word) }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                @endforeach
                 <td>{{ $blog->created_at->format('Y-m-d H:i:s') }}</td>
             </tr>
         @endforeach

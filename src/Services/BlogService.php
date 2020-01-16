@@ -63,6 +63,8 @@ class BlogService
             }
         }
 
+        $query->orderByDesc('created_at');
+
         return $query->get();
     }
 

@@ -33,9 +33,21 @@ class BlogTaxonomyHandler implements Searchable
 
     public function getItems($query, array $attributes)
     {
-        \Log::info(__METHOD__);
+        $query->with('taxonomy');
 
         return $query;
+    }
+
+    public function getBlogTaxonomyItem($blog, $taxonomyId)
+    {
+        $taxonomy = $blog->taxonomy()->where('taxonomy_id', $taxonomyId)->get()->first();
+
+        $taxonomyItem = null;
+        if ($taxonomy !== null) {
+            $taxonomyItem = $taxonomy->taxonomyItem;
+        }
+
+        return $taxonomyItem;
     }
 
     private function createTaxonomyDefaultConfig()
@@ -125,9 +137,15 @@ class BlogTaxonomyHandler implements Searchable
         });
 
         foreach ($taxonomyIds as $taxonomyId) {
+            $taxonomyItem = CategoryItem::find($taxonomyId);
+            if ($taxonomyItem === null) {
+                continue;
+            }
+
             $newBlogTaxonomy = new BlogTaxonomy();
             $newBlogTaxonomy->fill([
                 'blog_id' => $blog->id,
+                'taxonomy_id' => $taxonomyItem->category_id,
                 'taxonomy_item_id' => $taxonomyId
             ]);
             $newBlogTaxonomy->save();

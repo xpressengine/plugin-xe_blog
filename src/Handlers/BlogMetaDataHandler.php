@@ -13,8 +13,6 @@ class BlogMetaDataHandler implements Searchable
 
     public function getItems($query, array $attributes)
     {
-        \Log::info(__METHOD__);
-
         return $query;
     }
 
