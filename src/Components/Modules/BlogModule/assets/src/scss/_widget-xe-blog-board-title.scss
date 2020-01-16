@@ -99,12 +99,12 @@
     background-image: url(../img/icon-bookmark-gray.png);
 
     &.on {
-      background-image: url(../img/icon-bookmark-red.png);
+      background-image: url(../img/icon-bookmark-fill-red.png);
     }
 
     &.widget-bold-xe-blog-board-title-meta__item--mobile {
       position: absolute;
-      top: 0;
+      top: -44px;
       right: 0;
       width: 28px;
       height: 28px;
@@ -169,6 +169,14 @@
 }
 
 @include pc {
+  .widget-bold-xe-blog-board-title-meta__item {
+    &.widget-bold-xe-blog-board-title-meta__item--bookmark {
+      &.widget-bold-xe-blog-board-title-meta__item--mobile {
+        display: none;
+      }
+    }
+  }
+
   .widget-bold-xe-blog-board-title-meta--sns{
     display: block;
   }
