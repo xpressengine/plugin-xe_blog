@@ -34,6 +34,13 @@ class BlogController extends Controller
         XePresenter::share('metaDataHandler', new BlogMetaDataHandler());
     }
 
+    public function getItemsForJson(Request $request)
+    {
+        $items = $this->blogService->getItemsJson($request->all());
+
+        return XePresenter::makeApi($items);
+    }
+
     public function create(Request $request)
     {
         app('xe.theme')->selectBlankTheme();

@@ -4,16 +4,45 @@ namespace Xpressengine\Plugins\XeBlog\Handlers;
 
 use XeMedia;
 use XeStorage;
+use Xpressengine\Plugins\XeBlog\Interfaces\Jsonable;
 use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
+use Xpressengine\Plugins\XeBlog\Models\Blog;
 use Xpressengine\Plugins\XeBlog\Models\BlogMetaData;
 
-class BlogMetaDataHandler implements Searchable
+class BlogMetaDataHandler implements Searchable, Jsonable
 {
     const UPLOAD_PATH = 'public/blog';
 
     public function getItems($query, array $attributes)
     {
         return $query;
+    }
+
+    public function getTypeName()
+    {
+        return 'meta_data';
+    }
+
+    public function getJsonData(Blog $blog)
+    {
+        $data = [];
+        if ($subTitle = $this->getSubTitle($blog)) {
+            $data['sub_title'] = $subTitle;
+        }
+
+        if ($thumbnail = $this->getThumbnail($blog)) {
+            $data['thumbnail_url'] = $thumbnail->url();
+        }
+
+        if ($coverImage = $this->getCoverImage($blog)) {
+            $data['cover_image_url'] = $coverImage->url();
+        }
+
+        if ($backgroundColor = $this->getBackgroundColor($blog)) {
+            $data['background_color'] = $backgroundColor;
+        }
+
+        return $data;
     }
 
     public function getSubTitle($blog)

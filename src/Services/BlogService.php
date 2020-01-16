@@ -8,6 +8,7 @@ use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
+use Xpressengine\Plugins\XeBlog\Interfaces\Jsonable;
 use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
 use Xpressengine\Plugins\XeBlog\Models\Blog;
 use Xpressengine\Plugins\XeBlog\Plugin;
@@ -51,7 +52,7 @@ class BlogService
         $this->handlers[] = $handler;
     }
 
-    public function getItems(array $attributes)
+    public function getItemsQuery(array $attributes)
     {
         $query = Blog::division(Plugin::getId())->where('instance_id', Plugin::getId());
 
@@ -60,6 +61,34 @@ class BlogService
                 $query = $handler->getItems($query, $attributes);
             }
         }
+
+        return $query;
+    }
+
+    public function getItemsJson(array $attributes)
+    {
+        $query = $this->getItemsQuery($attributes);
+        $query->orderByDesc('created_at');
+        //pagination 처리
+
+        $json = [];
+        $items = $query->get();
+        $items->each(function ($blog) use (&$json) {
+            $blogData = [];
+            foreach ($this->handlers as $handler) {
+                if ($handler instanceof Jsonable) {
+                    $blogData[$handler->getTypeName()] = $handler->getJsonData($blog);
+                }
+            }
+            $json[] = $blogData;
+        });
+
+        return $json;
+    }
+
+    public function getItems(array $attributes)
+    {
+        $query = $this->getItemsQuery($attributes);
 
         $query->orderByDesc('created_at');
 

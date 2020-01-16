@@ -2,10 +2,12 @@
 
 namespace Xpressengine\Plugins\XeBlog\Handlers;
 
+use Xpressengine\Plugins\XeBlog\Interfaces\Jsonable;
 use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
+use Xpressengine\Plugins\XeBlog\Models\Blog;
 use Xpressengine\Plugins\XeBlog\Models\BlogFavorite;
 
-class BlogFavoriteHandler implements Searchable
+class BlogFavoriteHandler implements Searchable, Jsonable
 {
     public function isFavoriteBlog($blog, $user)
     {
@@ -36,5 +38,15 @@ class BlogFavoriteHandler implements Searchable
         }]);
 
         return $query;
+    }
+
+    public function getTypeName()
+    {
+        return 'favorite';
+    }
+
+    public function getJsonData(Blog $blog)
+    {
+        return $blog->favorite()->where('user_id', auth()->user()->getId())->get();
     }
 }

@@ -4,10 +4,12 @@ namespace Xpressengine\Plugins\XeBlog\Handlers;
 
 use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Category\Models\CategoryItem;
+use Xpressengine\Plugins\XeBlog\Interfaces\Jsonable;
 use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
+use Xpressengine\Plugins\XeBlog\Models\Blog;
 use Xpressengine\Plugins\XeBlog\Models\BlogTaxonomy;
 
-class BlogTaxonomyHandler implements Searchable
+class BlogTaxonomyHandler implements Searchable, Jsonable
 {
     const TAXONOMY_CONFIG_NAME = 'taxonomy';
 
@@ -36,6 +38,27 @@ class BlogTaxonomyHandler implements Searchable
         $query->with('taxonomy');
 
         return $query;
+    }
+
+    public function getTypeName()
+    {
+        return 'taxonomy';
+    }
+
+    public function getJsonData(Blog $blog)
+    {
+        $taxonomyData = [];
+        $taxonomies = $this->getTaxonomies();
+        foreach ($taxonomies as $taxonomy) {
+            $blogTaxonomyItem = $this->getBlogTaxonomyItem($blog, $taxonomy->id);
+            if ($blogTaxonomyItem === null) {
+                continue;
+            }
+
+            $taxonomyData[$taxonomy->id] = xe_trans($blogTaxonomyItem->word);
+        }
+
+        return $taxonomyData;
     }
 
     public function getBlogTaxonomyItem($blog, $taxonomyId)
