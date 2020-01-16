@@ -2,8 +2,9 @@
 
 namespace Xpressengine\Plugins\XeBlog\Components\Widgets\BlogWidget;
 
-use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
-use Xpressengine\Plugins\XeBlog\Plugin;
+use Route;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Services\BlogService;
 use Xpressengine\Widget\AbstractWidget;
 
 class BlogWidget extends AbstractWidget
@@ -12,12 +13,24 @@ class BlogWidget extends AbstractWidget
 
     public function render()
     {
-        /** @var BlogHandler $blogHandler */
-        $blogHandler = app('xe.blog.handler');
+        /** @var BlogService $blogService */
+        $blogService = app('xe.blog.service');
 
-        $blogs = $blogHandler->getItems(['instanceId' => Plugin::getId()]);
+        $metaDataHandler = new BlogMetaDataHandler();
+        $taxonomyHandler = app('xe.blog.taxonomyHandler');
+        $blogConfigHandler = app('xe.blog.configHandler');
 
-        return $this->renderSkin(['blogs' => $blogs]);
+        $blogs = $blogService->getItems([]);
+        $blogConfig = $blogConfigHandler->getBlogConfig();
+        $taxonomies = $taxonomyHandler->getTaxonomies();
+
+        return $this->renderSkin([
+            'blogs' => $blogs,
+            'blogConfig' => $blogConfig,
+            'metaDataHandler' => $metaDataHandler,
+            'taxonomyHandler' => $taxonomyHandler,
+            'taxonomies' => $taxonomies
+        ]);
     }
 
     public function renderSetting(array $args = [])

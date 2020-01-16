@@ -18,7 +18,7 @@ class BlogConfigHandler
         'assent' => true,
         'dissent' => false,
         'deleteToTrash' => false,
-        'taxonomy' => []
+        'perPage' => 12
     ];
 
     public function __construct($configManager)

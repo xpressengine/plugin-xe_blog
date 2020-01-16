@@ -100,19 +100,27 @@ class BlogTaxonomyHandler implements Searchable
         return $taxonomies;
     }
 
+    public function getTaxonomyItems($taxonomyId)
+    {
+        $items = [];
+        $taxonomyItems = CategoryItem::where('category_id', $taxonomyId)->orderBy('ordering')->get();
+        foreach ($taxonomyItems as $taxonomyItem) {
+            $items[] = [
+                'value' => $taxonomyItem->id,
+                'text' => $taxonomyItem->word
+            ];
+        }
+
+        return $items;
+    }
+
     public function getTaxonomyGroups()
     {
         $taxonomyGroups = [];
         $taxonomies = $this->getTaxonomies();
         foreach ($taxonomies as $taxonomy) {
-            $items = [];
-            $taxonomyItems = CategoryItem::where('category_id', $taxonomy->id)->orderBy('ordering')->get();
-            foreach ($taxonomyItems as $taxonomyItem) {
-                $items[] = [
-                    'value' => $taxonomyItem->id,
-                    'text' => $taxonomyItem->word
-                ];
-            }
+            $items = $this->getTaxonomyItems($taxonomy->id);
+
             $taxonomyGroups[$taxonomy->name] = $items;
         }
 

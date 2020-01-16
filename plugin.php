@@ -88,6 +88,7 @@ class Plugin extends AbstractPlugin
             Route::get('/edit/{blogId}', ['as' => 'edit', 'uses' => 'BlogController@edit']);
             Route::post('/update', ['as' => 'update', 'uses' => 'BlogController@update']);
             Route::post('/delete/{blogId}', ['as' => 'delete', 'uses' => 'BlogController@delete']);
+            Route::post('/set_favorite', ['as' => 'favorite', 'uses' => 'BlogController@setFavoriteState']);
         });
 
         Route::settings(Plugin::getId(), function () {
