@@ -1,0 +1,39 @@
+// post 플러그인 볼드저널 위젯모음
+
+// 더보기 버튼
+.widget-bold-xe-blog-button-box--more {
+  padding: 62px 0;
+  text-align: center;
+}
+
+.widget-bold-xe-blog-button__more {
+  padding: 0;
+  border: 0 none;
+  background-color: transparent;
+  outline: none;
+}
+
+.widget-bold-xe-blog-button__more-text {
+  display: inline-block;
+  font-family: 'Spoqa Han Sans', sans-serif;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 600;
+  vertical-align: top;
+}
+
+.widget-bold-xe-blog-list__button-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: 24px 24px;
+  vertical-align: top;
+}
+
+// 더보기 아이콘
+.widget-bold-xe-blog-list__button-icon--chevron-down {
+  margin-left: 12px;
+  background-image: url(../img/icon-chevron-down.svg);
+}

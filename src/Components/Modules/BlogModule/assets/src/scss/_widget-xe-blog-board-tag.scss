@@ -1,0 +1,36 @@
+// post 플러그인 게시물 태그 위젯
+.section-widget-bold-xe-blog-tag {
+  padding: 25px 0;
+}
+
+.widget-bold-xe-blog-tag {
+
+}
+
+.widget-bold-xe-blog-tag-list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  > li {
+    margin: 5px 10px 5px 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.widget-bold-xe-blog-tag__link {
+  display: inline-block;
+  padding: 10px 16px;
+  border: 1px solid $brown-grey;
+  border-radius: 4px;
+  background-color: $white;
+  color: $brown-grey;
+
+  &:hover {
+    border-color: $army-green;
+    text-decoration: none;
+    color: $black;
+  }
+}

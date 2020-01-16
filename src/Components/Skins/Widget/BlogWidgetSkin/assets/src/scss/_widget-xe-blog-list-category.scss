@@ -1,0 +1,84 @@
+// xe-blog 플러그인 리스트 상단 카테고리 스타일
+
+.widget-bold-xe-blog-category {
+  padding-bottom: 70px;
+}
+
+.widget-bold-xe-blog-category-list {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  white-space: nowrap;
+  margin: 0;
+  padding: 25px 0;
+  list-style: none;
+
+  > li {
+    display: inline-block;
+    margin: 5px 0;
+    padding: 0 30px;
+    list-style: none;
+
+    &.on {
+      .widget-bold-xe-blog-category-list__link {
+        font-weight: 600;
+        color: $black;
+      }
+    }
+  }
+}
+
+.widget-bold-xe-blog-category-list__link {
+  font-family: 'Spoqa Han Sans', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 300;
+  text-decoration: none;
+  color: $black;
+
+  &:hover {
+    text-decoration: none;
+    color: $black;
+  }
+}
+
+@include pc {
+  .widget-bold-xe-blog-category {
+    padding-bottom: 70px;
+  }
+
+  .widget-bold-xe-blog-category-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    white-space: normal;
+    overflow-x: visible;
+
+    > li {
+      margin: 5px 0;
+      padding: 0 30px;
+      list-style: none;
+
+      &.on {
+        .widget-bold-xe-blog-category-list__link {
+          font-weight: 600;
+          color: $black;
+        }
+      }
+    }
+  }
+
+  .widget-bold-xe-blog-category-list__link {
+    font-family: 'Spoqa Han Sans', sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 300;
+    text-decoration: none;
+    color: $black;
+
+    &:hover {
+      text-decoration: none;
+      color: $black;
+    }
+  }
+}
