@@ -1,0 +1,211 @@
+// xe-blog 플러그인 게시물 상세 메타(SNS, 추가영역) 영역 스타일
+.section-widget-bold-xe-blog-board-meta-mobile {
+
+}
+
+.widget-bold-xe-blog-board-meta-mobile {
+  position: absolute;
+  top: 0;
+  z-index: 10;
+}
+
+.widget-bold-xe-blog-board-meta-mobile--more-info {
+  position: static;
+  padding-top: 30px;
+  // display: none;
+  // left: 110.3%;
+  // width: 160px;
+  // top: 48px;
+}
+
+.widget-bold-xe-blog-board-meta-mobile-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  > li {
+    display: inline-block;
+    margin: 0 8px 0 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 400;
+    list-style: none;
+    color: $dark-khaki;
+
+    &.date {
+      display: block;
+      // padding-bottom: 24px;
+      padding-bottom: 0;
+    }
+  }
+}
+
+.widget-bold-xe-blog-board-meta-mobile--sns {
+  // display: none;
+  // left: -9.3%;
+  position: static;
+
+  .widget-bold-xe-blog-board-meta-mobile-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 29px 0 39px;
+
+    > li {
+      flex: 0 0 24px;
+      max-width: 24px;
+      // margin-left: 20px;
+      // margin-right: 20px;
+      // margin-bottom: 12px;
+      margin: 6px 20px;
+
+      // &:first-child {
+      //   flex: 0 0 0;
+      //   max-width: 0;
+      //   margin: 0;
+      // }
+    }
+  }
+}
+
+.widget-bold-xe-blog-board-meta-mobile__item {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  // padding: 4px 0;
+  padding: 0;
+  border: 0 none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: 24px 24px;
+  vertical-align: top;
+
+  &.widget-bold-xe-blog-board-meta-mobile__item--bookmark {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    width: 28px;
+    height: 28px;
+    background-size: 28px 28px;
+    background-image: url(../img/icon-bookmark-gray.png);
+
+    &.on {
+      background-image: url(../img/icon-bookmark-fill-red.png);
+    }
+  }
+
+  &.widget-bold-xe-blog-board-meta-mobile__item--twitter {
+    background-image: url(../img/icon-sns-twitter.png);
+
+    &:hover,
+    &:focus {
+      background-image: url(../img/icon-sns-twitter-hover.png);
+    }
+  }
+
+  &.widget-bold-xe-blog-board-meta-mobile__item--facebook {
+    background-image: url(../img/icon-sns-facebook.png);
+
+    &:hover,
+    &:focus {
+      background-image: url(../img/icon-sns-facebook-hover.png);
+    }
+  }
+
+  &.widget-bold-xe-blog-board-meta-mobile__item--kakaotalk {
+    background-image: url(../img/icon-sns-kakaotalk.png);
+
+    &:hover,
+    &:focus {
+      background-image: url(../img/icon-sns-kakaotalk-hover.png);
+    }
+  }
+
+  &.widget-bold-xe-blog-board-meta-mobile__item--share {
+    background-image: url(../img/icon-sns-share.png);
+
+    &:hover,
+    &:focus {
+      background-image: url(../img/icon-sns-share-hover.png);
+    }
+  }
+}
+
+.widget-bold-xe-blog-board-meta-mobile__bar {
+  position: relative;
+  display: none;
+  width: 16px;
+  padding: 16px 0;
+  vertical-align: top;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    margin-top: -1px;
+    width: 10px;
+    height: 1px;
+    background-color: $very-light-pink-two;
+  }
+}
+
+@include pc {
+  .section-widget-bold-xe-blog-board-meta-mobile {
+    display: none;
+  }
+
+  // .widget-bold-xe-blog-board-meta-mobile__item {
+  //   width: 16px;
+  //   height: 16px;
+  //   background-size: 16px 16px;
+
+  //   &.widget-bold-xe-blog-board-meta-mobile__item--bookmark {
+  //     position: static;
+  //     width: 16px;
+  //     height: 16px;
+  //     background-size: 16px 16px;
+  //   }
+  // }
+
+  // .widget-bold-xe-blog-board-meta-mobile--sns {
+  //   position: absolute;
+  //   display: block;
+  //   left: 6px;
+  //   padding: 0;
+
+  //   .widget-bold-xe-blog-board-meta-mobile-list {
+  //     display: block;
+  //     padding: 2px 0 0;
+
+  //     > li {
+  //       display: block;
+  //       margin: 0 0 12px;
+  //     }
+  //   }
+  // }
+
+  // .widget-bold-xe-blog-board-meta-mobile--more-info {
+  //   position: absolute;
+  //   left: calc(100% - 6px);
+  //   width: 160px;
+  //   top: 48px;
+  //   padding-top: 0;
+
+  //   .widget-bold-xe-blog-board-meta-mobile-list {
+  //     > li {
+  //       &.date {
+  //         display: block;
+  //         padding-bottom: 24px;
+  //       }
+  //     }
+  //   }
+  // }
+
+  // .widget-bold-xe-blog-board-meta-mobile__bar {
+  //   display: block;
+  // }
+}

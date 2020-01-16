@@ -1,4 +1,17 @@
 // post 플러그인 게시물 타이틀 위젯
+.section-widget-bold-xe-blog-board-title-wrap {
+  position: static;
+
+  .widget-bold-xe-blog-board-title-meta__item {
+    &.widget-bold-xe-blog-board-title-meta__item--bookmark {
+      &.widget-bold-xe-blog-board-title-meta__item--mobile {
+        top: 78px;
+        z-index: 10;
+      }
+    }
+  }
+}
+
 .section-widget-bold-xe-blog-board-title {
 
 }
@@ -9,28 +22,32 @@
 
 .widget-bold-xe-blog-board-title__category {
   display: inline-block;
-  padding-bottom: 24px;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 600;
+  padding-bottom: 20px;
+  font-family: 'Spoqa Han Sans', sans-serif;
+  font-size: 11px;
+  line-height: 18px;
+  font-weight: 400;
   color: $brown-grey;
 }
 
 .widget-bold-xe-blog-board-title__title {
   margin: 0;
-  padding: 0 0 16px;
-  font-size: 40px;
-  line-height: 60px;
+  padding: 0 0 10px;
+  font-family: 'Spoqa Han Sans', sans-serif;
+  font-size: 21px;
+  line-height: 30px;
   font-weight: 400;
+  letter-spacing: -0.5px;
   color: $black;
 }
 
 .widget-bold-xe-blog-board-title__text {
   margin: 0;
   padding: 0 0 60px;
-  font-size: 20px;
+  font-family: 'LarishAlte-Semibold', sans-serif;
+  font-size: 12px;
   line-height: 20px;
-  font-weight: 600;
+  font-weight: 400;
   color: $black;
 }
 
@@ -99,7 +116,7 @@
     background-image: url(../img/icon-bookmark-gray.png);
 
     &.on {
-      background-image: url(../img/icon-bookmark-fill-red.png);
+      background-image: url(../img/icon-bookmark-red.png);
     }
 
     &.widget-bold-xe-blog-board-title-meta__item--mobile {
@@ -169,19 +186,45 @@
 }
 
 @include pc {
+  .section-widget-bold-xe-blog-board-title-wrap {
+    position: relative;
+  }
+
+  .section-widget-bold-xe-blog-board-title {
+
+  }
+
+  .widget-bold-xe-blog-board-title__category {
+    padding-bottom: 24px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .widget-bold-xe-blog-board-title__title {
+    padding: 0 0 16px;
+    font-size: 40px;
+    line-height: 60px;
+    letter-spacing: -1px;
+  }
+
+  .widget-bold-xe-blog-board-title__text {
+    font-size: 20px;
+  }
+
+  .widget-bold-xe-blog-board-title-meta--sns{
+    display: block;
+    top: 4px;
+  }
+
+  .widget-bold-xe-blog-board-title-meta--more-info {
+    display: block;
+  }
+
   .widget-bold-xe-blog-board-title-meta__item {
     &.widget-bold-xe-blog-board-title-meta__item--bookmark {
       &.widget-bold-xe-blog-board-title-meta__item--mobile {
         display: none;
       }
     }
-  }
-
-  .widget-bold-xe-blog-board-title-meta--sns{
-    display: block;
-  }
-
-  .widget-bold-xe-blog-board-title-meta--more-info {
-    display: block;
   }
 }

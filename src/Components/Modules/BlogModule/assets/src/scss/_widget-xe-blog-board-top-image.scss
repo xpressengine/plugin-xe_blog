@@ -2,10 +2,10 @@
 .section-widget-bold-xe-blog-board-top-image {
   position: relative;
   width: 100vw;
-  height: 500px;
+  height: 415px;
   left: 50%;
   margin-left: -50vw;
-  margin-bottom: 160px;
+  margin-bottom: 30px;
   z-index: 10;
 }
 
@@ -14,8 +14,22 @@
 }
 
 .widget-bold-xe-blog-board-top-image-item {
-  height: 500px;
+  height: 415px;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
+}
+
+@include pc {
+  .section-widget-bold-xe-blog-board-top-image {
+    height: 500px;
+  }
+
+  .section-widget-bold-xe-blog-board-top-image {
+    margin-bottom: 80px;
+  }
+
+  .widget-bold-xe-blog-board-top-image-item {
+    height: 500px;
+  }
 }
