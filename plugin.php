@@ -3,8 +3,10 @@
 namespace Xpressengine\Plugins\XeBlog;
 
 use Route;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeInterception;
 use Xpressengine\Document\DocumentHandler;
+use Xpressengine\Menu\MenuHandler;
 use Xpressengine\Plugin\AbstractPlugin;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogFavoriteHandler;
@@ -70,8 +72,27 @@ class Plugin extends AbstractPlugin
     {
         $this->registerSettingMenu();
         $this->route();
+        $this->listenEvents();
 
         app('xe.editor')->setInstance(Plugin::getId(), 'editor/xe_blockeditor@xe_blockeditor');
+    }
+
+    protected function listenEvents()
+    {
+        intercept(
+            MenuHandler::class . '@createItem',
+            'blog::checkMenuItemURL',
+            function ($func, $menu, $attributes, $menuTypeInput) {
+                $blogConfigHandler = app('xe.blog.configHandler');
+                $taxonomyUseUrls = $blogConfigHandler->getTaxonomyUseUrls();
+
+                if (in_array($attributes['url'], $taxonomyUseUrls, true) === true) {
+                    throw new HttpException(422, xe_trans('xe::menuItemUrlAlreadyExists'));
+                }
+
+                return $func($menu, $attributes, $menuTypeInput);
+            }
+        );
     }
 
     protected function route()

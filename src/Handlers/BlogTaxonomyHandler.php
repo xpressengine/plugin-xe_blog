@@ -2,6 +2,7 @@
 
 namespace Xpressengine\Plugins\XeBlog\Handlers;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Xpressengine\Category\CategoryHandler;
 use Xpressengine\Category\Models\CategoryItem;
 use Xpressengine\Plugins\XeBlog\Interfaces\Jsonable;
@@ -20,7 +21,10 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
     protected $categoryHandler;
 
     protected $taxonomyDefaultConfig = [
+        'taxonomy_id' => '',
         'require' => false,
+        'use_slug' => false,
+        'slug_url' => null
     ];
 
     public function __construct()
@@ -88,9 +92,22 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
     {
         \XeDB::beginTransaction();
         try {
+            $slugUrl = isset($inputs['slug_url']) === true? $inputs['slug_url'] : null;
+            if ($slugUrl !== null && \XeMenu::items()->query()->where('url', $slugUrl)->exists()) {
+                throw new HttpException(422, xe_trans('xe::menuItemUrlAlreadyExists'));
+            }
+
+            $taxonomyUseUrls = $this->getTaxonomyUseUrls();
+            if (in_array($slugUrl, $taxonomyUseUrls) === true) {
+                throw new HttpException(422, xe_trans('xe::menuItemUrlAlreadyExists'));
+            }
+
             $taxonomyItem = $this->categoryHandler->createCate($inputs);
 
             $taxonomyInstanceConfigName = $this->getTaxonomyInstanceConfigName($taxonomyItem->id);
+
+            $inputs['taxonomy_id'] = $taxonomyItem->id;
+            $inputs['use_slug'] = isset($inputs['use_slug']);
             $this->blogConfigHandler->addConfig($inputs, $taxonomyInstanceConfigName);
         } catch (\Exception $e) {
             \XeDB::rollback();
@@ -102,6 +119,28 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
         return $taxonomyItem;
     }
 
+    public function getTaxonomyInstanceConfigs()
+    {
+        $taxonomyDefaultConfigName = $this->blogConfigHandler->getConfigName(BlogTaxonomyHandler::TAXONOMY_CONFIG_NAME);
+        $taxonomyDefaultConfig = $this->blogConfigHandler->get($taxonomyDefaultConfigName);
+
+        return app('xe.config')->children($taxonomyDefaultConfig);
+    }
+
+    public function getTaxonomyUseUrls()
+    {
+        $taxonomyInstanceConfigs = $this->getTaxonomyInstanceConfigs();
+
+        $taxonomyUseUrls = [];
+        foreach ($taxonomyInstanceConfigs as $taxonomyInstanceConfig) {
+            if ($taxonomyInstanceConfig->get('use_slug') === true && $taxonomyInstanceConfig->get('slug_url') !== null) {
+                $taxonomyUseUrls[] = $taxonomyInstanceConfig->get('slug_url');
+            }
+        }
+
+        return $taxonomyUseUrls;
+    }
+
     public function getTaxonomies()
     {
         $taxonomyDefaultConfigName = $this->blogConfigHandler->getConfigName(self::TAXONOMY_CONFIG_NAME);
@@ -110,9 +149,7 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
         $taxonomyInstanceConfigs = app('xe.config')->children($taxonomyDefaultConfig);
         $taxonomyIds = [];
         array_walk($taxonomyInstanceConfigs, function ($taxonomyInstanceConfig) use (&$taxonomyIds) {
-            $taxonomyInstanceConfigName = array_get($taxonomyInstanceConfig->getAttributes(), 'name', '');
-            $taxonomyConfigNamePrefix = $this->blogConfigHandler->getConfigName(self::TAXONOMY_CONFIG_NAME);
-            $taxonomyIds[] = str_replace($taxonomyConfigNamePrefix . '.', '', $taxonomyInstanceConfigName);
+            $taxonomyIds[] = $taxonomyInstanceConfig->get('taxonomy_id');
         });
 
         $taxonomies = [];
