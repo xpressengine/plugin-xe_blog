@@ -29,9 +29,11 @@ class BlogController extends Controller
         $this->blogService = $blogService;
         $this->blogHandler = $blogHandler;
 
-        $this->blogFavoriteHandler = new BlogFavoriteHandler();
+        $favoriteHandler = new BlogFavoriteHandler();
+        $this->blogFavoriteHandler = $favoriteHandler;
 
         XePresenter::share('metaDataHandler', new BlogMetaDataHandler());
+        XePresenter::share('favoriteHandler', $favoriteHandler);
     }
 
     public function getItemsForJson(Request $request)
