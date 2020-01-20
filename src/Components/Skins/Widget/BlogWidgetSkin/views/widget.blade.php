@@ -72,6 +72,10 @@
             @endforeach
         </ul>
     </div>
+
+    <div>
+        <a href="{{ route('blog.create') }}" class="xe-btn xe-btn-positive" target="_blank">글쓰기</a>
+    </div>
 </section>
 
 <script>
