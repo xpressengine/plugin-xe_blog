@@ -37,6 +37,11 @@
           "class": "Xpressengine\\Plugins\\XeBlog\\Components\\Skins\\Widget\\BlogWidgetSkin\\BlogWidgetSkin",
           "name": "XeBlog 위젯 스킨",
           "description": "XeBlog 위젯 스킨"
+        },
+        "blog/show/skin/blog@default": {
+          "class": "Xpressengine\\Plugins\\XeBlog\\Components\\Skins\\Blog\\BlogShowSkin\\BlogShowSkin",
+          "name": "XeBlog 상세보기 기본 스킨",
+          "description": "XeBlog 상세보기 기본 스킨"
         }
       }
     }

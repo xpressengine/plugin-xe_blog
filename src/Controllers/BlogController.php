@@ -64,6 +64,8 @@ class BlogController extends Controller
 
     public function show(Request $request, $blogId)
     {
+        XePresenter::setSkinTargetId('blog/show');
+
         $redirectUrl = $request->session()->pull('url.intended') ?: url()->previous();
         if ($redirectUrl !== $request->url()) {
             $request->session()->put('url.intended', $redirectUrl);
@@ -73,7 +75,7 @@ class BlogController extends Controller
 
         $blog->setCanonical(route('blog.show', ['blogId' => $blog->id]));
 
-        return XePresenter::make('xe_blog::views.blog.show', compact('blog'));
+        return XePresenter::make('show', compact('blog'));
     }
 
     public function edit(Request $request, $blogId)

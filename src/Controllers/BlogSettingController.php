@@ -2,6 +2,7 @@
 
 namespace Xpressengine\Plugins\XeBlog\Controllers;
 
+use App\Http\Sections\SkinSection;
 use XePresenter;
 use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
@@ -44,7 +45,9 @@ class BlogSettingController extends Controller
 
     public function editSetting(Request $request)
     {
-        return XePresenter::make('xe_blog::views.setting.setting');
+        $skinSection = new SkinSection('blog/show');
+
+        return XePresenter::make('xe_blog::views.setting.setting', compact('skinSection'));
     }
 
     public function storeSetting(Request $request)

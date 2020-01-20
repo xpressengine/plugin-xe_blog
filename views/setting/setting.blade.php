@@ -12,3 +12,7 @@
         <button type="submit" class="xe-btn">생성</button>
     </form>
 </div>
+
+<div>
+    {!! $skinSection !!}
+</div>
