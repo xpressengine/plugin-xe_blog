@@ -1,0 +1,88 @@
+// xe-blog 플러그인 게시물 하단 연관 게시물
+.section-widget-bold-xe-blog-related-article {
+  border-top: 1px solid $very-light-pink-two;
+}
+
+.widget-bold-xe-blog-related-article {
+  padding-top: 20px;
+  padding-bottom: 56px;
+
+  .widget-item-link {
+    display: block;
+    // padding: 20px 24px 80px;
+    margin-bottom: 24px;
+    padding: 0;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .widget-item__meta-text {
+    display: block;
+    margin: 0;
+    padding: 0 0 10px;
+    font-size: 11px;
+    line-height: 17px;
+    color: $brown-grey;
+  }
+
+  .widget-item__title {
+    display: block;
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    line-height: 26px;
+    letter-spacing: -0.5px;
+    color: $black;
+  }
+
+  .widget-item__text {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    line-height: 20px;
+    color: $brown-grey;
+  }
+}
+
+
+.widget-bold-xe-blog-board-top-image-item {
+  height: 415px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
+}
+
+@include extra-mobile {
+  .section-widget-bold-xe-blog-related-article {
+    margin: 0 -30px;
+    border-top: 1px solid $very-light-pink-two;
+    background-color: $off-white;
+  }
+
+  .widget-bold-xe-blog-related-article {
+    .widget-item-link {
+      display: block;
+      padding: 0 30px;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+@include pc {
+  .section-widget-bold-xe-blog-related-article {
+    border: 0 none;
+  }
+
+  .widget-bold-xe-blog-related-article {
+    .widget-item-link {
+      // padding: 20px 24px 80px;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+// xe_blog 플러그인 게시물 상세 섹션(위젯)모음
+@import 'common/common';                // xe-blog 플러그인 공통
+@import 'common/variables';             // xe-blog 플러그인 위젯 스킨 변수
+@import 'common/mixin';                 // xe-blog 플러그인 위젯 스킨 믹스인
+@import 'common/utilities';             // xe-blog 플러그인 위젯 스킨 유틸
+@import 'common/font';                  // xe-blog 플러그인 위젯 스킨 폰트
+
+@import 'widget-xe-blog-board-title';         // xe-blog 플러그인 게시물 상단 타이틀 스타일
+@import 'widget-xe-blog-board-top-image';     // xe-blog 플러그인 게시물 상단 대표 이미지
+@import 'widget-xe-blog-board-tag';           // xe-blog 플러그인 게시물 하단 태그
+@import 'widget-xe-blog-board-more-page';     // xe-blog 플러그인 게시물 이전, 다음
+@import 'widget-xe-blog-board-meta-mobile';          // xe-blog 플러그인 게시물 메타 정보
+// @import 'widget-xe-blog-board-related-article';          // xe-blog 플러그인 게시물 연관게시글 리스트
