@@ -14,6 +14,7 @@ use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
+use Xpressengine\Translation\Translator;
 
 class Plugin extends AbstractPlugin
 {
@@ -171,7 +172,7 @@ class Plugin extends AbstractPlugin
                 'ordering' => 100
             ],
             'contents.manageBlog.blogSetting' => [
-                'title' => 'xe_blog::blogSetting',
+                'title' => 'xe_blog::settingBlog',
                 'display' => true,
                 'description' => '',
                 'ordering' => 9999
@@ -207,7 +208,9 @@ class Plugin extends AbstractPlugin
      */
     public function activate($installedVersion = null)
     {
-        // implement code
+        /** @var Translator $trans */
+        $trans = app('xe.translator');
+        $trans->putFromLangDataSource('xe_blog', base_path('plugins/xe_blog/langs/lang.php'));
     }
 
     /**
