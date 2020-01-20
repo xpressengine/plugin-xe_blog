@@ -140,6 +140,19 @@ class Plugin extends AbstractPlugin
                 }
             });
         });
+
+        $taxonomyHandler = app('xe.blog.taxonomyHandler');
+        $taxonomyUrls = $taxonomyHandler->getTaxonomyUseUrls();
+        foreach ($taxonomyUrls as $taxonomyId => $taxonomyUrl) {
+            Route::group([
+                'prefix' => $taxonomyUrl,
+                'as' => sprintf('$s.', $taxonomyUrl),
+                'namespace' => 'Xpressengine\Plugins\XeBlog\Controllers',
+                'middleware' => ['web']
+            ], function () {
+                Route::get('/{slug}', ['as' => 'index', 'uses' => 'TaxonomyController@index']);
+            });
+        }
     }
 
     protected function registerSettingMenu()

@@ -39,7 +39,17 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
 
     public function getItems($query, array $attributes)
     {
-        $query->with('taxonomy');
+        if (isset($attributes['taxonomy_id']) === true) {
+            $query = $query->whereHas('taxonomy', function ($query) use ($attributes) {
+                $query->where('taxonomy_id', $attributes['taxonomy_id']);
+            });
+        }
+
+        if (isset($attributes['taxonomy_item_id']) === true) {
+            $query = $query->whereHas('taxonomy', function ($query) use ($attributes) {
+                $query->where('taxonomy_item_id', $attributes['taxonomy_item_id']);
+            });
+        }
 
         return $query;
     }
@@ -127,6 +137,11 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
         return app('xe.config')->children($taxonomyDefaultConfig);
     }
 
+    public function getTaxonomyInstanceConfig($taxonomyId)
+    {
+        return $this->blogConfigHandler->get($this->getTaxonomyInstanceConfigName($taxonomyId));
+    }
+
     public function getTaxonomyUseUrls()
     {
         $taxonomyInstanceConfigs = $this->getTaxonomyInstanceConfigs();
@@ -134,7 +149,7 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
         $taxonomyUseUrls = [];
         foreach ($taxonomyInstanceConfigs as $taxonomyInstanceConfig) {
             if ($taxonomyInstanceConfig->get('use_slug') === true && $taxonomyInstanceConfig->get('slug_url') !== null) {
-                $taxonomyUseUrls[] = $taxonomyInstanceConfig->get('slug_url');
+                $taxonomyUseUrls[$taxonomyInstanceConfig->get('taxonomy_id')] = $taxonomyInstanceConfig->get('slug_url');
             }
         }
 
