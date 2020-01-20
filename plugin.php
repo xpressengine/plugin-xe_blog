@@ -84,7 +84,7 @@ class Plugin extends AbstractPlugin
             MenuHandler::class . '@createItem',
             'blog::checkMenuItemURL',
             function ($func, $menu, $attributes, $menuTypeInput) {
-                $blogConfigHandler = app('xe.blog.configHandler');
+                $blogConfigHandler = app('xe.blog.taxonomyHandler');
                 $taxonomyUseUrls = $blogConfigHandler->getTaxonomyUseUrls();
 
                 if (in_array($attributes['url'], $taxonomyUseUrls, true) === true) {
