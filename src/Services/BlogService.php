@@ -7,6 +7,7 @@ use Xpressengine\Http\Request;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogSlugHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
 use Xpressengine\Plugins\XeBlog\Interfaces\Jsonable;
 use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
@@ -31,6 +32,9 @@ class BlogService
     /** @var BlogTaxonomyHandler $taxonomyHandler */
     protected $taxonomyHandler;
 
+    /** @var BlogSlugHandler $blogSlugHandler */
+    protected $blogSlugHandler;
+
     protected $handlers = [];
 
     public function __construct(
@@ -38,13 +42,15 @@ class BlogService
         BlogMetaDataHandler $metaDataHandler,
         BlogConfigHandler $blogConfigHandler,
         TagHandler $tagHandler,
-        BlogTaxonomyHandler $taxonomyHandler
+        BlogTaxonomyHandler $taxonomyHandler,
+        BlogSlugHandler $blogSlugHandler
     ) {
         $this->blogHandler = $blogHandler;
         $this->metaDataHandler = $metaDataHandler;
         $this->blogConfigHandler = $blogConfigHandler;
         $this->tagHandler = $tagHandler;
         $this->taxonomyHandler = $taxonomyHandler;
+        $this->blogSlugHandler = $blogSlugHandler;
     }
 
     public function addHandlers($handler)
@@ -112,6 +118,7 @@ class BlogService
             $blog = $this->blogHandler->store($inputs, $instanceId);
             $this->metaDataHandler->saveMetaData($blog, $inputs);
             $this->taxonomyHandler->storeTaxonomy($blog, $inputs);
+            $this->blogSlugHandler->storeSlug($blog, $inputs);
 
             if (isset($inputs['_tags']) && empty($inputs['_tags']) === false) {
                 $this->tagHandler->set($blog->id, $inputs['_tags']);

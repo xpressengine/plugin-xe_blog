@@ -10,6 +10,7 @@ class Migrations
     const META_TABLE_NAME = 'blog_meta_data';
     const FAVORITE_TABLE_NAME = 'blog_favorites';
     const TAXONOMY_TABLE_NAME = 'blog_taxonomy';
+    const SLUG_TABLE_NAME = 'blog_slug';
 
     public function checkInstalled()
     {
@@ -22,6 +23,10 @@ class Migrations
         }
 
         if ($this->checkExistTaxonomyTable() === false) {
+            return false;
+        }
+
+        if ($this->checkExistSlugTable() === false) {
             return false;
         }
 
@@ -40,6 +45,10 @@ class Migrations
 
         if ($this->checkExistTaxonomyTable() === false) {
             $this->createTaxonomyTable();
+        }
+
+        if ($this->checkExistSlugTable() === false) {
+            $this->createSlugTable();
         }
     }
 
@@ -95,6 +104,27 @@ class Migrations
             $table->integer('taxonomy_item_id');
 
             $table->index('blog_id');
+        });
+    }
+
+    protected function checkExistSlugTable()
+    {
+        return Schema::hasTable(self::SLUG_TABLE_NAME);
+    }
+
+    protected function createSlugTable()
+    {
+        Schema::create(self::SLUG_TABLE_NAME, function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->string('target_id', 36);
+            $table->string('instance_id', 36);
+            $table->string('slug');
+            $table->string('title');
+
+            $table->unique('slug');
+            $table->index('title');
+            $table->index('target_id');
         });
     }
 }

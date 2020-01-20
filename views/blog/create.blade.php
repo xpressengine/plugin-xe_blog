@@ -36,5 +36,9 @@
         ]) !!}
     @endforeach
 
+    <hr>
+    <span>Slug</span>
+    <input type="text" name="slug">
+
     <button type="submit" class="xe-btn">저장</button>
 </form>

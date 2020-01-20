@@ -12,6 +12,7 @@ use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogFavoriteHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogSlugHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
 use Xpressengine\Translation\Translator;
@@ -38,14 +39,24 @@ class Plugin extends AbstractPlugin
             $blogConfigHandler = app('xe.blog.configHandler');
             $tagHandler = app('xe.tag');
             $taxonomyHandler = app('xe.blog.taxonomyHandler');
+            $blogSlugHandler = app('xe.blog.slugHandler');
 
-            $boardService = new BlogService($blogHandler, $blogMetaDataHandler, $blogConfigHandler, $tagHandler, $taxonomyHandler);
+            $boardService = new BlogService(
+                $blogHandler,
+                $blogMetaDataHandler,
+                $blogConfigHandler,
+                $tagHandler,
+                $taxonomyHandler,
+                $blogSlugHandler
+            );
+
             $boardService->addHandlers($blogHandler);
             $boardService->addHandlers($blogMetaDataHandler);
             $boardService->addHandlers($blogConfigHandler);
             $boardService->addHandlers($tagHandler);
             $boardService->addHandlers($taxonomyHandler);
             $boardService->addHandlers(new BlogFavoriteHandler());
+            $boardService->addHandlers($blogSlugHandler);
 
             return $boardService;
         });
@@ -62,6 +73,11 @@ class Plugin extends AbstractPlugin
             return new BlogTaxonomyHandler();
         });
         app()->alias(BlogTaxonomyHandler::class, 'xe.blog.taxonomyHandler');
+
+        app()->singleton(BlogSlugHandler::class, function () {
+            return new BlogSlugHandler();
+        });
+        app()->alias(BlogSlugHandler::class, 'xe.blog.slugHandler');
     }
 
     /**
@@ -74,6 +90,7 @@ class Plugin extends AbstractPlugin
         $this->registerSettingMenu();
         $this->route();
         $this->listenEvents();
+        $this->reserveSlugUrl();
 
         app('xe.editor')->setInstance(Plugin::getId(), 'editor/xe_blockeditor@xe_blockeditor');
     }
@@ -197,6 +214,22 @@ class Plugin extends AbstractPlugin
         foreach ($menus as $id => $menu) {
             \XeRegister::push('settings/menu', $id, $menu);
         }
+    }
+
+    protected function reserveSlugUrl()
+    {
+        $slugHandler = app('xe.blog.slugHandler');
+
+        $slugHandler->setReserved([
+            'create',
+            'store',
+            'show',
+            'edit',
+            'update',
+            'delete',
+            'set_favorite',
+            'items_json',
+        ]);
     }
 
     /**
