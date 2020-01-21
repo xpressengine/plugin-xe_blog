@@ -160,7 +160,7 @@
         })
 
         // gallery 리스트
-        var perPage = '{{ $_config['take'] }}'
+        var perPage = '{{ $_config['perPage'] }}'
         var filterOptions = {
             perPage: perPage,
             taxonomy_item_id: null,
