@@ -7,18 +7,22 @@ use Xpressengine\Config\ConfigManager;
 
 class BlogConfigHandler
 {
+    const ORDER_TYPE_NEW = 'new';
+    const ORDER_TYPE_UPDATE = 'update';
+    const ORDER_TYPE_RECOMMEND = 'recommend';
+
     const CONFIG_NAME = 'blog';
 
     /** @var ConfigManager $configManager */
     protected $configManager;
 
     protected $defaultConfig = [
-        'skinId' => '',
+        'orderType' => 'new',
         'newBlogTime' => 24,
         'assent' => true,
         'dissent' => false,
         'deleteToTrash' => false,
-        'perPage' => 12
+        'alertMail' => '',
     ];
 
     public function __construct($configManager)
@@ -34,6 +38,17 @@ class BlogConfigHandler
     public function getBlogConfig()
     {
         return $this->configManager->get(self::CONFIG_NAME);
+    }
+
+    public function updateBlogConfig($attributes)
+    {
+        $blogConfig = $this->getBlogConfig();
+
+        foreach ($attributes as $key => $value) {
+            $blogConfig->set($key, $value);
+        }
+
+        $this->modifyConfig($blogConfig);
     }
 
     public function getConfigName($instanceId)

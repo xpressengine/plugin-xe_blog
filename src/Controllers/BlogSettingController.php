@@ -43,16 +43,19 @@ class BlogSettingController extends Controller
         return XePresenter::make('xe_blog::views.setting.blogs', compact('blogs', 'taxonomies'));
     }
 
-    public function editSetting(Request $request)
+    public function editSetting(Request $request, $type = 'config')
     {
+        $config = $this->configHandler->getBlogConfig();
         $skinSection = new SkinSection('blog/show');
 
-        return XePresenter::make('xe_blog::views.setting.setting', compact('skinSection'));
+        return XePresenter::make('xe_blog::views.setting.setting', compact('type', 'skinSection', 'config'));
     }
 
-    public function storeSetting(Request $request)
+    public function updateSetting(Request $request)
     {
+        $this->configHandler->updateBlogConfig($request->except('_token'));
 
+        return redirect()->back();
     }
 
     public function storeTaxonomy(Request $request)

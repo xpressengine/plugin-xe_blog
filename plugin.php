@@ -141,11 +141,13 @@ class Plugin extends AbstractPlugin
                     'uses' => 'BlogSettingController@blogs',
                     'settings_menu' => 'contents.manageBlog.manageBlog'
                 ]);
-                Route::get('/setting', [
+                Route::get('/setting/{type?}', [
                     'as' => 'setting',
                     'uses' => 'BlogSettingController@editSetting',
                     'settings_menu' => 'contents.manageBlog.blogSetting'
                 ]);
+                Route::post('/setting', ['as' => 'store_setting', 'uses' => 'BlogSettingController@updateSetting']);
+
                 Route::post('/store_taxonomy', ['as' => 'store_taxonomy', 'uses' => 'BlogSettingController@storeTaxonomy']);
 
                 $taxonomies = app('xe.blog.taxonomyHandler')->getTaxonomies();
