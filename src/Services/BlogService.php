@@ -89,8 +89,12 @@ class BlogService
         $items = $query->paginate($perPage, ['*'], 'page', $currentPage)->appends(array_except($attributes, 'page'));
 
         $json['page'] = [
-            'totalCount' => $items->total(),
+            'count' => $items->count(),
             'currentPage' => $items->currentPage(),
+            'hasMorePages' => $items->hasMorePages(),
+            'lastPage' => $items->lastPage(),
+            'perPage' => $items->perPage(),
+            'totalCount' => $items->total(),
         ];
 
         $items->each(function ($blog) use (&$json) {
