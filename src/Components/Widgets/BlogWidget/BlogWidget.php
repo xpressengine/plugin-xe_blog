@@ -9,6 +9,8 @@ use Xpressengine\Widget\AbstractWidget;
 
 class BlogWidget extends AbstractWidget
 {
+    const DEFAULT_PER_PAGE = 5;
+
     protected static $path = 'xe_blog/src/Components/Widgets/BlogWidget';
 
     public function render()
@@ -20,7 +22,13 @@ class BlogWidget extends AbstractWidget
         $taxonomyHandler = app('xe.blog.taxonomyHandler');
         $blogConfigHandler = app('xe.blog.configHandler');
 
-        $blogs = $blogService->getItems([]);
+        $widgetSetting = $this->setting();
+        $perPage = self::DEFAULT_PER_PAGE;
+        if (isset($widgetSetting['perPage']) === true) {
+            $perPage = $widgetSetting['perPage'];
+        }
+
+        $blogs = $blogService->getItems(['perPage' => $perPage]);
         $blogConfig = $blogConfigHandler->getBlogConfig();
         $taxonomies = $taxonomyHandler->getTaxonomies();
 
@@ -35,6 +43,6 @@ class BlogWidget extends AbstractWidget
 
     public function renderSetting(array $args = [])
     {
-        return \View::make(sprintf('%s/views/setting', static::$path));
+        return \View::make(sprintf('%s/views/setting', static::$path), ['config' => $args]);
     }
 }

@@ -17,6 +17,8 @@ use Xpressengine\Tag\TagHandler;
 
 class BlogService
 {
+    const DEFAULT_PER_PAGE = 12;
+
     /** @var BlogHandler $blogHandler */
     protected $blogHandler;
 
@@ -73,7 +75,7 @@ class BlogService
 
     public function getItemsJson(array $attributes)
     {
-        $perPage = 12;
+        $perPage = self::DEFAULT_PER_PAGE;
         if (isset($attributes['perPage']) === true) {
             $perPage = $attributes['perPage'];
         }
@@ -116,7 +118,12 @@ class BlogService
 
         $query->orderByDesc('created_at');
 
-        return $query->get();
+        $perPage = self::DEFAULT_PER_PAGE;
+        if (isset($attributes['perPage']) === true) {
+            $perPage = $attributes['perPage'];
+        }
+
+        return $query->paginate($perPage, ['*'], 'page')->appends(array_except($attributes,'page'));
     }
 
     public function store(Request $request, $instanceId)
