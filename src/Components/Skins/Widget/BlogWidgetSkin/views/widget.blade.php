@@ -175,7 +175,6 @@
 
             XE.get('/xe_blog/items_json', XE._.assign({}, filterOptions, { page: 1, taxonomy_item_id: $this.data('taxonomy-item-id') }))
             .then(function (res) {
-                res.data.page.totalPage = Math.ceil(res.data.page.totalCount / res.data.page.perPage)
                 res.data.favorite_url = '{{ route('blog.favorite') }}'
                 XE._.forEach(res.data.items, function (item) {
                     var taxonomies = []
@@ -188,7 +187,7 @@
 
                 $blogListStory.find('.widget-bold-xe-blog-card-list').html(tmpl(res.data))
                 {{-- 더보기 영역 토글 --}}
-                if (res.data.page.totalPage === res.data.page.currentPage) {
+                if (!res.data.page.hasMorePages) {
                     $blogListStory.find('.__blog-more-wrap').hide()
                     filterOptions.page = 1
                 } else {
@@ -201,7 +200,6 @@
         $blogListStory.on('click', '.__blog-more-btn', function (e) {
             XE.get('/xe_blog/items_json', XE._.assign({}, filterOptions, { page: ++filterOptions.page}))
             .then(function (res) {
-                res.data.page.totalPage = Math.ceil(res.data.page.totalCount / res.data.page.perPage)
                 res.data.favorite_url = '{{ route('blog.favorite') }}'
                 XE._.forEach(res.data.items, function (item) {
                     var taxonomies = []
@@ -214,7 +212,7 @@
 
                 $blogListStory.find('.widget-bold-xe-blog-card-list').append(tmpl(res.data))
                 {{-- 더보기 영역 토글 --}}
-                if (res.data.page.totalPage === res.data.page.currentPage) {
+                if (!res.data.page.hasMorePages) {
                     $blogListStory.find('.__blog-more-wrap').hide()
                     filterOptions.page = 1
                 } else {
