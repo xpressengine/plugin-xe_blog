@@ -73,6 +73,13 @@
         </ul>
     </div>
 
+    <div class="widget-bold-xe-blog-button-box widget-bold-xe-blog-button-box--more __blog-more-wrap">
+        <button type="button" class="widget-bold-xe-blog-button__more __blog-more-btn">
+            <span class="widget-bold-xe-blog-button__more-text">더보기</span>
+            <span class="widget-bold-xe-blog-list__button-icon widget-bold-xe-blog-list__button-icon--chevron-down"></span>
+        </button>
+    </div>
+
     <div class="text-right">
         <!-- <a href="{{ route('blog.create') }}" class="xe-btn xe-btn-positive" target="_blank">글쓰기</a> -->
         <a href="{{ route('blog.create') }}" class="btn btn-bj btn-bj--black">
@@ -87,7 +94,7 @@
 
 @verbatim
     <script type="text/x-template" id="blog-list-story-item">
-        {{for data ~favorite_url=favorite_url}}
+        {{for items ~favorite_url=favorite_url}}
             <li>
                 <div class="widget-bold-xe-blog-card-item widget-bold-xe-blog-card-item--story {{if meta_data.thumbnail_url}} widget-bold-xe-blog-card-item--image {{/if}}">
                     <div class="widget-bold-xe-blog-card-item-meta">
@@ -153,26 +160,33 @@
         })
 
         // gallery 리스트
+        var perPage = {{ $_config['take'] }}
+        function isLast() {
+            console.debug()
+        }
         var tmpl = $.templates('#blog-list-story-item')
+
+        var isLast = false
         $blogListStory.on('click', '.widget-bold-xe-blog-category-list__link', function (e) {
             e.preventDefault()
             var $this = $(this)
             $this.closest('li').addClass('on').siblings().removeClass('on')
 
             XE.get('/xe_blog/items_json', {
-                taxonomy_item_id: $this.data('taxonomy-item-id')
+                taxonomy_item_id: $this.data('taxonomy-item-id'),
+                perPage: Number.parseInt(perPage, 10)
             })
             .then(function (res) {
-                res.favorite_url = '{{ route('blog.favorite') }}'
-                XE._.forEach(res.data, function (data) {
+                res.data.favorite_url = '{{ route('blog.favorite') }}'
+                XE._.forEach(res.data.items, function (item) {
                     var taxonomies = []
-                    data.post_url = XE.Router.get('blog.show').url({ blogId: data.blog.id })
-                    XE._.forEach(data.taxonomy, function (taxonomy) {
+                    item.post_url = XE.Router.get('blog.show').url({ blogId: item.blog.id })
+                    XE._.forEach(item.taxonomy, function (taxonomy) {
                         taxonomies.push(taxonomy)
                     })
-                    data.taxonomy_text = XE._.join(taxonomies, ' / ')
+                    item.taxonomy_text = XE._.join(taxonomies, ' / ')
                 })
-                $blogListStory.find('.widget-bold-xe-blog-card-list').html(tmpl(res))
+                $blogListStory.find('.widget-bold-xe-blog-card-list').html(tmpl(res.data))
             })
         })
     })

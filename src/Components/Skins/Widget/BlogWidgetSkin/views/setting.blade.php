@@ -1,3 +1,8 @@
+<div class="form-group">
+    <label>글 수</label>
+    <input type="number" name="take" class="form-control" value="5">
+</div>
+
 <div>
     <span>출력할 Taxonomy 선택</span>
     <select name="targetTaxonomyId">
