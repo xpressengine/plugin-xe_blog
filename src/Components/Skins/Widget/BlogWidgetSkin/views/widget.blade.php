@@ -160,13 +160,14 @@
         })
 
         // gallery 리스트
-        var perPage = '{{ $_config['perPage'] }}'
-        function isLast() {
-            console.debug()
+        var perPage = '{{ $_config['take'] }}'
+        var filterOptions = {
+            perPage: perPage,
+            taxonomy_item_id: null,
+            page: 1
         }
         var tmpl = $.templates('#blog-list-story-item')
 
-        var isLast = false
         $blogListStory.on('click', '.widget-bold-xe-blog-category-list__link', function (e) {
             e.preventDefault()
             var $this = $(this)
@@ -176,6 +177,7 @@
                 taxonomy_item_id: $this.data('taxonomy-item-id'),
                 perPage: perPage
             })
+            XE.get('/xe_blog/items_json', XE._.assign({}, filterOptions, { page: 1, taxonomy_item_id: $this.data('taxonomy-item-id') }))
             .then(function (res) {
                 res.data.favorite_url = '{{ route('blog.favorite') }}'
                 XE._.forEach(res.data.items, function (item) {
@@ -186,7 +188,41 @@
                     })
                     item.taxonomy_text = XE._.join(taxonomies, ' / ')
                 })
+
                 $blogListStory.find('.widget-bold-xe-blog-card-list').html(tmpl(res.data))
+                {{-- 더보기 영역 토글 --}}
+                if (!res.data.page.hasMorePages) {
+                    $blogListStory.find('.__blog-more-wrap').hide()
+                    filterOptions.page = 1
+                } else {
+                    $blogListStory.find('.__blog-more-wrap').show()
+                    filterOptions.page = res.data.page.currentPage
+                }
+            })
+        })
+
+        $blogListStory.on('click', '.__blog-more-btn', function (e) {
+            XE.get('/xe_blog/items_json', XE._.assign({}, filterOptions, { page: ++filterOptions.page}))
+            .then(function (res) {
+                res.data.favorite_url = '{{ route('blog.favorite') }}'
+                XE._.forEach(res.data.items, function (item) {
+                    var taxonomies = []
+                    item.post_url = XE.Router.get('blog.show').url({ blogId: item.blog.id })
+                    XE._.forEach(item.taxonomy, function (taxonomy) {
+                        taxonomies.push(taxonomy)
+                    })
+                    item.taxonomy_text = XE._.join(taxonomies, ' / ')
+                })
+
+                $blogListStory.find('.widget-bold-xe-blog-card-list').append(tmpl(res.data))
+                {{-- 더보기 영역 토글 --}}
+                if (!res.data.page.hasMorePages) {
+                    $blogListStory.find('.__blog-more-wrap').hide()
+                    filterOptions.page = 1
+                } else {
+                    $blogListStory.find('.__blog-more-wrap').show()
+                    filterOptions.page = res.data.page.currentPage
+                }
             })
         })
     })
