@@ -86,12 +86,12 @@
 @expose_route('blog.favorite')
 
 @verbatim
-    <script type="text/x-template" id="blog-list-gallery-item">
+    <script type="text/x-template" id="blog-list-story-item">
         {{for data ~favorite_url=favorite_url}}
             <li>
                 <div class="widget-bold-xe-blog-card-item widget-bold-xe-blog-card-item--story {{if meta_data.thumbnail_url}} widget-bold-xe-blog-card-item--image {{/if}}">
                     <div class="widget-bold-xe-blog-card-item-meta">
-                            <span class="widget-bold-xe-blog-card-item-meta__category">{{:meta_data.sub_title}}</span>
+                            <span class="widget-bold-xe-blog-card-item-meta__category">{{:taxonomy_text}}</span>
 
                             <button type="button" data-blog_id="{{:blog.id}}" data-url="{{:~favorite_url}}" class="__favorite-button widget-bold-xe-blog-card-item-meta__button-wish widget-bold-xe-blog-card-item-meta__button-wish--black {{if favorite.length}} on {{/if}}">
                                 <span class="blind">찜하기</span>
@@ -153,10 +153,11 @@
         })
 
         // gallery 리스트
-        var tmpl = $.templates('#blog-list-gallery-item')
+        var tmpl = $.templates('#blog-list-story-item')
         $blogListStory.on('click', '.widget-bold-xe-blog-category-list__link', function (e) {
             e.preventDefault()
             var $this = $(this)
+            $this.closest('li').addClass('on').siblings().removeClass('on')
 
             XE.get('/xe_blog/items_json', {
                 taxonomy_item_id: $this.data('taxonomy-item-id')
@@ -164,7 +165,12 @@
             .then(function (res) {
                 res.favorite_url = '{{ route('blog.favorite') }}'
                 XE._.forEach(res.data, function (data) {
+                    var taxonomies = []
                     data.post_url = XE.Router.get('blog.show').url({ blogId: data.blog.id })
+                    XE._.forEach(data.taxonomy, function (taxonomy) {
+                        taxonomies.push(taxonomy)
+                    })
+                    data.taxonomy_text = XE._.join(taxonomies, ' / ')
                 })
                 $blogListStory.find('.widget-bold-xe-blog-card-list').html(tmpl(res))
             })
