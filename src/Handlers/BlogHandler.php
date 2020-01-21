@@ -35,13 +35,18 @@ class BlogHandler extends DocumentHandler implements Searchable, Jsonable
 
     public function getJsonData(Blog $blog)
     {
+        $blogConfigHandler = app('xe.blog.configHandler');
+        $blogConfig = $blogConfigHandler->getBlogConfig();
+
         return [
+            'id' => $blog->id,
             'title' => $blog->title,
             'content' => $blog->content,
             'read_count' => $blog->read_count,
             'comment_count' => $blog->comment_count,
             'assent_count' => $blog->assent_count,
             'dissent_count' => $blog->dissent_count,
+            'is_new' => $blog->isNew($blogConfig->get('newBlogTime')) === true,
             'created_at' => $blog->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $blog->updated_at->format('Y-m-d H:i:s')
         ];
