@@ -73,12 +73,26 @@ class BlogService
 
     public function getItemsJson(array $attributes)
     {
+        $perPage = 12;
+        if (isset($attributes['perPage']) === true) {
+            $perPage = $attributes['perPage'];
+        }
+
+        $currentPage = 1;
+        if (isset($attributes['page']) === true) {
+            $currentPage = $attributes['page'];
+        }
+
         $query = $this->getItemsQuery($attributes);
         $query->orderByDesc('created_at');
-        //pagination 처리
 
-        $json = [];
-        $items = $query->get();
+        $items = $query->paginate($perPage, ['*'], 'page', $currentPage)->appends(array_except($attributes, 'page'));
+
+        $json['page'] = [
+            'totalCount' => $items->total(),
+            'currentPage' => $items->currentPage(),
+        ];
+
         $items->each(function ($blog) use (&$json) {
             $blogData = [];
             foreach ($this->handlers as $handler) {
@@ -86,7 +100,7 @@ class BlogService
                     $blogData[$handler->getTypeName()] = $handler->getJsonData($blog);
                 }
             }
-            $json[] = $blogData;
+            $json['items'][] = $blogData;
         });
 
         return $json;
