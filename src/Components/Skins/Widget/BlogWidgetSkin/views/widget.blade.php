@@ -160,7 +160,7 @@
         })
 
         // gallery 리스트
-        var perPage = {{ $_config['take'] }}
+        var perPage = '{{ $_config['perPage'] }}'
         function isLast() {
             console.debug()
         }
@@ -174,7 +174,7 @@
 
             XE.get('/xe_blog/items_json', {
                 taxonomy_item_id: $this.data('taxonomy-item-id'),
-                perPage: Number.parseInt(perPage, 10)
+                perPage: perPage
             })
             .then(function (res) {
                 res.data.favorite_url = '{{ route('blog.favorite') }}'

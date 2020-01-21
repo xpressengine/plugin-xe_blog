@@ -24,7 +24,7 @@ class BlogWidget extends AbstractWidget
 
         $widgetSetting = $this->setting();
         $perPage = self::DEFAULT_PER_PAGE;
-        if (isset($widgetSetting['perPage']) === true) {
+        if (isset($widgetSetting['perPage']) === true && $widgetSetting['perPage'] !== '' && $widgetSetting['perPage'] !== null) {
             $perPage = $widgetSetting['perPage'];
         }
 

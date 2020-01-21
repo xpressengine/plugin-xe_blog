@@ -76,7 +76,7 @@ class BlogService
     public function getItemsJson(array $attributes)
     {
         $perPage = self::DEFAULT_PER_PAGE;
-        if (isset($attributes['perPage']) === true) {
+        if (isset($attributes['perPage']) === true && $attributes['perPage'] !== '' && $attributes['perPage'] !== null) {
             $perPage = $attributes['perPage'];
         }
 
@@ -119,7 +119,7 @@ class BlogService
         $query->orderByDesc('created_at');
 
         $perPage = self::DEFAULT_PER_PAGE;
-        if (isset($attributes['perPage']) === true) {
+        if (isset($attributes['perPage']) === true && $attributes['perPage'] !== '' && $attributes['perPage'] !== null) {
             $perPage = $attributes['perPage'];
         }
 
