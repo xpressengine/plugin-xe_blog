@@ -120,6 +120,11 @@ class Blog extends Document implements SeoUsable
         return $this->hasMany(BlogTaxonomy::class, 'blog_id', 'id');
     }
 
+    public function slug()
+    {
+        return $this->hasOne(BlogSlug::class, 'target_id', 'id');
+    }
+
     public function isNew($hour)
     {
         return strtotime($this->getAttribute(static::CREATED_AT)) + ($hour * 3600) > time();

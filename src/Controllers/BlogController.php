@@ -6,9 +6,11 @@ use Auth;
 use XePresenter;
 use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
+use Xpressengine\Plugins\XeBlog\Exceptions\NotFoundBlogException;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogFavoriteHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Models\BlogSlug;
 use Xpressengine\Plugins\XeBlog\Plugin;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
 use Xpressengine\Support\Exceptions\AccessDeniedHttpException;
@@ -64,18 +66,48 @@ class BlogController extends Controller
         return redirect()->intended();
     }
 
-    public function show(Request $request, $blogId)
+    public function showId(Request $request, $blogId)
     {
-        XePresenter::setSkinTargetId('blog/show');
-
         $redirectUrl = $request->session()->pull('url.intended') ?: url()->previous();
         if ($redirectUrl !== $request->url()) {
             $request->session()->put('url.intended', $redirectUrl);
         }
 
         $blog = $this->blogHandler->get($blogId);
+        if ($blog === null) {
+            throw new NotFoundBlogException;
+        }
 
-        $blog->setCanonical(route('blog.show', ['blogId' => $blog->id]));
+        $blog->setCanonical(route('blog.show', ['blogId' => $blogId]));
+
+        if ($blog->slug !== null) {
+            return redirect()->route('blog.show_slug', ['slug' => $blog->slug['slug']]);
+        }
+
+        return $this->show($request, $blog);
+    }
+
+    public function showSlug(Request $request, $slug)
+    {
+        $redirectUrl = $request->session()->pull('url.intended') ?: url()->previous();
+        if ($redirectUrl !== $request->url()) {
+            $request->session()->put('url.intended', $redirectUrl);
+        }
+
+        $blogSlug = BlogSlug::where('slug', $slug)->first();
+        if ($blogSlug === null) {
+            throw new NotFoundBlogException;
+        }
+
+        $blog = $blogSlug->blog;
+        $blog->setCanonical(route('blog.show_slug', ['slug' => $slug]));
+
+        return $this->show($request, $blog);
+    }
+
+    private function show(Request $request, $blog)
+    {
+        XePresenter::setSkinTargetId('blog/show');
 
         return XePresenter::make('show', compact('blog'));
     }

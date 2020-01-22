@@ -123,12 +123,13 @@ class Plugin extends AbstractPlugin
         ], function () {
             Route::get('/create', ['as' => 'create', 'uses' => 'BlogController@create']);
             Route::post('/store', ['as' => 'store', 'uses' => 'BlogController@store']);
-            Route::get('/show/{blogId}', ['as' => 'show', 'uses' => 'BlogController@show']);
+            Route::get('/show/{blogId}', ['as' => 'show', 'uses' => 'BlogController@showId']);
             Route::get('/edit/{blogId}', ['as' => 'edit', 'uses' => 'BlogController@edit']);
             Route::post('/update', ['as' => 'update', 'uses' => 'BlogController@update']);
             Route::post('/delete/{blogId}', ['as' => 'delete', 'uses' => 'BlogController@delete']);
             Route::post('/set_favorite', ['as' => 'favorite', 'uses' => 'BlogController@setFavoriteState']);
             Route::get('/items_json', ['as' => 'items_json', 'uses' => 'BlogController@getItemsForJson']);
+            Route::get('/{slug}', ['as' => 'show_slug', 'uses' => 'BlogController@showSlug']);
         });
 
         Route::settings(Plugin::getId(), function () {
