@@ -146,7 +146,7 @@ class BlogService
             $this->blogSlugHandler->storeSlug($blog, $inputs);
 
             if (isset($inputs['_tags']) && empty($inputs['_tags']) === false) {
-                $this->tagHandler->set($blog->id, $inputs['_tags']);
+                $this->tagHandler->set($blog->id, $inputs['_tags'], Plugin::getId());
             }
         } catch (\Exception $e) {
             XeDB::rollback();
@@ -169,7 +169,7 @@ class BlogService
             $this->blogSlugHandler->updateSlug($blog, $inputs);
 
             if (isset($inputs['_tags']) && empty($inputs['_tags']) === false) {
-                $this->tagHandler->set($blog->id, $inputs['_tags']);
+                $this->tagHandler->set($blog->id, $inputs['_tags'], Plugin::getId());
             }
         } catch (\Exception $e) {
             XeDB::rollback();
