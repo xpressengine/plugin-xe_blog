@@ -20,7 +20,7 @@ class BlogSlugHandler
     public function storeSlug($blog, $inputs)
     {
         $title = $inputs['title'];
-        if (isset($inputs['slug']) === true) {
+        if (isset($inputs['slug']) === true && $inputs['slug'] !== '' && $inputs['slug'] !== null) {
             $title = $inputs['slug'];
         }
 
