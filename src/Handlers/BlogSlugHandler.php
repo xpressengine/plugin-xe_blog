@@ -36,6 +36,24 @@ class BlogSlugHandler
         $newBlogSlug->save();
     }
 
+    public function updateSlug($blog, $inputs)
+    {
+        $slugItem = $blog->slug;
+        if ($slugItem === null) {
+            $this->storeSlug($blog, $inputs);
+        } else {
+            $slug = $inputs['title'];
+            if (isset($inputs['slug']) === true && $inputs['slug'] !== '' && $inputs['slug'] !== null) {
+                $slug = $inputs['slug'];
+            }
+
+            if ($slugItem['slug'] !== $slug) {
+                $slugItem['slug'] = $slug;
+                $slugItem->save();
+            }
+        }
+    }
+
     public function make($slug, $id)
     {
         $slug = $this->convert($slug);
