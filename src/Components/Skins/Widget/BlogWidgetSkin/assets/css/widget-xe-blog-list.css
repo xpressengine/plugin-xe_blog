@@ -156,6 +156,7 @@
   margin: 0;
   padding: 25px 0;
   list-style: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .widget-bold-xe-blog-category-list > li {

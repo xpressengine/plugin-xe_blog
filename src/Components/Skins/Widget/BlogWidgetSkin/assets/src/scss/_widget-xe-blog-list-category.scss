@@ -12,6 +12,7 @@
   margin: 0;
   padding: 25px 0;
   list-style: none;
+  -webkit-overflow-scrolling: touch;
 
   > li {
     display: inline-block;
