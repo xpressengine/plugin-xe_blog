@@ -10,6 +10,7 @@
     <li @if ($type === 'config') class="active" @endif><a href="{{ route('blog.setting.setting', ['type' => 'config']) }}">설정</a></li>
     <li @if ($type === 'taxonomy') class="active" @endif><a href="{{ route('blog.setting.setting', ['type' => 'taxonomy']) }}">Taxonomy</a></li>
     <li @if ($type === 'skin') class="active" @endif><a href="{{ route('blog.setting.setting', ['type' => 'skin']) }}">스킨</a></li>
+    <li @if ($type === 'dynamicField') class="active" @endif><a href="{{ route('blog.setting.setting', ['type' => 'dynamicField']) }}">확장필드</a></li>
 </ul>
 
 @if ($type === 'config')
@@ -133,6 +134,20 @@
                             <label>상세보기 스킨</label>
                         </div>
                         {!! $skinSection !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@elseif ($type === 'dynamicField')
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel-group">
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="clearfix">
+                            {!! $dynamicFieldSection !!}
+                        </div>
                     </div>
                 </div>
             </div>

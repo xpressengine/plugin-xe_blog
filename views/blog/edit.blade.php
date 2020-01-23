@@ -26,5 +26,11 @@
     <span>Slug</span>
     <input type="text" name="slug" @if ($blog->slug !== null) value="{{ $blog->slug['slug'] }}" @endif>
 
+    @foreach ($dynamicFields as $dynamicField)
+        @if ($dynamicField->getConfig()->get('use') === true)
+            {!! $dynamicField->getSkin()->edit($blog->getAttributes()) !!}
+        @endif
+    @endforeach
+
     <button type="submit" class="xe-btn">저장</button>
 </form>

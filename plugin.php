@@ -14,6 +14,7 @@ use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogSlugHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
+use Xpressengine\Plugins\XeBlog\Models\Blog;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
 use Xpressengine\Translation\Translator;
 
@@ -267,7 +268,7 @@ class Plugin extends AbstractPlugin
 
         /** @var DocumentHandler $documentConfigHandler */
         $documentConfigHandler = app('xe.document');
-        $documentConfigHandler->createInstance(Plugin::getId());
+        $documentConfigHandler->createInstance(Plugin::getId(), ['instanceId' => Plugin::getId(), 'group' => Plugin::getId()]);
     }
 
     /**

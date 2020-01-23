@@ -2,6 +2,7 @@
 
 namespace Xpressengine\Plugins\XeBlog\Controllers;
 
+use App\Http\Sections\DynamicFieldSection;
 use App\Http\Sections\SkinSection;
 use XePresenter;
 use App\Http\Controllers\Controller;
@@ -9,6 +10,7 @@ use Xpressengine\Http\Request;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
+use Xpressengine\Plugins\XeBlog\Plugin;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
 
 class BlogSettingController extends Controller
@@ -48,7 +50,16 @@ class BlogSettingController extends Controller
         $config = $this->configHandler->getBlogConfig();
         $skinSection = new SkinSection('blog/show');
 
-        return XePresenter::make('xe_blog::views.setting.setting', compact('type', 'skinSection', 'config'));
+        $dynamicFieldSection = new DynamicFieldSection(
+            'documents_' . Plugin::getId(),
+            \XeDB::connection(),
+            true
+        );
+
+        return XePresenter::make(
+            'xe_blog::views.setting.setting',
+            compact('type', 'skinSection', 'config', 'dynamicFieldSection')
+        );
     }
 
     public function updateSetting(Request $request)

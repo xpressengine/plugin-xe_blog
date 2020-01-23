@@ -40,5 +40,14 @@
     <span>Slug</span>
     <input type="text" name="slug">
 
+    <hr>
+    <span>DynamicFields</span>
+
+    @foreach ($dynamicFields as $dynamicField)
+        @if ($dynamicField->getConfig()->get('use') === true)
+            {!! df_create($dynamicField->getConfig()->get('group'), $dynamicField->getConfig()->get('id'), Request::all()) !!}
+        @endif
+    @endforeach
+
     <button type="submit" class="xe-btn">저장</button>
 </form>

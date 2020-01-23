@@ -60,6 +60,11 @@ class BlogService
         $this->handlers[] = $handler;
     }
 
+    public function getItem($id)
+    {
+        return Blog::division(Plugin::getId())->find($id);
+    }
+
     public function getItemsQuery(array $attributes)
     {
         $query = Blog::division(Plugin::getId())->where('instance_id', Plugin::getId());

@@ -5,6 +5,7 @@ namespace Xpressengine\Plugins\XeBlog\Controllers;
 use Auth;
 use XePresenter;
 use App\Http\Controllers\Controller;
+use Xpressengine\DynamicField\ConfigHandler;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugins\XeBlog\Exceptions\NotFoundBlogException;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogFavoriteHandler;
@@ -26,6 +27,9 @@ class BlogController extends Controller
     /** @var BlogFavoriteHandler $blogFavoriteHandler */
     protected $blogFavoriteHandler;
 
+    /** @var ConfigHandler $dynamicFieldConfigHandler */
+    protected $dynamicFieldConfigHandler;
+
     public function __construct(BlogService $blogService, BlogHandler $blogHandler)
     {
         $this->blogService = $blogService;
@@ -33,6 +37,7 @@ class BlogController extends Controller
 
         $favoriteHandler = new BlogFavoriteHandler();
         $this->blogFavoriteHandler = $favoriteHandler;
+        $this->dynamicFieldConfigHandler = app('xe.dynamicField');
 
         XePresenter::share('metaDataHandler', new BlogMetaDataHandler());
         XePresenter::share('favoriteHandler', $favoriteHandler);
@@ -56,7 +61,9 @@ class BlogController extends Controller
 
         $taxonomyGroups = app('xe.blog.taxonomyHandler')->getTaxonomyGroups();
 
-        return XePresenter::make('xe_blog::views.blog.create', compact('taxonomyGroups'));
+        $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
+
+        return XePresenter::make('xe_blog::views.blog.create', compact('taxonomyGroups', 'dynamicFields'));
     }
 
     public function store(Request $request)
@@ -73,7 +80,7 @@ class BlogController extends Controller
             $request->session()->put('url.intended', $redirectUrl);
         }
 
-        $blog = $this->blogHandler->get($blogId);
+        $blog = $this->blogService->getItem($blogId);
         if ($blog === null) {
             throw new NotFoundBlogException;
         }
@@ -99,7 +106,7 @@ class BlogController extends Controller
             throw new NotFoundBlogException;
         }
 
-        $blog = $blogSlug->blog;
+        $blog = $this->blogService->getItem($blogSlug->target_id);
         $blog->setCanonical(route('blog.show_slug', ['slug' => $slug]));
 
         return $this->show($request, $blog);
@@ -109,7 +116,9 @@ class BlogController extends Controller
     {
         XePresenter::setSkinTargetId('blog/show');
 
-        return XePresenter::make('show', compact('blog'));
+        $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
+
+        return XePresenter::make('show', compact('blog', 'dynamicFields'));
     }
 
     public function edit(Request $request, $blogId)
@@ -121,15 +130,17 @@ class BlogController extends Controller
             $request->session()->put('url.intended', $redirectUrl);
         }
 
-        $blog = $this->blogHandler->get($blogId);
+        $blog = $this->blogService->getItem($blogId);
 
-        return XePresenter::make('xe_blog::views.blog.edit', compact('blog'));
+        $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
+
+        return XePresenter::make('xe_blog::views.blog.edit', compact('blog', 'dynamicFields'));
     }
 
     public function update(Request $request)
     {
         $blogId = $request->get('blogId');
-        $blog = $this->blogHandler->get($blogId, Plugin::getId());
+        $blog = $this->blogService->getItem($blogId);
 
         $this->blogService->update($request, $blog);
 
@@ -138,7 +149,7 @@ class BlogController extends Controller
 
     public function delete(Request $request, $blogId)
     {
-        $blog = $this->blogHandler->get($blogId, Plugin::getId());
+        $blog = $this->blogService->getItem($blogId);
 
         $this->blogService->delete($blog, 'blog');
 
@@ -153,7 +164,7 @@ class BlogController extends Controller
 
         $user = Auth::user();
         $blogId = $request->get('blogId');
-        $blogItem = $this->blogHandler->get($blogId, 'blog');
+        $blogItem = $this->blogService->getItem($blogId);
 
         $favorite = false;
         if ($this->blogFavoriteHandler->isFavoriteBlog($blogItem, $user) === false) {
