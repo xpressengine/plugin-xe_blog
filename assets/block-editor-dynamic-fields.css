@@ -1,0 +1,30 @@
+/* xe blog plugin, 게시글 생성, 수정 하단 사용자 정의 필드 스타일 */
+.blind {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  margin: -1px;
+  width: 1px;
+  height: 1px;
+}
+
+.section-blog-block-editor-field {
+  padding: 32px 32px 12px;
+  border-top: 1px solid #e3e4e7;
+}
+
+.section-blog-block-editor-field .blog-block-editor-field__title-box {
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e3e4e7;
+}
+
+.section-blog-block-editor-field .blog-block-editor-field__title {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: 400;
+  letter-spacing: -0.0429em;
+  color: #444;
+}
