@@ -12,6 +12,10 @@ use Xpressengine\User\Models\UnknownUser;
 
 class Blog extends Document implements SeoUsable
 {
+    protected $casts = [
+        'published_at' => 'datetime'
+    ];
+
     use SoftDeletes;
 
     protected $canonical;

@@ -1,3 +1,5 @@
+{{ XeFrontend::css('plugins/xe_blog/assets/block-editor-dynamic-fields.css')->load() }}
+
 <form method="post" action="{{ route('blog.store') }}" enctype="multipart/form-data">
     <input type="text" name="title" value="{{ Request::old('title') }}" placeholder="title">
     <input type="text" name="sub_title" value="{{ Request::old('sub_title') }}" placeholder="sub_title">
@@ -41,13 +43,20 @@
     <input type="text" name="slug">
 
     <hr>
-    <span>DynamicFields</span>
-
-    @foreach ($dynamicFields as $dynamicField)
-        @if ($dynamicField->getConfig()->get('use') === true)
-            {!! df_create($dynamicField->getConfig()->get('group'), $dynamicField->getConfig()->get('id'), Request::all()) !!}
-        @endif
-    @endforeach
+    <section class="section-blog-block-editor-field">
+        <div class="blog-block-editor-field__title-box">
+            <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }}</h2>
+        </div>
+        <div class="blog-block-editor-filed-content">
+            <div class="inner">
+                @foreach ($dynamicFields as $dynamicField)
+                    @if ($dynamicField->getConfig()->get('use') === true)
+                        {!! df_create($dynamicField->getConfig()->get('group'), $dynamicField->getConfig()->get('id'), Request::all()) !!}
+                    @endif
+                @endforeach
+            </div>
+        </div>
+    </section>
 
     <button type="submit" class="xe-btn">저장</button>
 </form>
