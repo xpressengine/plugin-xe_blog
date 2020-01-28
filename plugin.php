@@ -133,6 +133,18 @@ class Plugin extends AbstractPlugin
             Route::get('/{slug}', ['as' => 'show_slug', 'uses' => 'BlogController@showSlug']);
         });
 
+        Route::group([
+            'prefix' => Plugin::getId() . '/template',
+            'as' => 'blog.template.',
+            'namespace' => 'Xpressengine\Plugins\XeBlog\Controllers',
+            'middleware' => ['web']
+        ], function () {
+            Route::get('/get_items', ['as' => 'get_items', 'uses' => 'BlogTemplateController@index']);
+            Route::post('/store', ['as' => 'store', 'uses' => 'BlogTemplateController@store']);
+            Route::post('/delete/{templateId}', ['as' => 'delete_item', 'uses' => 'BlogTemplateController@delete']);
+            Route::get('/{templateId}', ['as' => 'get_item', 'uses' => 'BlogTemplateController@getItem']);
+        });
+
         Route::settings(Plugin::getId(), function () {
             Route::group([
                 'namespace' => 'Xpressengine\Plugins\XeBlog\Controllers',

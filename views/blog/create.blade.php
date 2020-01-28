@@ -51,3 +51,43 @@
 
     <button type="submit" class="xe-btn">저장</button>
 </form>
+
+{{ XeFrontend::js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
+<div class="form-group">
+    <span>템플릿 저장</span>
+    <div>
+        <input id="template_title" type="text" name="template_title" placeholder="템플릿 이름">
+        <button id="btn_template_store" type="button">템플릿 저장</button>
+    </div>
+
+    <div>
+        <button id="btn_template_index" type="button" data-url="{{ route('blog.template.get_items') }}">템플릿 보기</button>
+        <div id="template_index"></div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#btn_template_store').click(function () {
+            var content = window.wp.data.select('core/editor').getEditedPostContent()
+            var title = $('#template_title').val()
+
+            XE.post('/xe_blog/template/store', {
+                'title': title,
+                'content': content
+            }).then(response => {
+                if (response.data.result == true) {
+                    alert('템플릿이 저장되었습니다.')
+                }
+            })
+        })
+
+        $('#btn_template_index').click(function () {
+            var url = $(this).data('url')
+
+            XE.get(url).then(response => {
+                console.log(response)
+            })
+        })
+    })
+</script>
