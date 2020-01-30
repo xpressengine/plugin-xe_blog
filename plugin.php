@@ -12,9 +12,9 @@ use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogFavoriteHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogPermissionHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogSlugHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
-use Xpressengine\Plugins\XeBlog\Models\Blog;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
 use Xpressengine\Translation\Translator;
 
@@ -79,6 +79,11 @@ class Plugin extends AbstractPlugin
             return new BlogSlugHandler();
         });
         app()->alias(BlogSlugHandler::class, 'xe.blog.slugHandler');
+
+        app()->singleton(BlogPermissionHandler::class, function () {
+            return new BlogPermissionHandler(app('xe.permission'));
+        });
+        app()->alias(BlogPermissionHandler::class, 'xe.blog.permissionHandler');
     }
 
     /**
@@ -163,6 +168,7 @@ class Plugin extends AbstractPlugin
                 Route::post('/setting', ['as' => 'store_setting', 'uses' => 'BlogSettingController@updateSetting']);
 
                 Route::post('/store_taxonomy', ['as' => 'store_taxonomy', 'uses' => 'BlogSettingController@storeTaxonomy']);
+                Route::post('/update_permission', ['as' => 'update_permission', 'uses' => 'BlogSettingController@updatePermission']);
 
                 $taxonomies = app('xe.blog.taxonomyHandler')->getTaxonomies();
                 foreach ($taxonomies as $taxonomy) {
@@ -273,6 +279,10 @@ class Plugin extends AbstractPlugin
         if ($migration->checkInstalled() === false) {
             $migration->install();
         }
+
+        /** @var BlogPermissionHandler $blogPermissionHandler */
+        $blogPermissionHandler = app('xe.blog.permissionHandler');
+        $blogPermissionHandler->storeDefaultPermission();
 
         /** @var BlogConfigHandler $configHandler */
         $configHandler = app('xe.blog.configHandler');

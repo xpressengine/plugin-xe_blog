@@ -11,6 +11,7 @@
     <li @if ($type === 'taxonomy') class="active" @endif><a href="{{ route('blog.setting.setting', ['type' => 'taxonomy']) }}">Taxonomy</a></li>
     <li @if ($type === 'skin') class="active" @endif><a href="{{ route('blog.setting.setting', ['type' => 'skin']) }}">스킨</a></li>
     <li @if ($type === 'dynamicField') class="active" @endif><a href="{{ route('blog.setting.setting', ['type' => 'dynamicField']) }}">확장필드</a></li>
+    <li @if ($type === 'permission') class="active" @endif><a href="{{ route('blog.setting.setting', ['type' => 'permission']) }}">권한</a></li>
 </ul>
 
 @if ($type === 'config')
@@ -149,6 +150,40 @@
                             {!! $dynamicFieldSection !!}
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@elseif ($type === 'permission')
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel-group">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <h3 class="panel-title">{{ xe_trans('xe::permission') }}</h3>
+                        </div>
+                    </div>
+
+                    <form method="post" action="{{ route('blog.setting.update_permission') }}">
+                        {!! csrf_field() !!}
+                        <div class="panel-body">
+                            @foreach ($perms as $perm)
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">{{ $perm['title'] }} {{xe_trans('xe::permission')}}</label>
+                                            <div class="well">
+                                                {!! uio('permission', $perm) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            <button type="submit" class="xe-btn">저장</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

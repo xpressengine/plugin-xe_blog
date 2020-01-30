@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogPermissionHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
 use Xpressengine\Plugins\XeBlog\Plugin;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
@@ -24,14 +25,19 @@ class BlogSettingController extends Controller
     /** @var BlogTaxonomyHandler $taxonomyHandler */
     protected $taxonomyHandler;
 
+    /** @var BlogPermissionHandler $blogPermissionHandler */
+    protected $blogPermissionHandler;
+
     public function __construct(
         BlogService $blogService,
         BlogConfigHandler $configHandler,
-        BlogTaxonomyHandler $taxonomyHandler
+        BlogTaxonomyHandler $taxonomyHandler,
+        BlogPermissionHandler $blogPermissionHandler
     ) {
         $this->blogService = $blogService;
         $this->configHandler = $configHandler;
         $this->taxonomyHandler = $taxonomyHandler;
+        $this->blogPermissionHandler = $blogPermissionHandler;
 
         XePresenter::share('metaDataHandler', new BlogMetaDataHandler());
         XePresenter::share('taxonomyHandler', $taxonomyHandler);
@@ -56,9 +62,11 @@ class BlogSettingController extends Controller
             true
         );
 
+        $perms = $this->blogPermissionHandler->getPerms();
+
         return XePresenter::make(
             'xe_blog::views.setting.setting',
-            compact('type', 'skinSection', 'config', 'dynamicFieldSection')
+            compact('type', 'skinSection', 'config', 'dynamicFieldSection', 'perms')
         );
     }
 
@@ -76,6 +84,13 @@ class BlogSettingController extends Controller
         $taxonomyItem = $this->taxonomyHandler->createTaxonomy($taxonomyAttribute);
 
         return redirect()->route('manage.category.show', ['id' => $taxonomyItem->id]);
+    }
+
+    public function updatePermission(Request $request, BlogPermissionHandler $blogPermissionHandler)
+    {
+        $blogPermissionHandler->updatePermission($request);
+
+        return redirect()->back();
     }
 
     public function connectTaxonomySetting(Request $request)
