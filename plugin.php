@@ -167,6 +167,10 @@ class Plugin extends AbstractPlugin
                 ]);
                 Route::post('/setting', ['as' => 'store_setting', 'uses' => 'BlogSettingController@updateSetting']);
 
+                Route::get('/edit_taxonomy_config/{taxonomyId}', ['as' => 'edit_taxonomy_config', 'uses' => 'BlogSettingController@editTaxonomyConfig']);
+                Route::post('/update_taxonomy_config', ['as' => 'update_taxonomy_config', 'uses' => 'BlogSettingController@updateTaxonomyConfig']);
+                Route::post('/delete_taxonomy', ['as' => 'delete_taxonomy', 'uses' => 'BlogSettingController@deleteTaxonomy']);
+
                 Route::post('/store_taxonomy', ['as' => 'store_taxonomy', 'uses' => 'BlogSettingController@storeTaxonomy']);
                 Route::post('/update_permission', ['as' => 'update_permission', 'uses' => 'BlogSettingController@updatePermission']);
 

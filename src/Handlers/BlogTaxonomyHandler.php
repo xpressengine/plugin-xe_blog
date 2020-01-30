@@ -129,6 +129,23 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
         return $taxonomyItem;
     }
 
+    public function deleteTaxonomy($taxonomyId)
+    {
+        \XeDB::beginTransaction();
+        try {
+            $taxonomy = \XeCategory::cates()->find($taxonomyId);
+            $this->categoryHandler->deleteCate($taxonomy);
+
+            $taxonomyConfig = $this->getTaxonomyInstanceConfig($taxonomyId);
+            $this->blogConfigHandler->removeConfig($taxonomyConfig);
+        } catch (\Exception $e) {
+            \XeDB::rollback();
+
+            throw $e;
+        }
+        \XeDB::commit();
+    }
+
     public function getTaxonomyInstanceConfigs()
     {
         $taxonomyDefaultConfigName = $this->blogConfigHandler->getConfigName(BlogTaxonomyHandler::TAXONOMY_CONFIG_NAME);
@@ -140,6 +157,15 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
     public function getTaxonomyInstanceConfig($taxonomyId)
     {
         return $this->blogConfigHandler->get($this->getTaxonomyInstanceConfigName($taxonomyId));
+    }
+
+    public function updateTaxonomyInstanceConfig($taxonomyConfig, $attributes)
+    {
+        foreach ($attributes as $key => $value) {
+            $taxonomyConfig->set($key, $value);
+        }
+
+        $this->blogConfigHandler->modifyConfig($taxonomyConfig);
     }
 
     public function getTaxonomyUseUrls()

@@ -5,6 +5,7 @@ namespace Xpressengine\Plugins\XeBlog\Controllers;
 use App\Http\Sections\DynamicFieldSection;
 use App\Http\Sections\SkinSection;
 use XePresenter;
+use XeFrontend;
 use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
@@ -13,6 +14,7 @@ use Xpressengine\Plugins\XeBlog\Handlers\BlogPermissionHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
 use Xpressengine\Plugins\XeBlog\Plugin;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
+use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
 
 class BlogSettingController extends Controller
 {
@@ -63,11 +65,73 @@ class BlogSettingController extends Controller
         );
 
         $perms = $this->blogPermissionHandler->getPerms();
+        $taxonomies = $this->taxonomyHandler->getTaxonomies();
 
         return XePresenter::make(
             'xe_blog::views.setting.setting',
-            compact('type', 'skinSection', 'config', 'dynamicFieldSection', 'perms')
+            compact('type', 'skinSection', 'config', 'dynamicFieldSection', 'perms', 'taxonomies')
         );
+    }
+
+    public function editTaxonomyConfig($taxonomyId)
+    {
+        $taxonomy = \XeCategory::cates()->find($taxonomyId);
+
+        if ($taxonomy === null) {
+            throw new InvalidArgumentHttpException;
+        }
+
+        $taxonomyConfig = $this->taxonomyHandler->getTaxonomyInstanceConfig($taxonomyId);
+
+        XeFrontend::css(
+            [
+                '/assets/core/lang/langEditorBox.css',
+                '/assets/core/xe-ui-component/xe-ui-component.css'
+            ]
+        )->load();
+
+        XeFrontend::js(
+            [
+                '/assets/core/lang/langEditorBox.bundle.js'
+            ]
+        )->appendTo('head')->load();
+
+        XeFrontend::js('/assets/core/common/js/xe.tree.js')->appendTo('body')->load();
+        XeFrontend::js('/assets/core/category/Category.js')->appendTo('body')->load();
+
+        XeFrontend::translation([
+            'xe::required',
+            'xe::addItem',
+            'xe::create',
+            'xe::createChild',
+            'xe::edit',
+            'xe::unknown',
+            'xe::word',
+            'xe::description',
+            'xe::save',
+            'xe::delete',
+            'xe::close',
+            'xe::subCategoryDestroy',
+            'xe::confirmDelete',
+        ]);
+
+        return XePresenter::make('xe_blog::views.setting.edit_taxonomy', compact('taxonomy', 'taxonomyConfig'));
+    }
+
+    public function updateTaxonomyConfig(Request $request)
+    {
+        $taxonomyConfig = $this->taxonomyHandler->getTaxonomyInstanceConfig($request->get('taxonomyId'));
+
+        $this->taxonomyHandler->updateTaxonomyInstanceConfig($taxonomyConfig, $request->except('_token'));
+
+        return redirect()->back();
+    }
+
+    public function deleteTaxonomy(Request $request)
+    {
+        $this->taxonomyHandler->deleteTaxonomy($request->get('taxonomyId'));
+
+        return redirect()->route('blog.setting.setting', ['type' => 'taxonomy']);
     }
 
     public function updateSetting(Request $request)

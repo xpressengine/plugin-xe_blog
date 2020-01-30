@@ -123,6 +123,14 @@
                         </form>
                     </div>
                 </div>
+
+                <div class="panel">
+                    <ul>
+                        @foreach ($taxonomies as $taxonomy)
+                            <li><a href="{{ route('blog.setting.edit_taxonomy_config', ['taxonomyId' => $taxonomy->id]) }}">{{ xe_trans($taxonomy->name) }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
