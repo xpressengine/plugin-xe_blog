@@ -80,13 +80,11 @@
         </button>
     </div>
 
-    <div class="text-right">
-        <!-- <a href="{{ route('blog.create') }}" class="xe-btn xe-btn-positive" target="_blank">글쓰기</a> -->
-        <a href="{{ route('blog.create') }}" class="btn btn-bj btn-bj--black">
-            글쓰기
-        </a>
-    </div>
-
+    @if ($isCreatable === true)
+        <div class="text-right">
+            <a href="{{ route('blog.create') }}" class="btn btn-bj btn-bj--black">글쓰기</a>
+        </div>
+    @endif
 </section>
 
 @expose_route('blog.show')
