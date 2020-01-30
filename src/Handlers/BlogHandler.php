@@ -17,6 +17,10 @@ class BlogHandler extends DocumentHandler implements Searchable, Jsonable
         $attributes['instance_id'] = $instanceId;
         $attributes['type'] = Plugin::getId();
 
+        if ($attributes['published_at'] === '') {
+            $attributes['published_at'] = date('Y-m-d H:i:s');
+        }
+
         return parent::add($attributes);
     }
 
