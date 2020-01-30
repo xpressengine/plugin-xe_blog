@@ -65,6 +65,18 @@ class BlogService
         return Blog::division(Plugin::getId())->find($id);
     }
 
+    public function checkItemPermission(Blog $blog, $user, $force = false)
+    {
+        $hasPermission = false;
+        if ($force === true) {
+            $hasPermission = true;
+        } elseif ($blog->user_id === $user->getId()) {
+            $hasPermission = true;
+        }
+
+        return $hasPermission;
+    }
+
     public function getItemsQuery(array $attributes)
     {
         $query = Blog::division(Plugin::getId())->where('instance_id', Plugin::getId());

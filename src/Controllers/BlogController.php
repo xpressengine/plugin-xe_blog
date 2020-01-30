@@ -4,13 +4,16 @@ namespace Xpressengine\Plugins\XeBlog\Controllers;
 
 use Auth;
 use XePresenter;
+use Gate;
 use App\Http\Controllers\Controller;
 use Xpressengine\DynamicField\ConfigHandler;
 use Xpressengine\Http\Request;
+use Xpressengine\Permission\Instance;
 use Xpressengine\Plugins\XeBlog\Exceptions\NotFoundBlogException;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogFavoriteHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogPermissionHandler;
 use Xpressengine\Plugins\XeBlog\Models\BlogSlug;
 use Xpressengine\Plugins\XeBlog\Plugin;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
@@ -30,6 +33,9 @@ class BlogController extends Controller
     /** @var ConfigHandler $dynamicFieldConfigHandler */
     protected $dynamicFieldConfigHandler;
 
+    /** @var BlogPermissionHandler $blogPermissionHandler */
+    protected $blogPermissionHandler;
+
     public function __construct(BlogService $blogService, BlogHandler $blogHandler)
     {
         $this->blogService = $blogService;
@@ -38,13 +44,23 @@ class BlogController extends Controller
         $favoriteHandler = new BlogFavoriteHandler();
         $this->blogFavoriteHandler = $favoriteHandler;
         $this->dynamicFieldConfigHandler = app('xe.dynamicField');
+        $this->blogPermissionHandler = app('xe.blog.permissionHandler');
 
         XePresenter::share('metaDataHandler', new BlogMetaDataHandler());
         XePresenter::share('favoriteHandler', $favoriteHandler);
     }
 
+    private function checkAllowPermission($action)
+    {
+        return Gate::allows($action, new Instance($this->blogPermissionHandler->getPermissionName()));
+    }
+
     public function getItemsForJson(Request $request)
     {
+        if ($this->checkAllowPermission(BlogPermissionHandler::ACTION_LIST) === false) {
+            throw new AccessDeniedHttpException;
+        }
+
         $items = $this->blogService->getItemsJson($request->all());
 
         return XePresenter::makeApi($items);
@@ -52,6 +68,10 @@ class BlogController extends Controller
 
     public function create(Request $request)
     {
+        if ($this->checkAllowPermission(BlogPermissionHandler::ACTION_CREATE) === false) {
+            throw new AccessDeniedHttpException;
+        }
+
         app('xe.theme')->selectBlankTheme();
 
         $redirectUrl = $request->session()->pull('url.intended') ?: url()->previous();
@@ -68,6 +88,10 @@ class BlogController extends Controller
 
     public function store(Request $request)
     {
+        if ($this->checkAllowPermission(BlogPermissionHandler::ACTION_CREATE) === false) {
+            throw new AccessDeniedHttpException;
+        }
+
         $this->blogService->store($request, Plugin::getId());
 
         return redirect()->intended();
@@ -114,6 +138,10 @@ class BlogController extends Controller
 
     private function show(Request $request, $blog)
     {
+        if ($this->checkAllowPermission(BlogPermissionHandler::ACTION_READ) === false) {
+            throw new AccessDeniedHttpException;
+        }
+
         XePresenter::setSkinTargetId('blog/show');
 
         $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
@@ -123,14 +151,22 @@ class BlogController extends Controller
 
     public function edit(Request $request, $blogId)
     {
+        $blog = $this->blogService->getItem($blogId);
+
+        if ($this->blogService->checkItemPermission(
+                $blog,
+                Auth::user(),
+                $this->checkAllowPermission(BlogPermissionHandler::ACTION_MANAGE)
+            ) === false) {
+            throw new AccessDeniedHttpException;
+        }
+
         app('xe.theme')->selectBlankTheme();
 
         $redirectUrl = $request->session()->pull('url.intended') ?: url()->previous();
         if ($redirectUrl !== $request->url()) {
             $request->session()->put('url.intended', $redirectUrl);
         }
-
-        $blog = $this->blogService->getItem($blogId);
 
         $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
 
@@ -142,6 +178,14 @@ class BlogController extends Controller
         $blogId = $request->get('blogId');
         $blog = $this->blogService->getItem($blogId);
 
+        if ($this->blogService->checkItemPermission(
+                $blog,
+                Auth::user(),
+                $this->checkAllowPermission(BlogPermissionHandler::ACTION_MANAGE)
+            ) === false) {
+            throw new AccessDeniedHttpException;
+        }
+
         $this->blogService->update($request, $blog);
 
         return redirect()->intended();
@@ -151,7 +195,15 @@ class BlogController extends Controller
     {
         $blog = $this->blogService->getItem($blogId);
 
-        $this->blogService->delete($blog, 'blog');
+        if ($this->blogService->checkItemPermission(
+                $blog,
+                Auth::user(),
+                $this->checkAllowPermission(BlogPermissionHandler::ACTION_MANAGE)
+            ) === false) {
+            throw new AccessDeniedHttpException;
+        }
+
+        $this->blogService->delete($blog, Plugin::getId());
 
         return redirect()->intended();
     }
