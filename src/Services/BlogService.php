@@ -154,7 +154,7 @@ class BlogService
         return $query->paginate($perPage, ['*'], 'page')->appends(array_except($attributes,'page'));
     }
 
-    public function store(Request $request, $instanceId)
+    public function store(Request $request)
     {
         $inputs = $request->originExcept('_token');
 
@@ -168,7 +168,7 @@ class BlogService
 
         XeDB::beginTransaction();
         try {
-            $blog = $this->blogHandler->store($inputs, $instanceId);
+            $blog = $this->blogHandler->store($inputs);
             $this->metaDataHandler->saveMetaData($blog, $inputs);
             $this->taxonomyHandler->storeTaxonomy($blog, $inputs);
             $this->blogSlugHandler->storeSlug($blog, $inputs);
@@ -207,11 +207,11 @@ class BlogService
         XeDB::commit();
     }
 
-    public function delete($blog, $instanceId)
+    public function delete($blog, $configName)
     {
         XeDB::beginTransaction();
         try {
-            $blogConfig = $this->blogConfigHandler->get($instanceId);
+            $blogConfig = $this->blogConfigHandler->get($configName);
             if ($blogConfig->get('deleteToTrash') === true) {
                 $this->blogHandler->trashBlog($blog);
             } else {

@@ -92,7 +92,7 @@ class BlogController extends Controller
             throw new AccessDeniedHttpException;
         }
 
-        $this->blogService->store($request, Plugin::getId());
+        $this->blogService->store($request);
 
         return redirect()->intended();
     }
@@ -203,7 +203,7 @@ class BlogController extends Controller
             throw new AccessDeniedHttpException;
         }
 
-        $this->blogService->delete($blog, Plugin::getId());
+        $this->blogService->delete($blog, 'blog');
 
         return redirect()->intended();
     }

@@ -13,9 +13,9 @@ class BlogHandler extends DocumentHandler implements Searchable, Jsonable, Order
 {
     protected $model = Blog::class;
 
-    public function store($attributes, $instanceId)
+    public function store($attributes)
     {
-        $attributes['instance_id'] = $instanceId;
+        $attributes['instance_id'] = Plugin::getId();
         $attributes['type'] = Plugin::getId();
 
         if ($attributes['published_at'] === '') {
