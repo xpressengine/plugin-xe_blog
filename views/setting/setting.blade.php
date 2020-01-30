@@ -31,6 +31,7 @@
                                                     <label>글 정렬</label>
                                                 </div>
                                                 <select name="orderType" class="form-control">
+                                                    <option value="{{ BlogConfigHandler::ORDER_TYPE_PUBLISH  }}" @if ($config->get('orderType') === BlogConfigHandler::ORDER_TYPE_PUBLISH) selected @endif>발행일순</option>
                                                     <option value="{{ BlogConfigHandler::ORDER_TYPE_NEW  }}" @if ($config->get('orderType') === BlogConfigHandler::ORDER_TYPE_NEW) selected @endif>최신순</option>
                                                     <option value="{{ BlogConfigHandler::ORDER_TYPE_UPDATE  }}" @if ($config->get('orderType') === BlogConfigHandler::ORDER_TYPE_UPDATE) selected @endif>업데이트순</option>
                                                     <option value="{{ BlogConfigHandler::ORDER_TYPE_RECOMMEND  }}" @if ($config->get('orderType') === BlogConfigHandler::ORDER_TYPE_RECOMMEND) selected @endif>추천순</option>

@@ -10,6 +10,7 @@ use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogSlugHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
 use Xpressengine\Plugins\XeBlog\Interfaces\Jsonable;
+use Xpressengine\Plugins\XeBlog\Interfaces\Orderable;
 use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
 use Xpressengine\Plugins\XeBlog\Models\Blog;
 use Xpressengine\Plugins\XeBlog\Plugin;
@@ -77,13 +78,24 @@ class BlogService
         return $hasPermission;
     }
 
-    public function getItemsQuery(array $attributes)
+    public function getItemsWhereQuery(array $attributes)
     {
         $query = Blog::division(Plugin::getId())->where('instance_id', Plugin::getId());
 
         foreach ($this->handlers as $handler) {
             if ($handler instanceof Searchable) {
                 $query = $handler->getItems($query, $attributes);
+            }
+        }
+
+        return $query;
+    }
+
+    public function getItemsOrderQuery($query, $attributes)
+    {
+        foreach ($this->handlers as $handler) {
+            if ($handler instanceof Orderable) {
+                $query = $handler->getOrder($query, $attributes);
             }
         }
 
@@ -102,8 +114,8 @@ class BlogService
             $currentPage = $attributes['page'];
         }
 
-        $query = $this->getItemsQuery($attributes);
-        $query->orderByDesc('created_at');
+        $query = $this->getItemsWhereQuery($attributes);
+        $query = $this->getItemsOrderQuery($query, $attributes);
 
         $items = $query->paginate($perPage, ['*'], 'page', $currentPage)->appends(array_except($attributes, 'page'));
 
@@ -131,9 +143,8 @@ class BlogService
 
     public function getItems(array $attributes)
     {
-        $query = $this->getItemsQuery($attributes);
-
-        $query->orderByDesc('created_at');
+        $query = $this->getItemsWhereQuery($attributes);
+        $query = $this->getItemsOrderQuery($query, $attributes);
 
         $perPage = self::DEFAULT_PER_PAGE;
         if (isset($attributes['perPage']) === true && $attributes['perPage'] !== '' && $attributes['perPage'] !== null) {

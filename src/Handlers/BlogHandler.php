@@ -4,11 +4,12 @@ namespace Xpressengine\Plugins\XeBlog\Handlers;
 
 use Xpressengine\Document\DocumentHandler;
 use Xpressengine\Plugins\XeBlog\Interfaces\Jsonable;
+use Xpressengine\Plugins\XeBlog\Interfaces\Orderable;
 use Xpressengine\Plugins\XeBlog\Interfaces\Searchable;
 use Xpressengine\Plugins\XeBlog\Models\Blog;
 use Xpressengine\Plugins\XeBlog\Plugin;
 
-class BlogHandler extends DocumentHandler implements Searchable, Jsonable
+class BlogHandler extends DocumentHandler implements Searchable, Jsonable, Orderable
 {
     protected $model = Blog::class;
 
@@ -32,6 +33,37 @@ class BlogHandler extends DocumentHandler implements Searchable, Jsonable
 
         if (isset($attributes['title']) === true) {
             $query = $query->where('title', 'like', '%' . $attributes['title']);
+        }
+
+        return $query;
+    }
+
+    public function getOrder($query, $attributes)
+    {
+        $blogConfigHandler = app('xe.blog.configHandler');
+        $blogConfig = $blogConfigHandler->getBlogConfig();
+
+        $orderType = $blogConfig->get('orderType');
+        if (isset($attributes['orderType']) === true) {
+            $orderType = $attributes['orderType'];
+        }
+
+        switch ($orderType) {
+            case BlogConfigHandler::ORDER_TYPE_PUBLISH:
+                $query = $query->orderByDesc('published_at');
+                break;
+
+            case BlogConfigHandler::ORDER_TYPE_NEW:
+                $query = $query->orderByDesc('created_at');
+                break;
+
+            case BlogConfigHandler::ORDER_TYPE_UPDATE:
+                $query = $query->orderByDesc('updated_at');
+                break;
+
+            case BlogConfigHandler::ORDER_TYPE_RECOMMEND:
+                $query = $query->orderByDesc('assent_count');
+                break;
         }
 
         return $query;

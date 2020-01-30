@@ -9,6 +9,8 @@
             <th>{{ xe_trans($taxonomy->name) }}</th>
         @endforeach
         <th>생성일</th>
+        <th>수정일</th>
+        <th>발행일</th>
     </tr>
     </thead>
     <tbody>
@@ -38,6 +40,8 @@
                     @endif
                 @endforeach
                 <td>{{ $blog->created_at->format('Y-m-d H:i:s') }}</td>
+                <td>{{ $blog->updated_at->format('Y-m-d H:i:s') }}</td>
+                <td>{{ $blog->published_at->format('Y-m-d H:i:s') }}</td>
             </tr>
         @endforeach
     </tbody>

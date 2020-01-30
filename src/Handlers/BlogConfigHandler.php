@@ -7,6 +7,7 @@ use Xpressengine\Config\ConfigManager;
 
 class BlogConfigHandler
 {
+    const ORDER_TYPE_PUBLISH = 'publish';
     const ORDER_TYPE_NEW = 'new';
     const ORDER_TYPE_UPDATE = 'update';
     const ORDER_TYPE_RECOMMEND = 'recommend';
@@ -17,7 +18,7 @@ class BlogConfigHandler
     protected $configManager;
 
     protected $defaultConfig = [
-        'orderType' => 'new',
+        'orderType' => self::ORDER_TYPE_PUBLISH,
         'newBlogTime' => 24,
         'assent' => true,
         'dissent' => false,
