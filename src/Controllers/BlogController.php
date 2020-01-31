@@ -74,11 +74,11 @@ class BlogController extends Controller
 
         app('xe.theme')->selectBlankTheme();
 
-        $taxonomyGroups = app('xe.blog.taxonomyHandler')->getTaxonomyGroups();
+        $taxonomies = app('xe.blog.taxonomyHandler')->getTaxonomies();
 
         $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
 
-        return XePresenter::make('xe_blog::views.blog.create', compact('taxonomyGroups', 'dynamicFields'));
+        return XePresenter::make('xe_blog::views.blog.create', compact('taxonomies', 'dynamicFields'));
     }
 
     public function store(Request $request)

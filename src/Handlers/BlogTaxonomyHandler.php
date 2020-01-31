@@ -14,6 +14,8 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
 {
     const TAXONOMY_CONFIG_NAME = 'taxonomy';
 
+    const TAXONOMY_ITEM_ID_ATTRIBUTE_NAME_PREFIX = 'taxonomy_item_id_';
+
     /** @var BlogConfigHandler $blogConfigHandler  */
     protected $blogConfigHandler;
 
@@ -154,6 +156,11 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
         return app('xe.config')->children($taxonomyDefaultConfig);
     }
 
+    public function getTaxonomyItemAttributeName($taxonomyId)
+    {
+        return self::TAXONOMY_ITEM_ID_ATTRIBUTE_NAME_PREFIX . $taxonomyId;
+    }
+
     public function getTaxonomyInstanceConfig($taxonomyId)
     {
         return $this->blogConfigHandler->get($this->getTaxonomyInstanceConfigName($taxonomyId));
@@ -215,38 +222,20 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
         return $items;
     }
 
-    public function getTaxonomyGroups()
-    {
-        $taxonomyGroups = [];
-        $taxonomies = $this->getTaxonomies();
-        foreach ($taxonomies as $taxonomy) {
-            $items = $this->getTaxonomyItems($taxonomy->id);
-
-            $taxonomyGroups[$taxonomy->name] = $items;
-        }
-
-        return $taxonomyGroups;
-    }
-
     public function storeTaxonomy($blog, $inputs)
     {
-        if (isset($inputs['taxonomy_item_id']) === false || empty($inputs['taxonomy_item_id']) === true) {
-            return;
-        }
-
-        $taxonomyIds = $inputs['taxonomy_item_id'];
-        if (is_array($taxonomyIds) === false) {
-            $taxonomyIds = [$taxonomyIds];
-        }
-
-        $taxonomyIds = array_filter($taxonomyIds, function ($taxonomyId) {
-            if ($taxonomyId !== '' || $taxonomyId !== null) {
-                return $taxonomyId;
+        $taxonomies = $this->getTaxonomies();
+        foreach ($taxonomies as $taxonomy) {
+            $taxonomyAttributeName = $this->getTaxonomyItemAttributeName($taxonomy->id);
+            if (isset($inputs[$taxonomyAttributeName]) === false) {
+                continue;
             }
-        });
+            $taxonomyItemId = $inputs[$taxonomyAttributeName];
+            if ($taxonomyItemId === null || $taxonomyItemId === '') {
+                continue;
+            }
 
-        foreach ($taxonomyIds as $taxonomyId) {
-            $taxonomyItem = CategoryItem::find($taxonomyId);
+            $taxonomyItem = CategoryItem::find($taxonomyItemId);
             if ($taxonomyItem === null) {
                 continue;
             }
@@ -255,7 +244,7 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
             $newBlogTaxonomy->fill([
                 'blog_id' => $blog->id,
                 'taxonomy_id' => $taxonomyItem->category_id,
-                'taxonomy_item_id' => $taxonomyId
+                'taxonomy_item_id' => $taxonomyItemId
             ]);
             $newBlogTaxonomy->save();
         }

@@ -42,11 +42,11 @@
 
         <hr>
         <p>Taxonomy</p>
-        @foreach ($taxonomyGroups as $taxonomyName => $taxonomy)
+        @foreach ($taxonomies as $taxonomy)
             {!! uio('uiobject/board@select', [
-                'name' => 'taxonomy_item_id[]',
-                'label' => xe_trans($taxonomyName),
-                'items' => $taxonomy,
+                'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
+                'label' => xe_trans($taxonomy->name),
+                'items' => app('xe.blog.taxonomyHandler')->getTaxonomyItems($taxonomy->id),
             ]) !!}
         @endforeach
 
