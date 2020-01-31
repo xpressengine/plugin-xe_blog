@@ -122,7 +122,7 @@ class BlogSettingController extends Controller
     {
         $taxonomyConfig = $this->taxonomyHandler->getTaxonomyInstanceConfig($request->get('taxonomyId'));
 
-        $this->taxonomyHandler->updateTaxonomyInstanceConfig($taxonomyConfig, $request->except('_token'));
+        $this->taxonomyHandler->updateTaxonomyInstanceConfig($taxonomyConfig, $request->except(['_token', 'taxonomyId']));
 
         return redirect()->back();
     }
