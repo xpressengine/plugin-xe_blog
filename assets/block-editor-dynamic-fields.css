@@ -28,3 +28,7 @@
   letter-spacing: -0.0429em;
   color: #444;
 }
+
+.xe-blockeditor__editor .edit-post-editor-regions__content {
+  max-height: calc(100vh - 270px) !important;
+}
