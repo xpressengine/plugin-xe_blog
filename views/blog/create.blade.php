@@ -1,49 +1,61 @@
 {{ XeFrontend::css('plugins/xe_blog/assets/block-editor-dynamic-fields.css')->load() }}
 
-<form method="post" action="{{ route('blog.store') }}" enctype="multipart/form-data">
-    <input type="text" name="title" value="{{ Request::old('title') }}" placeholder="title">
-    <input type="text" name="sub_title" value="{{ Request::old('sub_title') }}" placeholder="sub_title">
+<form method="post" action="{{ route('blog.store') }}" enctype="multipart/form-data" style="padding-bottom: 40px;">
+    <fieldset>
+        <legend>제목 및 부제목 영역 (이동 예정)</legend>
+        <div class="xe-form-group">
+            <label for="f-title">제목</label>
+            <input type="text" id="f-title" class="xe-form-control" name="title" value="{{ Request::old('title') }}" placeholder="title">
+        </div>
+
+        <div class="xe-form-group">
+            <label for="f-title">부제목</label>
+            <input type="text" id="f-sub-title" class="xe-form-control" name="sub_title" value="{{ Request::old('sub_title') }}" placeholder="sub_title">
+        </div>
+    </fieldset>
 
     {!! editor('xe_blog', [
         'content' => Request::old('content'),
         'cover' => true,
     ]) !!}
 
-    <hr>
-    <input type="text" name="published_at" value="{{ Request::old('published_at') }}" placeholder="예약 발행(Y-m-d H:i:s)">
 
-    <hr>
-    <span>썸네일</span>
-    <input type="file" name="thumbnail">
+    <fieldset style="margin: 40px;">
+        <legend>Metadata (에디터 사이드바로 이동 예정)</legend>
+        <input type="text" class="xe-form-control" name="published_at" value="{{ Request::old('published_at') }}" placeholder="예약 발행(Y-m-d H:i:s)">
 
-    <hr>
-    <span>커버 이미지</span>
-    <input type="file" name="cover_image">
+        <hr>
+        <p>썸네일</p>
+        <input type="file" name="thumbnail">
 
-    <hr>
-    <span>배경 컬러</span>
-    <input type="text" name="background_color">
+        <hr>
+        <p>커버 이미지</p>
+        <input type="file" name="cover_image">
 
-    <hr>
-    <span>태그</span>
-    {!! uio('uiobject/board@tag') !!}
+        <hr>
+        <p>배경 컬러</p>
+        <input type="text" class="xe-form-control" name="background_color">
 
-    <hr>
-    <span>Taxonomy</span>
-    @foreach ($taxonomyGroups as $taxonomyName => $taxonomy)
-        {!! uio('uiobject/board@select', [
-            'name' => 'taxonomy_item_id[]',
-            'label' => xe_trans($taxonomyName),
-            'items' => $taxonomy,
-        ]) !!}
-    @endforeach
+        <hr>
+        <p>태그</p>
+        {!! uio('uiobject/board@tag') !!}
 
-    <hr>
-    <span>Slug</span>
-    <input type="text" name="slug">
+        <hr>
+        <p>Taxonomy</p>
+        @foreach ($taxonomyGroups as $taxonomyName => $taxonomy)
+            {!! uio('uiobject/board@select', [
+                'name' => 'taxonomy_item_id[]',
+                'label' => xe_trans($taxonomyName),
+                'items' => $taxonomy,
+            ]) !!}
+        @endforeach
 
-    <hr>
-    <section class="section-blog-block-editor-field">
+        <hr>
+        <p>Slug</p>
+        <input type="text" class="xe-form-control" name="slug">
+    </fieldset>
+
+    <section class="section-blog-block-editor-field" style="margin: 40px;">
         <div class="blog-block-editor-field__title-box">
             <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }}</h2>
         </div>
@@ -58,22 +70,27 @@
         </div>
     </section>
 
-    <button type="submit" class="xe-btn">저장</button>
+    <div style="margin: 40px;">
+        <button type="submit" class="pull-right xe-btn xe-btn-lg xe-btn-primary"> 저장 </button>
+    </div>
 </form>
 
 {{ XeFrontend::js('assets/core/xe-ui-component/js/xe-page.js')->load() }}
-<div class="form-group">
-    <span>템플릿 저장</span>
-    <div>
-        <input id="template_title" type="text" name="template_title" placeholder="템플릿 이름">
-        <button id="btn_template_store" type="button">템플릿 저장</button>
-    </div>
+<fieldset  style="margin: 40px;">
+        <legend>템플릿 관리 (에디터 사이드바로 이동 예정)</legend>
+        <div class="form-group">
+            <span>템플릿 저장</span>
+            <div>
+                <input id="template_title" type="text" name="template_title" placeholder="템플릿 이름">
+                <button id="btn_template_store" type="button">템플릿 저장</button>
+            </div>
 
-    <div>
-        <button id="btn_template_index" type="button" data-url="{{ route('blog.template.get_items') }}">템플릿 보기</button>
-        <div id="template_index"></div>
-    </div>
-</div>
+            <div>
+                <button id="btn_template_index" type="button" data-url="{{ route('blog.template.get_items') }}">템플릿 보기</button>
+                <div id="template_index"></div>
+            </div>
+        </div>
+</fieldset>
 
 <script>
     $(function () {
