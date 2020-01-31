@@ -74,11 +74,6 @@ class BlogController extends Controller
 
         app('xe.theme')->selectBlankTheme();
 
-        $redirectUrl = $request->session()->pull('url.intended') ?: url()->previous();
-        if ($redirectUrl !== $request->url()) {
-            $request->session()->put('url.intended', $redirectUrl);
-        }
-
         $taxonomyGroups = app('xe.blog.taxonomyHandler')->getTaxonomyGroups();
 
         $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
@@ -92,18 +87,13 @@ class BlogController extends Controller
             throw new AccessDeniedHttpException;
         }
 
-        $this->blogService->store($request);
+        $blog = $this->blogService->store($request);
 
-        return redirect()->intended();
+        return redirect()->route('blog.show', ['blogId' => $blog->id]);
     }
 
     public function showId(Request $request, $blogId)
     {
-        $redirectUrl = $request->session()->pull('url.intended') ?: url()->previous();
-        if ($redirectUrl !== $request->url()) {
-            $request->session()->put('url.intended', $redirectUrl);
-        }
-
         $blog = $this->blogService->getItem($blogId);
         if ($blog === null) {
             throw new NotFoundBlogException;
@@ -120,11 +110,6 @@ class BlogController extends Controller
 
     public function showSlug(Request $request, $slug)
     {
-        $redirectUrl = $request->session()->pull('url.intended') ?: url()->previous();
-        if ($redirectUrl !== $request->url()) {
-            $request->session()->put('url.intended', $redirectUrl);
-        }
-
         $blogSlug = BlogSlug::where('slug', $slug)->first();
         if ($blogSlug === null) {
             throw new NotFoundBlogException;
@@ -163,11 +148,6 @@ class BlogController extends Controller
 
         app('xe.theme')->selectBlankTheme();
 
-        $redirectUrl = $request->session()->pull('url.intended') ?: url()->previous();
-        if ($redirectUrl !== $request->url()) {
-            $request->session()->put('url.intended', $redirectUrl);
-        }
-
         $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
 
         return XePresenter::make('xe_blog::views.blog.edit', compact('blog', 'dynamicFields'));
@@ -188,7 +168,7 @@ class BlogController extends Controller
 
         $this->blogService->update($request, $blog);
 
-        return redirect()->intended();
+        return redirect()->route('blog.show', ['blogId' => $blogId]);
     }
 
     public function delete(Request $request, $blogId)
@@ -205,7 +185,7 @@ class BlogController extends Controller
 
         $this->blogService->delete($blog, 'blog');
 
-        return redirect()->intended();
+        return redirect('/');
     }
 
     public function setFavoriteState(Request $request)
