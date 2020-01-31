@@ -36,11 +36,13 @@
                 <li class="">
                     <div class="widget-bold-xe-blog-card-item widget-bold-xe-blog-card-item--story @if ($thumbnail !== null) widget-bold-xe-blog-card-item--image @endif ">
                         <div class="widget-bold-xe-blog-card-item-meta">
-                                <span class="widget-bold-xe-blog-card-item-meta__category">{{ $taxonomyText }}</span>
+                            <span class="widget-bold-xe-blog-card-item-meta__category">{{ $taxonomyText }}</span>
 
+                            @if (Auth::check() === true)
                                 <button type="button" data-blog_id="{{ $blog->id }}" data-url="{{ route('blog.favorite') }}" class="__favorite-button widget-bold-xe-blog-card-item-meta__button-wish widget-bold-xe-blog-card-item-meta__button-wish--black @if ($blog->favorite->count() > 0) on @endif">
                                     <span class="blind">찜하기</span>
                                 </button>
+                            @endif
                         </div>
                         <a href="{{ route('blog.show', ['blogId' => $blog->id]) }}" class="widget-bold-xe-blog-card-item-content-box ">
                             <div class="widget-bold-xe-blog-card-item-content">
