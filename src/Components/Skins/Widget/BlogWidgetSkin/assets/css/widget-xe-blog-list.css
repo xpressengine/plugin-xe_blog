@@ -186,9 +186,6 @@
 }
 
 @media (min-width: 992px) {
-  .widget-bold-xe-blog-category {
-    padding-bottom: 70px;
-  }
   .widget-bold-xe-blog-category-list {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -202,25 +199,7 @@
     overflow-x: visible;
   }
   .widget-bold-xe-blog-category-list > li {
-    margin: 5px 0;
-    padding: 0 30px;
-    list-style: none;
-  }
-  .widget-bold-xe-blog-category-list > li.on .widget-bold-xe-blog-category-list__link {
-    font-weight: 600;
-    color: #000;
-  }
-  .widget-bold-xe-blog-category-list__link {
-    font-family: 'Spoqa Han Sans', sans-serif;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 300;
-    text-decoration: none;
-    color: #000;
-  }
-  .widget-bold-xe-blog-category-list__link:hover {
-    text-decoration: none;
-    color: #000;
+    margin: 10px 0;
   }
 }
 
