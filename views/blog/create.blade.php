@@ -54,6 +54,10 @@
         <hr>
         <p>Slug</p>
         <input type="text" class="xe-form-control" name="slug">
+
+        <hr>
+        <p>Gallery Banner Group ID</p>
+        <input type="text" class="xe-form-control" name="gallery_group_id">
     </fieldset>
 
     <section class="section-blog-block-editor-field" style="margin: 40px;">

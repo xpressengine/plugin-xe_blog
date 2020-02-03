@@ -10,6 +10,7 @@ class BlogMetaData extends DynamicModel
     const TYPE_BACKGROUND_COLOR = 'background_color';
     const TYPE_COVER_THUMBNAIL = 'cover_thumbnail';
     const TYPE_COVER_IMAGE = 'cover_image';
+    const TYPE_GALLERY_GROUP_ID = 'gallery_group_id';
 
     protected $table = 'blog_meta_data';
 

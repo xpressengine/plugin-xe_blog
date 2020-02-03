@@ -96,12 +96,23 @@ class BlogMetaDataHandler implements Searchable, Jsonable
         return $backgroundColorMetaData['meta_data'];
     }
 
+    public function getGalleryGroupId($blog)
+    {
+        $galleryGroupIdMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_GALLERY_GROUP_ID)->get()->first();
+        if ($galleryGroupIdMetaData === null) {
+            return '';
+        }
+
+        return $galleryGroupIdMetaData['meta_data'];
+    }
+
     public function saveMetaData($blog, $inputs)
     {
         $this->saveSubTitle($blog, $inputs);
         $this->saveThumbnail($blog, $inputs);
         $this->saveCoverImage($blog, $inputs);
         $this->saveBackgroundColor($blog, $inputs);
+        $this->saveGalleryGroupId($blog, $inputs);
     }
 
     protected function saveSubTitle($blog, $inputs)
@@ -118,6 +129,26 @@ class BlogMetaDataHandler implements Searchable, Jsonable
                 ]);
             } else {
                 $subTitle['meta_data'] = $inputs['sub_title'];
+            }
+
+            $subTitle->save();
+        }
+    }
+
+    protected function saveGalleryGroupId($blog, $inputs)
+    {
+        if (isset($inputs['gallery_group_id']) === true && $inputs['gallery_group_id'] !== '') {
+            $subTitle = $blog->getMetaDataQuery(BlogMetaData::TYPE_GALLERY_GROUP_ID)->get()->first();
+
+            if ($subTitle === null) {
+                $subTitle = new BlogMetaData();
+                $subTitle->fill([
+                    'blog_id' => $blog->id,
+                    'type' => BlogMetaData::TYPE_GALLERY_GROUP_ID,
+                    'meta_data' => $inputs['gallery_group_id']
+                ]);
+            } else {
+                $subTitle['meta_data'] = $inputs['gallery_group_id'];
             }
 
             $subTitle->save();
