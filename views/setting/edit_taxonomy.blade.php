@@ -47,11 +47,13 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="clearfix"><label>Taxonomy slug 사용 여부</label></div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <select name="use_slug" class="form-control">
                                                     <option value="true" @if ($taxonomyConfig->get('use_slug', false) === true) selected @endif>{{ xe_trans('xe::use') }}</option>
                                                     <option value="false" @if ($taxonomyConfig->get('use_slug', false) === false) selected @endif>{{ xe_trans('xe::disuse') }}</option>
                                                 </select>
+                                            </div>
+                                            <div class="col-sm-10">
                                                 <input type="text" name="slug_url" class="form-control" placeholder="Slug" value="{{ $taxonomyConfig->get('slug_url') }}">
                                             </div>
                                         </div>
