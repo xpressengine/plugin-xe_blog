@@ -1,4 +1,5 @@
 {{ XeFrontend::css('plugins/xe_blog/assets/block-editor-dynamic-fields.css')->load() }}
+{{ XeFrontend::js('plugins/xe_blog/assets/js/boldjournal-block-style.js')->load() }}
 
 <form method="post" action="{{ route('blog.update') }}">
     {!! csrf_field() !!}
