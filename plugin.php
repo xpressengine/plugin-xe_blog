@@ -191,7 +191,7 @@ class Plugin extends AbstractPlugin
         foreach ($taxonomyUrls as $taxonomyId => $taxonomyUrl) {
             Route::group([
                 'prefix' => $taxonomyUrl,
-                'as' => sprintf('$s.', $taxonomyUrl),
+                'as' => sprintf('blog.%s.', $taxonomyUrl),
                 'namespace' => 'Xpressengine\Plugins\XeBlog\Controllers',
                 'middleware' => ['web']
             ], function () {

@@ -2,8 +2,11 @@
 
 namespace Xpressengine\Plugins\XeBlog\Controllers;
 
+use XePresenter;
 use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogFavoriteHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
 
@@ -37,11 +40,19 @@ class TaxonomyController extends Controller
     {
         $taxonomyConfig = $this->getTaxonomyConfigBySlug($request->segment(1));
 
-        $blogItems = $this->blogService->getItems([
+        $blogs = $this->blogService->getItems([
             'taxonomy_id' => $taxonomyConfig->get('taxonomy_id'),
             'taxonomy_item_id' => $slug
         ]);
 
-        return $blogItems;
+        $taxonomies = $this->taxonomyHandler->getTaxonomies();
+
+        $blogConfig = app('xe.blog.configHandler')->getBlogConfig();
+
+        XePresenter::share('metaDataHandler', new BlogMetaDataHandler());
+        XePresenter::share('favoriteHandler', new BlogFavoriteHandler());
+        XePresenter::share('taxonomyHandler', $this->taxonomyHandler);
+
+        return \XePresenter::make('xe_blog::views.blog.index', compact('blogs', 'taxonomies', 'blogConfig'));
     }
 }
