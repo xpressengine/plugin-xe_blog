@@ -183,15 +183,6 @@ class Plugin extends AbstractPlugin
 
                 Route::post('/store_taxonomy', ['as' => 'store_taxonomy', 'uses' => 'BlogSettingController@storeTaxonomy']);
                 Route::post('/update_permission', ['as' => 'update_permission', 'uses' => 'BlogSettingController@updatePermission']);
-
-                $taxonomies = app('xe.blog.taxonomyHandler')->getTaxonomies();
-                foreach ($taxonomies as $taxonomy) {
-                    Route::get('/taxonomy/' . $taxonomy->id, [
-                        'as' => 'setting_taxonomy_' . $taxonomy->id,
-                        'uses' => 'BlogSettingController@connectTaxonomySetting',
-                        'settings_menu' => 'contents.manageBlog.' . $taxonomy->id
-                    ]);
-                }
             });
         });
 
@@ -231,21 +222,6 @@ class Plugin extends AbstractPlugin
                 'ordering' => 9999
             ]
         ];
-
-        $taxonomies = app('xe.blog.taxonomyHandler')->getTaxonomies();
-        $taxonomyMenus = [];
-        foreach ($taxonomies as $index => $taxonomy) {
-            $key = 'contents.manageBlog.' . $taxonomy->id;
-
-            $taxonomyMenus[$key] = [
-                'title' => xe_trans($taxonomy->name),
-                'display' => true,
-                'description' => '',
-                'ordering' => ($index + 1) * 100
-            ];
-        }
-
-        $menus = array_merge($menus, $taxonomyMenus);
 
         foreach ($menus as $id => $menu) {
             \XeRegister::push('settings/menu', $id, $menu);
