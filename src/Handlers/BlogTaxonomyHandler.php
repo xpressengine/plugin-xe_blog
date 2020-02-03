@@ -171,11 +171,16 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
         if ($attributes['use_slug'] === 'true') {
             $taxonomyUseUrls = $this->getTaxonomyUseUrls();
 
+            $slugUrl = isset($attributes['slug_url']) === true? $attributes['slug_url'] : null;
+            if ($slugUrl !== null && \XeMenu::items()->query()->where('url', $slugUrl)->exists()) {
+                throw new HttpException(422, xe_trans('xe::menuItemUrlAlreadyExists'));
+            }
+
             if (isset($attributes[$taxonomyConfig->get('taxonomy_id')]) === true) {
                 unset($attributes[$taxonomyConfig->get('taxonomy_id')]);
             }
 
-            if (in_array($attributes['slug_url'], $taxonomyUseUrls) === true) {
+            if (in_array($slugUrl, $taxonomyUseUrls) === true) {
                 throw new HttpException(422, xe_trans('xe::menuItemUrlAlreadyExists'));
             }
         }
