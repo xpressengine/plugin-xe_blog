@@ -15,6 +15,7 @@ use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogPermissionHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogSlugHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogValidatorHandler;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
 use Xpressengine\Translation\Translator;
 
@@ -84,6 +85,15 @@ class Plugin extends AbstractPlugin
             return new BlogPermissionHandler(app('xe.permission'));
         });
         app()->alias(BlogPermissionHandler::class, 'xe.blog.permissionHandler');
+
+        app()->singleton(BlogValidatorHandler::class, function () {
+            return new BlogValidatorHandler(
+                app('xe.blog.taxonomyHandler'),
+                app('xe.blog.configHandler'),
+                app('xe.dynamicField')
+            );
+        });
+        app()->alias(BlogValidatorHandler::class, 'xe.blog.validatorHandler');
     }
 
     /**

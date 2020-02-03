@@ -189,6 +189,11 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
         return $taxonomyUseUrls;
     }
 
+    public function getTaxonomyItem($taxonomyId)
+    {
+        return $this->categoryHandler->cates()->find($taxonomyId);
+    }
+
     public function getTaxonomies()
     {
         $taxonomyDefaultConfigName = $this->blogConfigHandler->getConfigName(self::TAXONOMY_CONFIG_NAME);

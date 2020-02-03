@@ -10,10 +10,12 @@ use Xpressengine\DynamicField\ConfigHandler;
 use Xpressengine\Http\Request;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Plugins\XeBlog\Exceptions\NotFoundBlogException;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogFavoriteHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogPermissionHandler;
+use Xpressengine\Plugins\XeBlog\Handlers\BlogValidatorHandler;
 use Xpressengine\Plugins\XeBlog\Models\BlogSlug;
 use Xpressengine\Plugins\XeBlog\Plugin;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
@@ -27,6 +29,9 @@ class BlogController extends Controller
     /** @var BlogHandler $blogHandler */
     protected $blogHandler;
 
+    /** @var BlogValidatorHandler $blogValidationHandler */
+    protected $blogValidationHandler;
+
     /** @var BlogFavoriteHandler $blogFavoriteHandler */
     protected $blogFavoriteHandler;
 
@@ -36,15 +41,20 @@ class BlogController extends Controller
     /** @var BlogPermissionHandler $blogPermissionHandler */
     protected $blogPermissionHandler;
 
-    public function __construct(BlogService $blogService, BlogHandler $blogHandler)
+    /** @var BlogConfigHandler $blogConfigHandler */
+    protected $blogConfigHandler;
+
+    public function __construct(BlogService $blogService, BlogHandler $blogHandler, BlogValidatorHandler $blogValidationHandler)
     {
         $this->blogService = $blogService;
         $this->blogHandler = $blogHandler;
 
         $favoriteHandler = new BlogFavoriteHandler();
         $this->blogFavoriteHandler = $favoriteHandler;
+        $this->blogValidationHandler = $blogValidationHandler;
         $this->dynamicFieldConfigHandler = app('xe.dynamicField');
         $this->blogPermissionHandler = app('xe.blog.permissionHandler');
+        $this->blogConfigHandler = app('xe.blog.configHandler');
 
         XePresenter::share('metaDataHandler', new BlogMetaDataHandler());
         XePresenter::share('favoriteHandler', $favoriteHandler);
@@ -86,6 +96,9 @@ class BlogController extends Controller
         if ($this->checkAllowPermission(BlogPermissionHandler::ACTION_CREATE) === false) {
             throw new AccessDeniedHttpException;
         }
+
+        $rules = $this->blogValidationHandler->getRules(Auth::user(), $this->blogConfigHandler->getBlogConfig());
+        $this->validate($request, $rules);
 
         $blog = $this->blogService->store($request);
 
@@ -165,6 +178,9 @@ class BlogController extends Controller
             ) === false) {
             throw new AccessDeniedHttpException;
         }
+
+        $rules = $this->blogValidationHandler->getRules(Auth::user(), $this->blogConfigHandler->getBlogConfig());
+        $this->validate($request, $rules);
 
         $this->blogService->update($request, $blog);
 
