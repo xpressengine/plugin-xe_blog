@@ -101,13 +101,14 @@
                                         <td></td>
                                     @endif
                                 @endforeach
+
                                 <td>
                                     @if ($blog->isPublished() === true)
                                         최종 수정일<br>
-                                        {{ $blog->updated_at->format('Y-m-d H:i:s') }}
+                                        <span @if ($blog->updated_at->getTimestamp() > strtotime('-1 days')) data-xe-timeago="{{ $blog->updated_at }}" @endif>{{ $blog->updated_at->format('Y-m-d H:i:s') }}</span>
                                     @else
                                         예약됨<br>
-                                        {{ $blog->published_at->format('Y-m-d H:i:s') }}
+                                        <span @if ($blog->published_at->getTimestamp() < strtotime('-1 days')) data-xe-timeago="{{ $blog->published_at }}" @endif> {{ $blog->published_at->format('Y-m-d H:i:s') }}</span>
                                     @endif
                                 </td>
                             </tr>
