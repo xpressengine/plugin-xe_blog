@@ -22,17 +22,45 @@ class BlogHandler extends DocumentHandler implements Searchable, Jsonable, Order
             $attributes['published_at'] = date('Y-m-d H:i:s');
         }
 
+        //TODO 상수 변경
+        if (isset($attributes['blog_status']) === true) {
+            switch ($attributes['blog_status']) {
+                case 'public':
+                    $attributes['status'] = Blog::STATUS_PUBLIC;
+                    $attributes['approved'] = Blog::APPROVED_APPROVED;
+                    $attributes['display'] = Blog::DISPLAY_VISIBLE;
+                    break;
+
+                case 'private':
+                    $attributes['status'] = Blog::STATUS_PRIVATE;
+                    $attributes['approved'] = Blog::APPROVED_APPROVED;
+                    $attributes['display'] = Blog::DISPLAY_SECRET;
+                    break;
+
+                case 'temp':
+                    $attributes['status'] = Blog::STATUS_TEMP;
+                    $attributes['approved'] = Blog::APPROVED_WAITING;
+                    $attributes['display'] = Blog::DISPLAY_HIDDEN;
+                    break;
+            }
+        }
+
         return parent::add($attributes);
     }
 
     public function getItems($query, $attributes)
     {
-        if (isset($attributes['force']) === true && $attributes['force'] === true) {
+        if (isset($attributes['force']) === false || $attributes['force'] === false) {
             $query = $query->visible();
         }
 
+        if (isset($attributes['titleWithContent']) === true) {
+            $query = $query->where('title', 'like', '%' . $attributes['titleWithContent'] . '%')
+                ->orWhere('content', 'like', '%' . $attributes['titleWithContent'] . '%');
+        }
+
         if (isset($attributes['title']) === true) {
-            $query = $query->where('title', 'like', '%' . $attributes['title']);
+            $query = $query->where('title', 'like', '%' . $attributes['title'] . '%');
         }
 
         return $query;
