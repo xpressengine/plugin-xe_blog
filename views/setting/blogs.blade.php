@@ -4,7 +4,7 @@
 
 @section('page_title')
     <div class="clearfix">
-        <h2 class="pull-left">settingBlog</h2>
+        <h2 class="pull-left">manageBlog</h2>
         <a href="{{ route('blog.create') }}" class="xu-button xu-button--primary pull-right">새글추가</a>
     </div>
 @endsection
