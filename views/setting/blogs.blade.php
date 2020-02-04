@@ -3,7 +3,10 @@
 @endphp
 
 @section('page_title')
-    <a href="{{ route('blog.create') }}" class="xe-btn xe-btn-positive" target="_blank">생성</a>
+    <div class="clearfix">
+        <h2 class="pull-left">settingBlog</h2>
+        <a href="{{ route('blog.create') }}" class="xu-button xu-button--primary pull-right">새글추가</a>
+    </div>
 @endsection
 
 <div class="row">
@@ -169,7 +172,7 @@
         </div>
 
         <div class="panel-footer">
-            <div class="pull-left">
+            <div class="text-center" style="padding: 24px 0;">
                 <nav>
                     {!! $blogs->render() !!}
                 </nav>
