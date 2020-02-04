@@ -170,11 +170,14 @@
                         </li>
                     @endforeach
                 @else
-{{--                없을 떄--}}
+                    <li>
+                        <p class="no-data">등록된 글이 없습니다.</p>
+                    </li>
                 @endif
             </ul>
         </div>
 
+        @if ($blogs->count() > 0)
         <div class="panel-footer">
             <div class="text-center" style="padding: 24px 0;">
                 <nav>
@@ -182,5 +185,6 @@
                 </nav>
             </div>
         </div>
+        @endif
     </div>
 </div>
