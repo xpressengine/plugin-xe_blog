@@ -104,6 +104,15 @@ class Blog extends Document implements SeoUsable
             $this->display === self::DISPLAY_VISIBLE;
     }
 
+    public function setPublic()
+    {
+        $this->status = self::STATUS_PUBLIC;
+        $this->approved = self::APPROVED_APPROVED;
+        $this->display = self::DISPLAY_VISIBLE;
+
+        $this->save();
+    }
+
     public function scopePrivate($query)
     {
         return $query->where('status', self::STATUS_PRIVATE)
@@ -118,6 +127,15 @@ class Blog extends Document implements SeoUsable
             $this->display === self::DISPLAY_SECRET;
     }
 
+    public function setPrivate()
+    {
+        $this->status = self::STATUS_PRIVATE;
+        $this->approved = self::APPROVED_APPROVED;
+        $this->display = self::DISPLAY_SECRET;
+
+        $this->save();
+    }
+
     public function scopeTemp($query)
     {
         return $query->where('status', self::STATUS_TEMP)
@@ -130,6 +148,15 @@ class Blog extends Document implements SeoUsable
         return $this->status === self::STATUS_TEMP &&
             $this->approved === self::APPROVED_WAITING &&
             $this->display === self::DISPLAY_HIDDEN;
+    }
+
+    public function setTemp()
+    {
+        $this->status = self::STATUS_TEMP;
+        $this->approved = self::APPROVED_WAITING;
+        $this->display = self::DISPLAY_HIDDEN;
+
+        $this->save();
     }
 
     public function scopePublishReserved($query)

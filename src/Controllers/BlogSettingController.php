@@ -9,6 +9,7 @@ use XePresenter;
 use XeFrontend;
 use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
+use Xpressengine\Plugins\XeBlog\Exceptions\NotFoundBlogException;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogPermissionHandler;
@@ -82,7 +83,30 @@ class BlogSettingController extends Controller
 
     public function setBlogState(Request $request)
     {
-        dd($request->all());
+        $setState = $request->get('state_type');
+
+        $targetBlogIds = $request->get('blogIds', []);
+        if (is_array($targetBlogIds) === false) {
+            $targetBlogIds = [$targetBlogIds];
+        }
+
+        foreach ($targetBlogIds as $targetBlogId) {
+            $blogItem = $this->blogService->getItem($targetBlogId, true);
+            if ($blogItem === null) {
+                throw new NotFoundBlogException;
+            }
+
+            $this->blogService->setBlogState($blogItem, $setState);
+        }
+
+        return redirect()->back();
+    }
+
+    public function trashClear()
+    {
+        $this->blogService->trashClear();
+
+        return redirect()->back();
     }
 
     private function getSettingBlogs($request)

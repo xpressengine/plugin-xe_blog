@@ -139,8 +139,28 @@ class BlogHandler extends DocumentHandler implements Searchable, Jsonable, Order
         $blog->delete();
     }
 
+    public function restoreBlog($blog)
+    {
+        $blog->restore();
+    }
+
     public function dropBlog($blog)
     {
         $blog->forceDelete();
+    }
+
+    public function setBlogPublic($blog)
+    {
+        $blog->setPublic();
+    }
+
+    public function setBlogPrivate($blog)
+    {
+        $blog->setPrivate();
+    }
+
+    public function setBlogTemp($blog)
+    {
+        $blog->setTemp();
     }
 }

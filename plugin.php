@@ -171,6 +171,7 @@ class Plugin extends AbstractPlugin
                     'settings_menu' => 'contents.manageBlog.manageBlog'
                 ]);
                 Route::post('/set_blog_state', ['as' => 'set_blog_state', 'uses' => 'BlogSettingController@setBlogState']);
+                Route::post('/trash_clear', ['as' => 'trash_clear', 'uses' => 'BlogSettingController@trashClear']);
 
                 Route::get('/setting/{type?}', [
                     'as' => 'setting',

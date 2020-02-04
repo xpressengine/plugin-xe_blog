@@ -4,7 +4,7 @@
 
 @section('page_title')
     <div class="clearfix">
-        <h2 class="pull-left">manageBlog</h2>
+        <h2 class="pull-left">{{ xe_trans('xe_blog::manageBlog') }}</h2>
         <a href="{{ route('blog.create') }}" class="xu-button xu-button--primary pull-right">새글추가</a>
     </div>
 @endsection
@@ -30,7 +30,7 @@
                             <select class="xu-form-group__control __target-type-select" id="selectJob">
                                 <option disabled="disabled" selected="selected" value="">선택하세요.</option>
                                 <option value="trash">휴지통으로 이동</option>
-                                <option value="publish">발행</option>
+                                <option value="public">발행</option>
                                 <option value="private">비공개</option>
                                 <option value="temp">임시글</option>
                             </select>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <button type="button" class="xu-button xu-button--primary __blog-state-apply-button">적용</button>
-                    <button type="button" class="xu-button xu-button--danger">휴지통 비우기</button>
+                    <button id="trashClearButton" type="button" class="xu-button xu-button--danger">휴지통 비우기</button>
                 </div>
             @endif
 
@@ -101,78 +101,80 @@
                     </li>
 
                     @if ($blogs->count() > 0)
-                            @foreach ($blogs as $blog)
-                                <li @if ($blog->isPublic() === true) class="on" @endif>
-                                    <div class="item-content">
-                                        <div class="item-content__item item-content__item--checkbox">
-                                            <label class="xu-label-checkradio">
-                                                <input type="checkbox" class="__blog-id-checkbox" name="blogIds[]" value="{{ $blog->id }}">
-                                                <span class="xu-label-checkradio__helper"></span>
-                                                <span class="xu-label-checkradio__text blind">글선택</span>
-                                            </label>
-                                        </div>
-                                        <div class="item-content__item item-content__item--title">
-                                            <span class="item-content__item-info-text">
-                                                @if ($blog->isTemp() === true)
-                                                    임시글
-                                                @endif
-                                                @if ($blog->isPublishReserved() === true)
-                                                    예약됨
-                                                @endif
-                                                @if ($blog->isPrivate() === true)
-                                                    비공개
-                                                @endif
-                                            </span>
-                                            <a href="{{ route('blog.show', ['blogId' => $blog->id]) }}" class="item-content__item-link" target="_blank">{{ $blog->title }}</a>
-                                            <div class="item-content__item-meta">
-                                                <a href="{{ route('blog.edit', ['blogId' => $blog->id]) }}" class="item-content__item-meta-link" target="_blank">편집</a>,
-                                                <a href="#" class="item-content__item-meta-link item-content__item-meta-link--color-danger">휴지통</a>
-                                            </div>
-                                        </div>
-                                        <div class="item-content__item">
-                                            <div class="item-content__item-inner">
-                                                <span class="item-content__item-text-item">작성자</span>
-                                                <span class="item-content__item-text">
-                                                    @if ($blog->user !== null)
-                                                        {{ $blog->user->getDisplayName() }}
-                                                    @else
-                                                        Guest
-                                                    @endif
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        @foreach ($taxonomies as $taxonomy)
-                                            <div class="item-content__item">
-                                                <div class="item-content__item-inner">
-                                                    <span class="item-content__item-text-item">{{ xe_trans($taxonomy->name) }}</span>
-                                                    <span class="item-content__item-text">
-                                                        @if ($taxonomyHandler->getBlogTaxonomyItem($blog, $taxonomy->id) !== null)
-                                                            {{ xe_trans($taxonomyHandler->getBlogTaxonomyItem($blog, $taxonomy->id)->word) }}
-                                                        @endif
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        @endforeach
-
-                                        <div class="item-content__item item-content__item--date">
-                                            <div class="item-content__item-inner">
-                                                <span class="item-content__item-text-item">일자</span>
-
-                                                <span class="item-content__item-text">
-                                                    @if ($blog->isPublished() === true)
-                                                        <span class="item-content__item-text-date">최근 수정일</span>
-                                                        <span class="item-content__item-text-date" @if ($blog->updated_at->getTimestamp() > strtotime('-1 days')) data-xe-timeago="{{ $blog->updated_at }}" @endif>{{ $blog->updated_at->format('Y-m-d H:i:s') }}</span>
-                                                    @else
-                                                        <span class="item-content__item-text-date">예약됨</span>
-                                                        <span class="item-content__item-text-date" @if ($blog->published_at->getTimestamp() < strtotime('-1 days')) data-xe-timeago="{{ $blog->published_at }}" @endif>{{ $blog->published_at->format('Y-m-d H:i:s') }}</span>
-                                                    @endif
-                                                </span>
-                                            </div>
+                        @foreach ($blogs as $blog)
+                            <li @if ($blog->isPublic() === true) class="on" @endif>
+                                <div class="item-content">
+                                    <div class="item-content__item item-content__item--checkbox">
+                                        <label class="xu-label-checkradio">
+                                            <input type="checkbox" class="__blog-id-checkbox" name="blogIds[]" value="{{ $blog->id }}">
+                                            <span class="xu-label-checkradio__helper"></span>
+                                            <span class="xu-label-checkradio__text blind">글선택</span>
+                                        </label>
+                                    </div>
+                                    <div class="item-content__item item-content__item--title">
+                                        <span class="item-content__item-info-text">
+                                            @if ($blog->isTemp() === true)
+                                                임시글
+                                            @endif
+                                            @if ($blog->isPublishReserved() === true)
+                                                예약됨
+                                            @endif
+                                            @if ($blog->isPrivate() === true)
+                                                비공개
+                                            @endif
+                                        </span>
+                                        <a href="{{ route('blog.show', ['blogId' => $blog->id]) }}" class="item-content__item-link" target="_blank">{{ $blog->title }}</a>
+                                        <div class="item-content__item-meta">
+                                            <a href="{{ route('blog.edit', ['blogId' => $blog->id]) }}" class="item-content__item-meta-link" target="_blank">편집</a>
+                                            @if (Request::get('stateType', 'all') !== 'trash')
+                                                <a href="#" class="item-content__item-meta-link item-content__item-meta-link--color-danger  __set-blog-trash">휴지통</a>
+                                            @endif
                                         </div>
                                     </div>
-                                </li>
-                            @endforeach
+                                    <div class="item-content__item">
+                                        <div class="item-content__item-inner">
+                                            <span class="item-content__item-text-item">작성자</span>
+                                            <span class="item-content__item-text">
+                                                @if ($blog->user !== null)
+                                                    {{ $blog->user->getDisplayName() }}
+                                                @else
+                                                    Guest
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    @foreach ($taxonomies as $taxonomy)
+                                        <div class="item-content__item">
+                                            <div class="item-content__item-inner">
+                                                <span class="item-content__item-text-item">{{ xe_trans($taxonomy->name) }}</span>
+                                                <span class="item-content__item-text">
+                                                    @if ($taxonomyHandler->getBlogTaxonomyItem($blog, $taxonomy->id) !== null)
+                                                        {{ xe_trans($taxonomyHandler->getBlogTaxonomyItem($blog, $taxonomy->id)->word) }}
+                                                    @endif
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                    <div class="item-content__item item-content__item--date">
+                                        <div class="item-content__item-inner">
+                                            <span class="item-content__item-text-item">일자</span>
+
+                                            <span class="item-content__item-text">
+                                                @if ($blog->isPublished() === true)
+                                                    <span class="item-content__item-text-date">최근 수정일</span>
+                                                    <span class="item-content__item-text-date" @if ($blog->updated_at->getTimestamp() > strtotime('-1 days')) data-xe-timeago="{{ $blog->updated_at }}" @endif>{{ $blog->updated_at->format('Y-m-d H:i:s') }}</span>
+                                                @else
+                                                    <span class="item-content__item-text-date">예약됨</span>
+                                                    <span class="item-content__item-text-date" @if ($blog->published_at->getTimestamp() < strtotime('-1 days')) data-xe-timeago="{{ $blog->published_at }}" @endif>{{ $blog->published_at->format('Y-m-d H:i:s') }}</span>
+                                                @endif
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
                     @else
                         <li>
                             <p class="no-data">등록된 글이 없습니다.</p>
@@ -193,6 +195,10 @@
         @endif
     </div>
 </div>
+
+<form id="trashClearForm" method="post" action="{{ route('blog.setting.trash_clear') }}">
+    {!! csrf_field() !!}
+</form>
 
 <script>
     $(function () {
@@ -228,6 +234,27 @@
                 return;
             }
 
+            $('#stateBlogForm').submit()
+        })
+
+        $('#trashClearButton').click(function () {
+            if (confirm('휴지통의 모든 글을 삭제하시겠습니까?') == false) {
+                return
+            }
+
+            $('#trashClearForm').submit()
+        })
+
+        $('.__set-blog-trash').click(function () {
+            if (confirm('휴지통으로 이동하시겠습니까?') == false) {
+                return
+            }
+
+            $('.__blog-id-all-checkbox').prop('checked', false)
+            $('.__blog-id-checkbox').prop('checked', false)
+            $(this).closest('.item-content').find('.__blog-id-checkbox').prop('checked', true)
+
+            $('#targetState').val('trash')
             $('#stateBlogForm').submit()
         })
     })

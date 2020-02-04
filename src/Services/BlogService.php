@@ -61,9 +61,14 @@ class BlogService
         $this->handlers[] = $handler;
     }
 
-    public function getItem($id)
+    public function getItem($id, $force = false)
     {
-        return Blog::division(Plugin::getId())->find($id);
+        $query = Blog::division(Plugin::getId());
+        if ($force === true) {
+            $query = $query->withTrashed();
+        }
+
+        return $query->find($id);
     }
 
     public function checkItemPermission(Blog $blog, $user, $force = false)
@@ -207,6 +212,43 @@ class BlogService
         XeDB::commit();
     }
 
+    public function setBlogState($blogItem, $state)
+    {
+        switch ($state) {
+            case 'public':
+                $this->blogHandler->setBlogPublic($blogItem);
+                break;
+
+            case 'private':
+                $this->blogHandler->setBlogPrivate($blogItem);
+                break;
+
+            case 'temp':
+                $this->blogHandler->setBlogTemp($blogItem);
+                break;
+
+            case 'trash':
+                $this->blogHandler->trashBlog($blogItem);
+                break;
+
+            case 'restore':
+                $this->blogHandler->restoreBlog($blogItem);
+                break;
+
+            case 'force_delete':
+                $this->blogHandler->dropBlog($blogItem);
+                break;
+        }
+    }
+
+    public function trashClear()
+    {
+        $forceDeleteTargetBlogs = Blog::onlyTrashed()->get();
+        foreach ($forceDeleteTargetBlogs as $forceDeleteTargetBlog) {
+            $this->forceDeleteBlog($forceDeleteTargetBlog);
+        }
+    }
+
     public function delete($blog, $configName)
     {
         XeDB::beginTransaction();
@@ -215,8 +257,7 @@ class BlogService
             if ($blogConfig->get('deleteToTrash') === true) {
                 $this->blogHandler->trashBlog($blog);
             } else {
-                $this->metaDataHandler->deleteMetaData($blog);
-                $this->blogHandler->dropBlog($blog);
+                $this->forceDeleteBlog($blog);
             }
         } catch (\Exception $e) {
             XeDB::rollback();
@@ -224,5 +265,12 @@ class BlogService
             throw $e;
         }
         XeDB::commit();
+    }
+
+    public function forceDeleteBlog($blog)
+    {
+        //TODO blog 관련 데이터 삭제 필요
+        $this->metaDataHandler->deleteMetaData($blog);
+        $this->blogHandler->dropBlog($blog);
     }
 }
