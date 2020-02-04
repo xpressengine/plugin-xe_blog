@@ -47,6 +47,9 @@ class BlogSettingController extends Controller
 
     public function blogs(Request $request)
     {
+        \XeFrontend::css(Plugin::asset('assets/css/admin-setting-xe-blog.css'))->load();
+        \XeFrontend::css('assets/core/xe-ui/css/xe-ui-without-base.css')->load();
+
         $blogs = $this->blogService->getItems($request->all());
         $taxonomies = $this->taxonomyHandler->getTaxonomies();
 
