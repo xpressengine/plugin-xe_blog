@@ -80,6 +80,11 @@ class BlogSettingController extends Controller
         ));
     }
 
+    public function setBlogState(Request $request)
+    {
+        dd($request->all());
+    }
+
     private function getSettingBlogs($request)
     {
         $perPage = $request->get('perPage', 20);

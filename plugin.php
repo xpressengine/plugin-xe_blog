@@ -170,6 +170,8 @@ class Plugin extends AbstractPlugin
                     'uses' => 'BlogSettingController@blogs',
                     'settings_menu' => 'contents.manageBlog.manageBlog'
                 ]);
+                Route::post('/set_blog_state', ['as' => 'set_blog_state', 'uses' => 'BlogSettingController@setBlogState']);
+
                 Route::get('/setting/{type?}', [
                     'as' => 'setting',
                     'uses' => 'BlogSettingController@editSetting',
