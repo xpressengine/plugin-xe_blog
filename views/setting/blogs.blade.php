@@ -5,7 +5,7 @@
 @section('page_title')
     <div class="clearfix">
         <h2 class="pull-left">{{ xe_trans('xe_blog::manageBlog') }}</h2>
-        <a href="{{ route('blog.create') }}" class="xu-button xu-button--primary pull-right">새글추가</a>
+        <a href="{{ route('blog.create') }}" class="xu-button xu-button--primary pull-right" target="_blank">새글추가</a>
     </div>
 @endsection
 
