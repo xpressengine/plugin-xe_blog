@@ -28,6 +28,17 @@ $(function() {
     label: '인용문 스타일 (여백있음)' // 스타일의 이름
   })
 
+  // 인용문 (글쓴이 영역)
+  wp.blocks.registerBlockStyle('core/quote', {
+    name: 'boldjournal__text-quote--writer', // 클래스명. 'is-style-bold-p-style'로 변경됨. `is-style-`가 prefix로 붙음
+    label: '글 저자 스타일 (여백없음)' // 스타일의 이름
+  })
+
+  wp.blocks.registerBlockStyle('core/quote', {
+    name: 'boldjournal__text-quote--writer-indent', // 클래스명. 'is-style-bold-p-style'로 변경됨. `is-style-`가 prefix로 붙음
+    label: '글 저자 스타일 (여백있음)' // 스타일의 이름
+  })
+
   // 구분선
   wp.blocks.registerBlockStyle('core/separator', {
     name: 'boldjournal__text-separator', // 클래스명. 'is-style-bold-p-style'로 변경됨. `is-style-`가 prefix로 붙음
