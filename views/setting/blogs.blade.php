@@ -117,7 +117,6 @@
                                 </span>
                                 <a href="{{ route('blog.show', ['blogId' => $blog->id]) }}" class="item-content__item-link" target="_blank">{{ $blog->title }}</a>
                                 <div class="item-content__item-meta">
-                                    <a href="#" class="item-content__item-meta-link">미리보기</a>,
                                     <a href="{{ route('blog.edit', ['blogId' => $blog->id]) }}" class="item-content__item-meta-link" target="_blank">편집</a>,
                                     <a href="#" class="item-content__item-meta-link item-content__item-meta-link--color-danger">휴지통</a>
                                 </div>
