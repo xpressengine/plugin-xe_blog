@@ -26,6 +26,14 @@
         <input type="text" class="xe-form-control" name="published_at" value="{{ Request::old('published_at') }}" placeholder="예약 발행(Y-m-d H:i:s)">
 
         <hr>
+        <p>공개 속성</p>
+        <select name="blog_status">
+            <option value="public">공개</option>
+            <option value="private">비공개</option>
+            <option value="temp">임시</option>
+        </select>
+
+        <hr>
         <p>썸네일</p>
         <input type="file" name="thumbnail">
 
