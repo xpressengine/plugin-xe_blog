@@ -18,6 +18,15 @@
     list-style: none;
     border-top: 1px solid #c1c7d0;
 
+    &.on {
+      margin-left: -1px;
+      border-left: 3px solid #2684ff;
+
+      .item-content {
+        margin-left: -2px;
+      }
+    }
+
     &:first-child {
       &:after {
         content: '';
