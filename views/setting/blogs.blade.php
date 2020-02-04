@@ -4,7 +4,7 @@
 
 @section('page_title')
     <div class="clearfix">
-        <h2 class="pull-left">settingBlog</h2>
+        <h2 class="pull-left">manageBlog</h2>
         <a href="{{ route('blog.create') }}" class="xu-button xu-button--primary pull-right">새글추가</a>
     </div>
 @endsection
@@ -63,7 +63,7 @@
 
             <div class="pull-right">
                 <form method="get" action="{{ route('blog.setting.blogs') }}">
-                    <div class="xu-form-group float-right" style="display: inline-block; width: 300px;">
+                    <div class="xu-form-group float-right" style="display: inline-block;">
                         <div class="xu-form-group__box xu-form-group__box--icon-left">
                             <input type="text" name="titleWithContent" class="xu-form-group__control" value="{{ Request::get('titleWithContent') }}">
                             <button type="button" class="xu-form-group__icon">
@@ -175,11 +175,14 @@
                         @endforeach
                     </form>
                 @else
-{{--                없을 떄--}}
+                    <li>
+                        <p class="no-data">등록된 글이 없습니다.</p>
+                    </li>
                 @endif
             </ul>
         </div>
 
+        @if ($blogs->count() > 0)
         <div class="panel-footer">
             <div class="text-center" style="padding: 24px 0;">
                 <nav>
@@ -187,6 +190,7 @@
                 </nav>
             </div>
         </div>
+        @endif
     </div>
 </div>
 

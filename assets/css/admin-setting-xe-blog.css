@@ -3,6 +3,15 @@
   overflow: hidden;
 }
 
+.admin-table-list-box .no-data {
+  margin: 0;
+  padding: 100px 0;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: center;
+  color: #172b4d;
+}
+
 .admin-table-list {
   margin: 0;
   padding: 0;
@@ -197,7 +206,7 @@
         -ms-flex-align: center;
             align-items: center;
     position: relative;
-    padding: 10px 0;
+    padding: 15px 0;
   }
   .admin-table-list .item-content__item {
     -webkit-box-flex: 0;

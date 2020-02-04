@@ -2,6 +2,15 @@
 .admin-table-list-box {
   position: relative;
   overflow: hidden;
+
+  .no-data {
+    margin: 0;
+    padding: 100px 0;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: center;
+    color: #172b4d;
+  }
 }
 
 .admin-table-list {
@@ -211,7 +220,7 @@
       display: flex;
       align-items: center;
       position: relative;
-      padding: 10px 0;
+      padding: 15px 0;
     }
 
     .item-content__item {
