@@ -92,6 +92,10 @@ class BlogSettingController extends Controller
 
         $stateType = $request->get('stateType', 'all');
         switch ($stateType) {
+            case 'all':
+                $blogQuery = $blogQuery->withTrashed();
+                break;
+
             case 'published':
                 $blogQuery = $blogQuery->public()->published();
                 break;
@@ -109,7 +113,7 @@ class BlogSettingController extends Controller
                 break;
 
             case 'trash':
-                $blogQuery = $blogQuery->withTrashed();
+                $blogQuery = $blogQuery->onlyTrashed();
                 break;
         }
 

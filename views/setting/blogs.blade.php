@@ -6,14 +6,6 @@
     <a href="{{ route('blog.create') }}" class="xe-btn xe-btn-positive" target="_blank">생성</a>
 @endsection
 
-<form method="get" action="{{ route('blog.setting.blogs') }}">
-    <div>
-        <input type="text" name="titleWithContent" value="{{ Request::get('titleWithContent') }}">
-    </div>
-
-    <button type="submit" class="xe-btn">검색</button>
-</form>
-
 <div class="row">
     <div class="col-sm-12">
         <div class="admin-tab-info">
@@ -27,55 +19,57 @@
         </div>
 
         <div class="clearfix">
-            <div class="pull-left">
-                <div class="xu-form-group" style="display: inline-block;">
-                    <label class="xu-form-group__label" for="selectSize1" style="margin-right: 8px;">일괄작업</label>
-                    <div class="xu-form-group__box xu-form-group__box--icon-right" style="display: inline-block;">
-                        <!-- <span class="xu-form-group__box-text">선택하세요.</span> -->
-                        <select class="xu-form-group__control" id="selectSize1">
-                        <option disabled="disabled" selected="selected">선택하세요.</option>
-                        <option>휴지통으로 이동</option>
-                        <option>발행</option>
-                        <option>비공개</option>
-                        <option>임시글</option>
-                        </select>
-                        <span class="xu-form-group__icon">
-                            <i class="xi-angle-down-min"></i>
-                        </span>
+            @if (Request::get('stateType', 'all') !== 'trash')
+                <div class="pull-left">
+                    <div class="xu-form-group" style="display: inline-block;">
+                        <label class="xu-form-group__label" for="selectSize1" style="margin-right: 8px;">일괄작업</label>
+                        <div class="xu-form-group__box xu-form-group__box--icon-right" style="display: inline-block;">
+                            <select class="xu-form-group__control" id="selectSize1">
+                            <option disabled="disabled" selected="selected">선택하세요.</option>
+                            <option>휴지통으로 이동</option>
+                            <option>발행</option>
+                            <option>비공개</option>
+                            <option>임시글</option>
+                            </select>
+                            <span class="xu-form-group__icon">
+                                <i class="xi-angle-down-min"></i>
+                            </span>
+                        </div>
                     </div>
+                    <button type="submit" class="xu-button xu-button--primary">적용</button>
                 </div>
-                <button type="submit" class="xu-button xu-button--primary">적용</button>
-            </div>
-
-            <div class="pull-left">
-                <div class="xu-form-group" style="display: inline-block;">
-                    <label class="xu-form-group__label" for="selectSize1" style="margin-right: 8px;">일괄작업</label>
-                    <div class="xu-form-group__box xu-form-group__box--icon-right" style="display: inline-block;">
-                        <!-- <span class="xu-form-group__box-text">선택하세요.</span> -->
-                        <select class="xu-form-group__control" id="selectSize1">
-                        <option disabled="disabled" selected="selected">선택하세요.</option>
-                        <option>복구</option>
-                        <option>영구 삭제</option>
-                        </select>
-                        <span class="xu-form-group__icon">
-                            <i class="xi-angle-down-min"></i>
-                        </span>
+            @else
+                <div class="pull-left">
+                    <div class="xu-form-group" style="display: inline-block;">
+                        <label class="xu-form-group__label" for="selectSize1" style="margin-right: 8px;">일괄작업</label>
+                        <div class="xu-form-group__box xu-form-group__box--icon-right" style="display: inline-block;">
+                            <select class="xu-form-group__control" id="selectSize1">
+                            <option disabled="disabled" selected="selected">선택하세요.</option>
+                            <option>복구</option>
+                            <option>영구 삭제</option>
+                            </select>
+                            <span class="xu-form-group__icon">
+                                <i class="xi-angle-down-min"></i>
+                            </span>
+                        </div>
                     </div>
+                    <button type="submit" class="xu-button xu-button--primary">적용</button>
+                    <button type="button" class="xu-button xu-button--danger">휴지통 비우기</button>
                 </div>
-                <button type="submit" class="xu-button xu-button--primary">적용</button>
-                <button type="button" class="xu-button xu-button--danger">휴지통 비우기</button>
-            </div>
+            @endif
 
             <div class="pull-right">
-                <div class="xu-form-group float-right" style="display: inline-block; width: 300px;">
-                    <div class="xu-form-group__box xu-form-group__box--icon-left">
-                        <input type="text" name="inputSize7" class="xu-form-group__control" placeholder="size large icon left">
-                        <button type="button" class="xu-form-group__icon">
-                            <i class="xi-search"></i>
-                        </button>
+                <form method="get" action="{{ route('blog.setting.blogs') }}">
+                    <div class="xu-form-group float-right" style="display: inline-block; width: 300px;">
+                        <div class="xu-form-group__box xu-form-group__box--icon-left">
+                            <input type="text" name="titleWithContent" class="xu-form-group__control" value="{{ Request::get('titleWithContent') }}">
+                            <button type="button" class="xu-form-group__icon">
+                                <i class="xi-search"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <button type="submit" class="xu-button xu-button--primary">검색</button>
+                    <button type="submit" class="xu-button xu-button--primary">검색</button>
+                </form>
             </div>
         </div>
 
@@ -121,25 +115,21 @@
                                         비공개
                                     @endif
                                 </span>
-                                <a href="#" class="item-content__item-link">{{ $blog->title }}</a>
+                                <a href="{{ route('blog.show', ['blogId' => $blog->id]) }}" class="item-content__item-link" target="_blank">{{ $blog->title }}</a>
                                 <div class="item-content__item-meta">
                                     <a href="#" class="item-content__item-meta-link">미리보기</a>,
-                                    <a href="#" class="item-content__item-meta-link">편집</a>,
+                                    <a href="{{ route('blog.edit', ['blogId' => $blog->id]) }}" class="item-content__item-meta-link" target="_blank">편집</a>,
                                     <a href="#" class="item-content__item-meta-link item-content__item-meta-link--color-danger">휴지통</a>
                                 </div>
                             </div>
                             <div class="item-content__item">
                                 <div class="item-content__item-inner">
-                                    <!-- 항목 명 -->
-                                    <span class="item-content__item-text-item">
-                                        작성자
-                                    </span>
-                                    <!-- //항목 명 -->
+                                    <span class="item-content__item-text-item">작성자</span>
                                     <span class="item-content__item-text">
                                         @if ($blog->user !== null)
                                             {{ $blog->user->getDisplayName() }}
                                         @else
-                                            guest
+                                            Guest
                                         @endif
                                     </span>
                                 </div>
@@ -148,7 +138,7 @@
                             @foreach ($taxonomies as $taxonomy)
                                 <div class="item-content__item">
                                     <div class="item-content__item-inner">
-                                        <span class="item-content__item-text-item">텍소노미</span>
+                                        <span class="item-content__item-text-item">{{ xe_trans($taxonomy->name) }}</span>
                                         <span class="item-content__item-text">
                                             @if ($taxonomyHandler->getBlogTaxonomyItem($blog, $taxonomy->id) !== null)
                                                 {{ xe_trans($taxonomyHandler->getBlogTaxonomyItem($blog, $taxonomy->id)->word) }}
