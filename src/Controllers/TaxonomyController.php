@@ -5,6 +5,7 @@ namespace Xpressengine\Plugins\XeBlog\Controllers;
 use XePresenter;
 use App\Http\Controllers\Controller;
 use Xpressengine\Http\Request;
+use Xpressengine\Plugins\XeBlog\Exceptions\NotFoundBlogException;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogFavoriteHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
@@ -40,9 +41,22 @@ class TaxonomyController extends Controller
     {
         $taxonomyConfig = $this->getTaxonomyConfigBySlug($request->segment(1));
 
+        $allTaxonomyItemConfigs = $this->taxonomyHandler->getTaxonomyItemConfigs();
+        $targetTaxonomyItemConfig = null;
+        foreach ($allTaxonomyItemConfigs as $taxonomyItemConfig) {
+            if ($taxonomyItemConfig->get('slug') == $slug) {
+                $targetTaxonomyItemConfig = $taxonomyItemConfig;
+                break;
+            }
+        }
+
+        if ($targetTaxonomyItemConfig === null) {
+            throw new NotFoundBlogException;
+        }
+
         $blogs = $this->blogService->getItems([
             'taxonomy_id' => $taxonomyConfig->get('taxonomy_id'),
-            'taxonomy_item_id' => $slug
+            'taxonomy_item_id' => $targetTaxonomyItemConfig->get('taxonomyItemId')
         ]);
 
         $taxonomies = $this->taxonomyHandler->getTaxonomies();

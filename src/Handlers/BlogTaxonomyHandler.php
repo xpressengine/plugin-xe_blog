@@ -14,6 +14,8 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
 {
     const TAXONOMY_CONFIG_NAME = 'taxonomy';
 
+    const TAXONOMY_ITEM_CONFIG_NAME = 'taxonomyItem';
+
     const TAXONOMY_ITEM_ID_ATTRIBUTE_NAME_PREFIX = 'taxonomy_item_id_';
 
     /** @var BlogConfigHandler $blogConfigHandler  */
@@ -36,6 +38,10 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
 
         if ($this->blogConfigHandler->get($this->blogConfigHandler->getConfigName(self::TAXONOMY_CONFIG_NAME)) === null) {
             $this->createTaxonomyDefaultConfig();
+        }
+
+        if ($this->blogConfigHandler->get($this->blogConfigHandler->getConfigName(self::TAXONOMY_ITEM_CONFIG_NAME)) === null) {
+            $this->createTaxonomyItemDefaultConfig();
         }
     }
 
@@ -95,9 +101,20 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
         $this->blogConfigHandler->addConfig($this->taxonomyDefaultConfig, $taxonomyConfigName);
     }
 
+    private function createTaxonomyItemDefaultConfig()
+    {
+        $taxonomyItemConfigName = $this->blogConfigHandler->getConfigName(self::TAXONOMY_ITEM_CONFIG_NAME);
+        $this->blogConfigHandler->addConfig([], $taxonomyItemConfigName);
+    }
+
     public function getTaxonomyInstanceConfigName($taxonomyId)
     {
         return $this->blogConfigHandler->getConfigName(sprintf('%s.%s', self::TAXONOMY_CONFIG_NAME, $taxonomyId));
+    }
+
+    public function getTaxonomyItemConfigName($taxonomyItemId)
+    {
+        return $this->blogConfigHandler->getConfigName(sprintf('%s.%s', self::TAXONOMY_ITEM_CONFIG_NAME, $taxonomyItemId));
     }
 
     public function createTaxonomy($inputs)
@@ -156,6 +173,14 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
         return app('xe.config')->children($taxonomyDefaultConfig);
     }
 
+    public function getTaxonomyItemConfigs()
+    {
+        $taxonomyItemDefaultConfigName = $this->blogConfigHandler->getConfigName(BlogTaxonomyHandler::TAXONOMY_ITEM_CONFIG_NAME);
+        $taxonomyItemDefaultConfig = $this->blogConfigHandler->get($taxonomyItemDefaultConfigName);
+
+        return app('xe.config')->children($taxonomyItemDefaultConfig);
+    }
+
     public function getTaxonomyItemAttributeName($taxonomyId)
     {
         return self::TAXONOMY_ITEM_ID_ATTRIBUTE_NAME_PREFIX . $taxonomyId;
@@ -164,6 +189,17 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
     public function getTaxonomyInstanceConfig($taxonomyId)
     {
         return $this->blogConfigHandler->get($this->getTaxonomyInstanceConfigName($taxonomyId));
+    }
+
+    public function createTaxonomyItemConfig($taxonomyItemId, $attributes)
+    {
+        $taxonomyItemConfigName = $this->getTaxonomyItemConfigName($taxonomyItemId);
+        $this->blogConfigHandler->addConfig($attributes, $taxonomyItemConfigName);
+    }
+
+    public function getTaxonomyItemConfig($taxonomyItemId)
+    {
+        return $this->blogConfigHandler->get($this->getTaxonomyItemConfigName($taxonomyItemId));
     }
 
     public function updateTaxonomyInstanceConfig($taxonomyConfig, $attributes)
