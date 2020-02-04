@@ -4,6 +4,7 @@ namespace Xpressengine\Plugins\XeBlog\Controllers;
 
 use App\Http\Sections\DynamicFieldSection;
 use App\Http\Sections\SkinSection;
+use Carbon\Carbon;
 use XePresenter;
 use XeFrontend;
 use App\Http\Controllers\Controller;
@@ -12,6 +13,7 @@ use Xpressengine\Plugins\XeBlog\Handlers\BlogConfigHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogPermissionHandler;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogTaxonomyHandler;
+use Xpressengine\Plugins\XeBlog\Models\Blog;
 use Xpressengine\Plugins\XeBlog\Plugin;
 use Xpressengine\Plugins\XeBlog\Services\BlogService;
 use Xpressengine\Support\Exceptions\InvalidArgumentHttpException;
@@ -47,10 +49,70 @@ class BlogSettingController extends Controller
 
     public function blogs(Request $request)
     {
-        $blogs = $this->blogService->getItems($request->all());
+        $blogConfig = $this->configHandler->getBlogConfig();
+
+        $blogs = $this->getSettingBlogs($request);
         $taxonomies = $this->taxonomyHandler->getTaxonomies();
 
-        return XePresenter::make('xe_blog::views.setting.blogs', compact('blogs', 'taxonomies'));
+        $dateFilterList = Blog::withTrashed()->orderByDesc('created_at')->get()->groupBy(function ($item) {
+            return $item->created_at->format('Y-m');
+        })->toArray();
+        $dateFilterList = array_keys($dateFilterList);
+
+        $stateTypeCounts = [
+            'all' => Blog::withTrashed()->count(),
+            'published' => Blog::published()->public()->count(),
+            'publishReserved' => Blog::publishReserved()->public()->count(),
+            'tempBlog' => Blog::temp()->count(),
+            'private' => Blog::private()->count(),
+            'trash' => Blog::onlyTrashed()->count()
+        ];
+
+        return XePresenter::make('xe_blog::views.setting.blogs', compact(
+            'blogConfig',
+            'blogs',
+            'taxonomies',
+            'stateTypeCounts',
+            'dateFilterList'
+        ));
+    }
+
+    private function getSettingBlogs($request)
+    {
+        $perPage = $request->get('perPage', 20);
+
+        $blogQuery = $this->blogService->getItemsWhereQuery(array_merge($request->all(), ['force' => true]));
+
+        if ($filterDate = $request->get('filter_date')) {
+            $blogQuery = $blogQuery->where('created_at', 'like', $filterDate . '%');
+        }
+
+        $stateType = $request->get('stateType', 'all');
+        switch ($stateType) {
+            case 'published':
+                $blogQuery = $blogQuery->public()->published();
+                break;
+
+            case 'publishReserved':
+                $blogQuery = $blogQuery->public()->publishReserved();
+                break;
+
+            case 'tempBlog':
+                $blogQuery = $blogQuery->temp();
+                break;
+
+            case 'private':
+                $blogQuery = $blogQuery->private();
+                break;
+
+            case 'trash':
+                $blogQuery = $blogQuery->withTrashed();
+                break;
+        }
+
+        $blogQuery = $this->blogService->getItemsOrderQuery($blogQuery, $request->all());
+
+        return $blogQuery->paginate($perPage, ['*'], 'page')->appends($request->except('page'));
     }
 
     public function editSetting(Request $request, $type = 'config')

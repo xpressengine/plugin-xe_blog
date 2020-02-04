@@ -50,12 +50,17 @@ class BlogHandler extends DocumentHandler implements Searchable, Jsonable, Order
 
     public function getItems($query, $attributes)
     {
-        if (isset($attributes['force']) === true && $attributes['force'] === true) {
+        if (isset($attributes['force']) === false || $attributes['force'] === false) {
             $query = $query->visible();
         }
 
+        if (isset($attributes['titleWithContent']) === true) {
+            $query = $query->where('title', 'like', '%' . $attributes['titleWithContent'] . '%')
+                ->orWhere('content', 'like', '%' . $attributes['titleWithContent'] . '%');
+        }
+
         if (isset($attributes['title']) === true) {
-            $query = $query->where('title', 'like', '%' . $attributes['title']);
+            $query = $query->where('title', 'like', '%' . $attributes['title'] . '%');
         }
 
         return $query;

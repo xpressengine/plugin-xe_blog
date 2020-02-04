@@ -90,18 +90,74 @@ class Blog extends Document implements SeoUsable
         return compile($this->instance_id, $this->content, $this->format === static::FORMAT_HTML);
     }
 
+    public function scopePublic($query)
+    {
+        return $query->where('status', self::STATUS_PUBLIC)
+            ->where('approved', self::APPROVED_APPROVED)
+            ->where('display', self::DISPLAY_VISIBLE);
+    }
+
+    public function isPublic()
+    {
+        return $this->status === self::STATUS_PUBLIC &&
+            $this->approved === self::APPROVED_APPROVED &&
+            $this->display === self::DISPLAY_VISIBLE;
+    }
+
+    public function scopePrivate($query)
+    {
+        return $query->where('status', self::STATUS_PRIVATE)
+            ->where('approved', self::APPROVED_APPROVED)
+            ->where('display', self::DISPLAY_SECRET);
+    }
+
+    public function isPrivate()
+    {
+        return $this->status === self::STATUS_PRIVATE &&
+            $this->approved === self::APPROVED_APPROVED &&
+            $this->display === self::DISPLAY_SECRET;
+    }
+
+    public function scopeTemp($query)
+    {
+        return $query->where('status', self::STATUS_TEMP)
+            ->where('approved', self::APPROVED_WAITING)
+            ->where('display', self::DISPLAY_HIDDEN);
+    }
+
+    public function isTemp()
+    {
+        return $this->status === self::STATUS_TEMP &&
+            $this->approved === self::APPROVED_WAITING &&
+            $this->display === self::DISPLAY_HIDDEN;
+    }
+
+    public function scopePublishReserved($query)
+    {
+        return $query->where('published_at', '>', date('Y-m-d H:i:s'));
+    }
+
+    public function isPublishReserved()
+    {
+        return $this->published_at > date('Y-m-d H:i:s');
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('published_at', '<=', date('Y-m-d H:i:s'));
+    }
+
+    public function isPublished()
+    {
+        return $this->published_at <= date('Y-m-d H:i:s');
+    }
+
     public function scopeVisible($query)
     {
         return $query->where('status', static::STATUS_PUBLIC)
             ->where('display', '<>', static::DISPLAY_HIDDEN)
-            ->where(function ($query) {
-                $query->where('approved', static::APPROVED_APPROVED)
-                    ->orWhere($this->getTable() . '.user_id', auth()->id());
-            })
-            ->where(function ($query) {
-                $query->where('published_at', null)
-                    ->orWhere('published_at', '<=', date('Y-m-d H:i:s'));
-            });
+            ->where('approved', static::APPROVED_APPROVED)
+            ->where('published_at', '<=', date('Y-m-d H:i:s'));
     }
 
     public function getMetaDataQuery($metaDataType)
