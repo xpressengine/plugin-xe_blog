@@ -63,7 +63,7 @@
 
             <div class="pull-right">
                 <form method="get" action="{{ route('blog.setting.blogs') }}">
-                    <div class="xu-form-group float-right" style="display: inline-block; width: 300px;">
+                    <div class="xu-form-group float-right" style="display: inline-block;">
                         <div class="xu-form-group__box xu-form-group__box--icon-left">
                             <input type="text" name="titleWithContent" class="xu-form-group__control" value="{{ Request::get('titleWithContent') }}">
                             <button type="button" class="xu-form-group__icon">
