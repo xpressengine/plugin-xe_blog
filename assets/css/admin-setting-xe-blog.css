@@ -32,6 +32,11 @@
   height: 2px;
 }
 
+.admin-table-list > li.admin-table-list__item-title {
+  border-top: 0 none;
+  border-bottom: 1px solid #c1c7d0;
+}
+
 .admin-table-list > li.admin-table-list__item-title .item-content__item {
   display: none;
 }

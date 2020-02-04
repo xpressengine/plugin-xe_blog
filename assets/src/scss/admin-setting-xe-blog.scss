@@ -35,6 +35,9 @@
     }
 
     &.admin-table-list__item-title {
+      border-top: 0 none;
+      border-bottom: 1px solid #c1c7d0;
+
       .item-content__item {
         display: none;
 
