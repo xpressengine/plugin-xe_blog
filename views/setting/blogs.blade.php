@@ -26,6 +26,59 @@
             </ul>
         </div>
 
+        <div class="clearfix">
+            <div class="pull-left">
+                <div class="xu-form-group" style="display: inline-block;">
+                    <label class="xu-form-group__label" for="selectSize1" style="margin-right: 8px;">일괄작업</label>
+                    <div class="xu-form-group__box xu-form-group__box--icon-right" style="display: inline-block;">
+                        <!-- <span class="xu-form-group__box-text">선택하세요.</span> -->
+                        <select class="xu-form-group__control" id="selectSize1">
+                        <option disabled="disabled" selected="selected">선택하세요.</option>
+                        <option>휴지통으로 이동</option>
+                        <option>발행</option>
+                        <option>비공개</option>
+                        <option>임시글</option>
+                        </select>
+                        <span class="xu-form-group__icon">
+                            <i class="xi-angle-down-min"></i>
+                        </span>
+                    </div>
+                </div>
+                <button type="submit" class="xu-button xu-button--primary">적용</button>
+            </div>
+
+            <div class="pull-left">
+                <div class="xu-form-group" style="display: inline-block;">
+                    <label class="xu-form-group__label" for="selectSize1" style="margin-right: 8px;">일괄작업</label>
+                    <div class="xu-form-group__box xu-form-group__box--icon-right" style="display: inline-block;">
+                        <!-- <span class="xu-form-group__box-text">선택하세요.</span> -->
+                        <select class="xu-form-group__control" id="selectSize1">
+                        <option disabled="disabled" selected="selected">선택하세요.</option>
+                        <option>복구</option>
+                        <option>영구 삭제</option>
+                        </select>
+                        <span class="xu-form-group__icon">
+                            <i class="xi-angle-down-min"></i>
+                        </span>
+                    </div>
+                </div>
+                <button type="submit" class="xu-button xu-button--primary">적용</button>
+                <button type="button" class="xu-button xu-button--danger">휴지통 비우기</button>
+            </div>
+
+            <div class="pull-right">
+                <div class="xu-form-group float-right" style="display: inline-block; width: 300px;">
+                    <div class="xu-form-group__box xu-form-group__box--icon-left">
+                        <input type="text" name="inputSize7" class="xu-form-group__control" placeholder="size large icon left">
+                        <button type="button" class="xu-form-group__icon">
+                            <i class="xi-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="xu-button xu-button--primary">검색</button>
+            </div>
+        </div>
+
         <div class="admin-table-list-box">
             <ul class="admin-table-list" style="">
                 <li class="admin-table-list__item-title">
@@ -105,7 +158,7 @@
                                 </div>
                             @endforeach
 
-                            <div class="item-content__item">
+                            <div class="item-content__item item-content__item--date">
                                 <div class="item-content__item-inner">
                                     <span class="item-content__item-text-item">일자</span>
 

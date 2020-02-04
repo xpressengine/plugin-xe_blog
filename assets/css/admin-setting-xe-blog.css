@@ -38,6 +38,7 @@
 
 .admin-table-list .item-content {
   display: table;
+  width: 100%;
 }
 
 .admin-table-list .item-content:after {
@@ -205,6 +206,12 @@
             flex: 0 0 80px;
     max-width: 80px;
     text-align: center;
+  }
+  .admin-table-list .item-content__item.item-content__item--date {
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 170px;
+            flex: 0 0 170px;
+    max-width: 170px;
   }
   .admin-table-list .item-content__item .item-content__item-link {
     margin: 25px 0;
