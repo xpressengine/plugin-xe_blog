@@ -5,72 +5,88 @@
     {!! csrf_field() !!}
     <input type="hidden" name="blogId" value="{{ $blog->id }}">
 
-    <fieldset>
-        <legend>제목 및 부제목 영역 (이동 예정)</legend>
+    {!! editor('xe_blog', [
+        'content' => $blog->content,
+        'cover' => true,
+    ]) !!}
+
+    <br>
+    <br>
+
+    <fieldset style="margin: 40px;">
+        <legend>문서 설정 (사이드바로 이동 예정)</legend>
+
         <div class="xe-form-group">
             <label for="f-title">제목</label>
             <input type="text" id="f-title" class="xe-form-control" name="title" value="{{ $blog->title }}" placeholder="title">
         </div>
 
         <div class="xe-form-group">
-            <label for="f-title">부제목</label>
+            <label for="f-sub-title">부제목</label>
             <input type="text" id="f-sub-title" class="xe-form-control" name="sub_title" value="{{ $metaDataHandler->getSubTitle($blog) }}" placeholder="sub_title">
         </div>
-    </fieldset>
 
-    {!! editor('xe_blog', [
-        'content' => $blog->content,
-        'cover' => true,
-    ]) !!}
+        <div class="xe-form-group">
+            <label>발행시간 (Y-m-d H:i:s)</label>
+            <input type="text" class="xe-form-control" name="published_at" value="{{ $blog->published_at }}" placeholder="예약 발행(Y-m-d H:i:s)">
+        </div>
 
-    <fieldset style="margin: 40px;">
-        <legend>Metadata (에디터 사이드바로 이동 예정)</legend>
-        <input type="text" class="xe-form-control" name="published_at" value="{{ $blog->published_at }}" placeholder="예약 발행(Y-m-d H:i:s)">
+        <div class="xe-form-group">
+            <label>공개 속성</label>
+            <select name="blog_status" class="xe-form-control">
+                <option value="public" @if ($blog->isPublic() === true) selected @endif>공개</option>
+                <option value="private" @if ($blog->isPrivate() === true) selected @endif>비공개</option>
+                <option value="temp" @if ($blog->isTemp() === true) selected @endif>임시</option>
+            </select>
+        </div>
 
-        <hr>
-        <p>공개 속성</p>
-        <select name="blog_status">
-            <option value="public" @if ($blog->isPublic() === true) selected @endif>공개</option>
-            <option value="private" @if ($blog->isPrivate() === true) selected @endif>비공개</option>
-            <option value="temp" @if ($blog->isTemp() === true) selected @endif>임시</option>
-        </select>
+        <div class="xe-form-group">
+            <label>썸네일</label>
+            <input class="xe-form-control" type="file" name="thumbnail">
+        </div>
 
-        <hr>
-        <p>썸네일</p>
-        <input type="file" name="thumbnail">
+        <div class="xe-form-group">
+            <label>커버 이미지</label>
+            <input class="xe-form-control" type="file" name="cover_image">
+        </div>
 
-        <hr>
-        <p>커버 이미지</p>
-        <input type="file" name="cover_image">
+        <div class="xe-form-group">
+            <label>배경 컬러</label>
+            <input type="text" class="xe-form-control" name="background_color" value="{{ $metaDataHandler->getBackgroundColor($blog) }}">
+        </div>
 
-        <hr>
-        <p>배경 컬러</p>
-        <input type="text" class="xe-form-control" name="background_color" value="{{ $metaDataHandler->getBackgroundColor($blog) }}">
-
-        <hr>
-        <p>태그</p>
-        {!! uio('uiobject/board@tag', [
-            'tags' => $blog->tags->toArray()
-        ]) !!}
-
-        <hr>
-        <p>Taxonomy</p>
-        @foreach ($taxonomies as $taxonomy)
-            {!! uio('uiobject/board@select', [
-                'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
-                'label' => xe_trans($taxonomy->name),
-                'items' => app('xe.blog.taxonomyHandler')->getTaxonomyItems($taxonomy->id),
-                'value' => app('xe.blog.taxonomyHandler')->getBlogTaxonomyItem($blog, $taxonomy->id)['id']
+        <div class="xe-form-group">
+            <label>태그</label>
+            {!! uio('uiobject/board@tag', [
+                'tags' => $blog->tags->toArray()
             ]) !!}
-        @endforeach
+        </div>
 
-        <hr>
-        <p>Slug</p>
-        <input type="text" class="xe-form-control" name="slug" @if ($blog->slug !== null) value="{{ $blog->slug['slug'] }}" @endif>
+        <div class="xe-form-group">
+            <label>Taxonomy</label>
+            <div class="xe-row">
+                @foreach ($taxonomies as $taxonomy)
+                <div class="xe-col-md-2">
+                    {!! uio('uiobject/board@select', [
+                        'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
+                        'label' => xe_trans($taxonomy->name),
+                        'items' => app('xe.blog.taxonomyHandler')->getTaxonomyItems($taxonomy->id),
+                        'value' => app('xe.blog.taxonomyHandler')->getBlogTaxonomyItem($blog, $taxonomy->id)['id']
+                    ]) !!}
+                </div>
+                @endforeach
+            </div>
+        </div>
 
-        <hr>
-        <p>Gallery Banner Group ID</p>
-        <input type="text" class="xe-form-control" name="gallery_group_id" value="{{ $metaDataHandler->getGalleryGroupId($blog) }}">
+        <div class="xe-form-group">
+            <label>Slug</label>
+            <input type="text" class="xe-form-control" name="slug" @if ($blog->slug !== null) value="{{ $blog->slug['slug'] }}" @endif>
+        </div>
+
+        <div class="xe-form-group">
+            <label>Gallery Banner Group ID</label>
+            <input type="text" class="xe-form-control" name="gallery_group_id" value="{{ $metaDataHandler->getGalleryGroupId($blog) }}">
+        </div>
     </fieldset>
 
     <section class="section-blog-block-editor-field">
@@ -88,7 +104,14 @@
         </div>
     </section>
 
-    <div style="margin: 40px;">
+    <div style="padding: 40px;">
         <button type="submit" class="pull-right xe-btn xe-btn-lg xe-btn-primary"> 저장 </button>
     </div>
 </form>
+
+<script>
+    $(function () {
+        wp.data.dispatch('core/edit-post').toggleFeature('welcomeGuide')
+        $('.editor-post-publish-button, .editor-post-trash').hide()
+    })
+</script>

@@ -30,5 +30,6 @@
 }
 
 .xe-blockeditor__editor .edit-post-editor-regions__content {
-  max-height: calc(100vh - 270px) !important;
+  max-height: calc(100vh - 80px);
+  height: calc(100vh - 80px);
 }
