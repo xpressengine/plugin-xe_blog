@@ -327,6 +327,7 @@
   position: absolute;
   top: 20px;
   left: 20px;
+  padding-right: 45px;
   z-index: 10;
 }
 
