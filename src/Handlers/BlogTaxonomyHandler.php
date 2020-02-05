@@ -307,4 +307,45 @@ class BlogTaxonomyHandler implements Searchable, Jsonable
             $newBlogTaxonomy->save();
         }
     }
+
+    public function updateTaxonomy($blog, $inputs)
+    {
+        $taxonomies = $this->getTaxonomies();
+        foreach ($taxonomies as $taxonomy) {
+            $taxonomyAttributeName = $this->getTaxonomyItemAttributeName($taxonomy->id);
+            if (isset($inputs[$taxonomyAttributeName]) === false) {
+                continue;
+            }
+
+            $blogTaxonomy = $blog->taxonomy()->where('taxonomy_id', $taxonomy->id)->get()->first();
+
+            $taxonomyItemId = $inputs[$taxonomyAttributeName];
+            if ($taxonomyItemId === null || $taxonomyItemId === '') {
+                if ($blogTaxonomy !== null) {
+                    $blogTaxonomy->delete();
+                    continue;
+                }
+            }
+
+            $taxonomyItem = CategoryItem::find($taxonomyItemId);
+            if ($taxonomyItem === null) {
+                continue;
+            }
+
+            if ($blogTaxonomy !== null) {
+                if ($blogTaxonomy['taxonomy_item_id'] != $taxonomyItemId) {
+                    $blogTaxonomy['taxonomy_item_id'] = $taxonomyItemId;
+                    $blogTaxonomy->save();
+                }
+            } else {
+                $newBlogTaxonomy = new BlogTaxonomy();
+                $newBlogTaxonomy->fill([
+                    'blog_id' => $blog->id,
+                    'taxonomy_id' => $taxonomyItem->category_id,
+                    'taxonomy_item_id' => $taxonomyItemId
+                ]);
+                $newBlogTaxonomy->save();
+            }
+        }
+    }
 }

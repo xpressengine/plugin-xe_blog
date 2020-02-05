@@ -161,9 +161,10 @@ class BlogController extends Controller
 
         app('xe.theme')->selectBlankTheme();
 
+        $taxonomies = app('xe.blog.taxonomyHandler')->getTaxonomies();
         $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
 
-        return XePresenter::make('xe_blog::views.blog.edit', compact('blog', 'dynamicFields'));
+        return XePresenter::make('xe_blog::views.blog.edit', compact('blog', 'dynamicFields', 'taxonomies'));
     }
 
     public function update(Request $request)

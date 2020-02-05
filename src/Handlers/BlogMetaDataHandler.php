@@ -167,12 +167,18 @@ class BlogMetaDataHandler implements Searchable, Jsonable
                 $thumbnail = XeMedia::createThumbnails($media, $thumbnailType);
             }
 
-            $thumbnailMetaData = new BlogMetaData();
-            $thumbnailMetaData->fill([
-                'blog_id' => $blog->id,
-                'type' => BlogMetaData::TYPE_COVER_THUMBNAIL,
-                'meta_data' => $file->id
-            ]);
+            $thumbnailMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_THUMBNAIL)->get()->first();
+            if ($thumbnailMetaData === null) {
+                $thumbnailMetaData = new BlogMetaData();
+                $thumbnailMetaData->fill([
+                    'blog_id' => $blog->id,
+                    'type' => BlogMetaData::TYPE_COVER_THUMBNAIL,
+                    'meta_data' => $file->id
+                ]);
+            } else {
+                $thumbnailMetaData['meta_data'] = $file->id;
+            }
+
             $thumbnailMetaData->save();
         }
     }
@@ -184,12 +190,18 @@ class BlogMetaDataHandler implements Searchable, Jsonable
 
             $file = XeStorage::upload($coverImageFile, self::UPLOAD_PATH);
 
-            $coverImageMetaData = new BlogMetaData();
-            $coverImageMetaData->fill([
-                'blog_id' => $blog->id,
-                'type' => BlogMetaData::TYPE_COVER_IMAGE,
-                'meta_data' => $file->id
-            ]);
+            $coverImageMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_IMAGE)->get()->first();
+            if ($coverImageMetaData === null) {
+                $coverImageMetaData = new BlogMetaData();
+                $coverImageMetaData->fill([
+                    'blog_id' => $blog->id,
+                    'type' => BlogMetaData::TYPE_COVER_IMAGE,
+                    'meta_data' => $file->id
+                ]);
+            } else {
+                $coverImageMetaData['meta_data'] = $file->id;
+            }
+
             $coverImageMetaData->save();
         }
     }

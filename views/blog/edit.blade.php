@@ -1,7 +1,7 @@
 {{ XeFrontend::css('plugins/xe_blog/assets/block-editor-dynamic-fields.css')->load() }}
 {{ XeFrontend::js('plugins/xe_blog/assets/js/boldjournal-block-style.js')->load() }}
 
-<form method="post" action="{{ route('blog.update') }}">
+<form method="post" action="{{ route('blog.update') }}" enctype="multipart/form-data">
     {!! csrf_field() !!}
     <input type="hidden" name="blogId" value="{{ $blog->id }}">
 
@@ -25,8 +25,23 @@
 
     <fieldset style="margin: 40px;">
         <legend>Metadata (에디터 사이드바로 이동 예정)</legend>
-
         <input type="text" class="xe-form-control" name="published_at" value="{{ $blog->published_at }}" placeholder="예약 발행(Y-m-d H:i:s)">
+
+        <hr>
+        <p>공개 속성</p>
+        <select name="blog_status">
+            <option value="public" @if ($blog->isPublic() === true) selected @endif>공개</option>
+            <option value="private" @if ($blog->isPrivate() === true) selected @endif>비공개</option>
+            <option value="temp" @if ($blog->isTemp() === true) selected @endif>임시</option>
+        </select>
+
+        <hr>
+        <p>썸네일</p>
+        <input type="file" name="thumbnail">
+
+        <hr>
+        <p>커버 이미지</p>
+        <input type="file" name="cover_image">
 
         <hr>
         <p>배경 컬러</p>
@@ -39,8 +54,23 @@
         ]) !!}
 
         <hr>
+        <p>Taxonomy</p>
+        @foreach ($taxonomies as $taxonomy)
+            {!! uio('uiobject/board@select', [
+                'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
+                'label' => xe_trans($taxonomy->name),
+                'items' => app('xe.blog.taxonomyHandler')->getTaxonomyItems($taxonomy->id),
+                'value' => app('xe.blog.taxonomyHandler')->getBlogTaxonomyItem($blog, $taxonomy->id)['id']
+            ]) !!}
+        @endforeach
+
+        <hr>
         <p>Slug</p>
         <input type="text" class="xe-form-control" name="slug" @if ($blog->slug !== null) value="{{ $blog->slug['slug'] }}" @endif>
+
+        <hr>
+        <p>Gallery Banner Group ID</p>
+        <input type="text" class="xe-form-control" name="gallery_group_id" value="{{ $metaDataHandler->getGalleryGroupId($blog) }}">
     </fieldset>
 
     <section class="section-blog-block-editor-field">

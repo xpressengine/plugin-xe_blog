@@ -125,6 +125,23 @@ class BlogHandler extends DocumentHandler implements Searchable, Jsonable, Order
     {
         $attributes = $blog->getAttributes();
 
+        //TODO 상수 변경
+        if (isset($inputs['blog_status']) === true) {
+            switch ($inputs['blog_status']) {
+                case 'public':
+                    $blog->setPublic();
+                    break;
+
+                case 'private':
+                    $blog->setPrivate();
+                    break;
+
+                case 'temp':
+                    $blog->setTemp();
+                    break;
+            }
+        }
+
         foreach ($inputs as $name => $value) {
             if (array_key_exists($name, $attributes)) {
                 $blog->{$name} = $value;

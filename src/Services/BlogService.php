@@ -199,6 +199,7 @@ class BlogService
         try {
             $this->blogHandler->update($blog, $inputs);
             $this->metaDataHandler->saveMetaData($blog, $inputs);
+            $this->taxonomyHandler->updateTaxonomy($blog, $inputs);
             $this->blogSlugHandler->updateSlug($blog, $inputs);
 
             if (isset($inputs['_tags']) && empty($inputs['_tags']) === false) {
