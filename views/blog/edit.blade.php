@@ -67,6 +67,11 @@
             <div class="xe-row">
                 @foreach ($taxonomies as $taxonomy)
                 <div class="xe-col-md-2">
+                    @if (app('xe.blog.taxonomyHandler')->getTaxonomyInstanceConfig($taxonomy->id)->get('require', false) === true)
+                        <span style="color: red;">(필수)</span>
+                    @else
+                        <span>(선택)</span>
+                    @endif
                     {!! uio('uiobject/board@select', [
                         'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
                         'label' => xe_trans($taxonomy->name),
