@@ -57,12 +57,12 @@
         </div> --}}
 
         <div class="xe-form-group">
-            <label>썸네일</label>
+            <label>썸네일 @if ($metaDataHandler->getThumbnail($blog) !== null) <small>{{ \Xpressengine\Storage\File::find($metaDataHandler->getThumbnail($blog)['origin_id'])->clientname }}</small> @endif </label>
             <input class="xe-form-control" type="file" name="thumbnail">
         </div>
 
         <div class="xe-form-group">
-            <label>커버 이미지</label>
+            <label>커버 이미지 @if ($metaDataHandler->getCoverImage($blog) !== null) <small>{{ \Xpressengine\Storage\File::find($metaDataHandler->getCoverImage($blog)['id'])->clientname }}</small> @endif </label>
             <input class="xe-form-control" type="file" name="cover_image">
         </div>
 
