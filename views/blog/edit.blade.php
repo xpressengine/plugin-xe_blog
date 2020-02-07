@@ -27,6 +27,7 @@
         @endif
         <input type="text" name="background_color" value="{{ $metaDataHandler->getBackgroundColor($blog) }}">
         <input type="text" name="slug" @if ($blog->slug !== null) value="{{ $blog->slug['slug'] }}" @endif>
+        <input type="text" name="published_at" value="{{ $blog->published_at }}">
     </div>
 
     <fieldset style="margin: 40px;">
@@ -42,10 +43,10 @@
             <input type="text" id="f-sub-title" class="xe-form-control" name="sub_title" value="{{ $metaDataHandler->getSubTitle($blog) }}" placeholder="sub_title">
         </div> --}}
 
-        <div class="xe-form-group">
+        {{-- <div class="xe-form-group">
             <label>발행시간 (Y-m-d H:i:s)</label>
             <input type="text" class="xe-form-control" name="published_at" value="{{ $blog->published_at }}" placeholder="예약 발행(Y-m-d H:i:s)">
-        </div>
+        </div> --}}
 
         {{-- <div class="xe-form-group">
             <label>공개 속성</label>
@@ -71,14 +72,14 @@
             <input type="text" class="xe-form-control" name="background_color" value="{{ $metaDataHandler->getBackgroundColor($blog) }}">
         </div> --}}
 
-        <div class="xe-form-group">
+        {{-- <div class="xe-form-group">
             <label>태그</label>
             {!! uio('uiobject/board@tag', [
                 'tags' => $blog->tags->toArray()
             ]) !!}
-        </div>
+        </div> --}}
 
-        <div class="xe-form-group">
+        {{-- <div class="xe-form-group">
             <label>Taxonomy</label>
             <div class="xe-row">
                 @foreach ($taxonomies as $taxonomy)
@@ -97,7 +98,7 @@
                 </div>
                 @endforeach
             </div>
-        </div>
+        </div> --}}
 
         {{-- <div class="xe-form-group">
             <label>Slug</label>
@@ -138,12 +139,6 @@
             </h2>
             <div class="components-base-control">
                 <div class="components-base-control__field">
-                    <span class="components-base-control__label">제목</span>
-                    <input type="text" id="__f-title" class="components-text-control__input" name="f_title" value="{{ $blog->title }}" placeholder="title">
-                </div>
-            </div>
-            <div class="components-base-control">
-                <div class="components-base-control__field">
                     <span class="components-base-control__label">부제목</span>
                     <input type="text" id="__f-sub-title" class="components-text-control__input" name="f_sub_title" value="{{ $metaDataHandler->getSubTitle($blog) }}" placeholder="sub_title">
                 </div>
@@ -166,6 +161,38 @@
             </div>
             <div class="components-base-control">
                 <div class="components-base-control__field">
+                    <span class="components-base-control__label">태그</span>
+                    {!! uio('uiobject/board@tag', [
+                        'tags' => $blog->tags->toArray()
+                    ]) !!}
+                </div>
+            </div>
+
+            <div class="components-base-control">
+                <div class="components-base-control__field">
+                    <span class="components-base-control__label">Taxonomy</span>
+                    @foreach ($taxonomies as $taxonomy)
+                        <div class="__taxonomy-field">
+                            @if (app('xe.blog.taxonomyHandler')->getTaxonomyInstanceConfig($taxonomy->id)->get('require', false) === true)
+                                <span class="components-base-control__label"><span style="color: red;">(필수)</span></span>
+                            @else
+                                <span class="components-base-control__label">(선택)</span>
+                            @endif
+                            <div class="components-base-control__field">
+                                {!! uio('uiobject/board@select', [
+                                    'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
+                                    'label' => xe_trans($taxonomy->name),
+                                    'items' => app('xe.blog.taxonomyHandler')->getTaxonomyItems($taxonomy->id),
+                                    'value' => app('xe.blog.taxonomyHandler')->getBlogTaxonomyItem($blog, $taxonomy->id)['id']
+                                ]) !!}
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="components-base-control">
+                <div class="components-base-control__field">
                     <span class="components-base-control__label">Slug</span>
                     <input type="text" id="__f-slug" class="components-text-control__input" name="f_slug" @if ($blog->slug !== null) value="{{ $blog->slug['slug'] }}" @endif>
                 </div>
@@ -186,7 +213,14 @@
         });
 
         wp.data.dispatch('core/edit-post').toggleFeature('welcomeGuide')
-        $('.editor-post-publish-button, .editor-post-trash').hide()
+
+        wp.data.subscribe(function (select) {
+            var publishedAt = wp.data.select('core/editor').getEditedPostAttribute('date')
+            var dateString = XE.moment(publishedAt).format('YYYY-MM-DD HH:mm:ss')
+            var title = wp.data.select('core/editor').getEditedPostAttribute('title')
+            var $field = $('[name=published_at]').val(dateString)
+            $('[name=title]').val(title)
+        })
 
         // 폼채우기
         $(document).on('change', '#__f-title', function () {

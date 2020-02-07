@@ -16,6 +16,7 @@
         <input type="text" name="blog_status" value="public">
         <input type="text" name="background_color" value="{{ Request::old('background_color') }}">
         <input type="text" name="slug" value="{{ Request::old('slug') }}">
+        <input type="text" name="published_at" value="{{ Request::old('published_at') }}">
     </div>
 
     <fieldset style="margin: 40px;">
@@ -31,10 +32,10 @@
             <input type="text" id="f-sub-title" class="xe-form-control" name="sub_title" value="{{ Request::old('sub_title') }}" placeholder="sub_title">
         </div> --}}
 
-        <div class="xe-form-group">
+        {{-- <div class="xe-form-group">
             <label>발행 시간 (Y-m-d H:i:s)</label>
             <input type="text" class="xe-form-control" name="published_at" value="{{ Request::old('published_at') }}" placeholder="예약 발행(Y-m-d H:i:s)">
-        </div>
+        </div> --}}
 
         {{-- <div class="xe-form-group">
             <label>공개 속성</label>
@@ -60,16 +61,16 @@
             <input type="text" class="xe-form-control" name="background_color">
         </div> --}}
 
-        <div class="xe-form-group">
+        {{-- <div class="xe-form-group">
             <label>태그</label>
             {!! uio('uiobject/board@tag') !!}
-        </div>
+        </div> --}}
 
-        <div class="xe-form-group">
+        {{-- <div class="xe-form-group">
             <label>Taxonomy</label>
             <div class="xe-row">
                 @foreach ($taxonomies as $taxonomy)
-                <div class="xe-col-md-2">
+                <div class="__taxonomy-field">
                     @if (app('xe.blog.taxonomyHandler')->getTaxonomyInstanceConfig($taxonomy->id)->get('require', false) === true)
                         <span style="color: red;">(필수)</span>
                     @else
@@ -83,7 +84,7 @@
                 </div>
                 @endforeach
             </div>
-        </div>
+        </div> --}}
 
         {{-- <div class="xe-form-group">
             <label>Slug</label>
@@ -96,39 +97,33 @@
         </div>
     </fieldset>
 
-    <section class="section-blog-block-editor-field" style="margin: 40px 0;">
-        <div class="blog-block-editor-field__title-box">
-            <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }}</h2>
-        </div>
-
-        <div class="blog-block-editor-filed-content">
-            <div class="inner">
-                @foreach ($dynamicFields as $dynamicField)
-                    @if ($dynamicField->getConfig()->get('use') === true)
-                        {!! df_create($dynamicField->getConfig()->get('group'), $dynamicField->getConfig()->get('id'), Request::all()) !!}
-                    @endif
-                @endforeach
-            </div>
-        </div>
-    </section>
-
     <div style="padding: 40px;">
         <button type="submit" class="pull-right xe-btn xe-btn-lg xe-btn-primary"> 저장 </button>
     </div>
 </form>
 
-<div id="sidebar-container" style="display: none;">
+<section class="section-blog-block-editor-field" style="margin: 40px 0;">
+    <div class="blog-block-editor-field__title-box">
+        <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }}</h2>
+    </div>
+
+    <div class="blog-block-editor-filed-content">
+        <div class="inner">
+            @foreach ($dynamicFields as $dynamicField)
+                @if ($dynamicField->getConfig()->get('use') === true)
+                    {!! df_create($dynamicField->getConfig()->get('group'), $dynamicField->getConfig()->get('id'), Request::all()) !!}
+                @endif
+            @endforeach
+        </div>
+    </div>
+</section>
+
+<div id="meta-sidebar-container" style="display: none;">
     <form class="metabox-location-side" onsubmit="return false">
         <div class="components-panel__body is-opened">
             <h2 class="components-panel__body-title">
                 <button type="button" aria-expanded="true" class="components-button components-panel__body-toggle">글 설정</button>
             </h2>
-            <div class="components-base-control">
-                <div class="components-base-control__field">
-                    <span class="components-base-control__label">제목</span>
-                    <input type="text" id="__f-title" class="components-text-control__input" name="f_title" value="{{ Request::old('title') }}" placeholder="title">
-                </div>
-            </div>
             <div class="components-base-control">
                 <div class="components-base-control__field">
                     <span class="components-base-control__label">부제목</span>
@@ -153,6 +148,35 @@
             </div>
             <div class="components-base-control">
                 <div class="components-base-control__field">
+                    <span class="components-base-control__label">태그</span>
+                    {!! uio('uiobject/board@tag') !!}
+                </div>
+            </div>
+
+            <div class="components-base-control">
+                <div class="components-base-control__field">
+                    <span class="components-base-control__label">Taxonomy</span>
+                    @foreach ($taxonomies as $taxonomy)
+                        <div class="__taxonomy-field">
+                            @if (app('xe.blog.taxonomyHandler')->getTaxonomyInstanceConfig($taxonomy->id)->get('require', false) === true)
+                                <span class="components-base-control__label"><span style="color: red;">(필수)</span></span>
+                            @else
+                                <span class="components-base-control__label">(선택)</span>
+                            @endif
+                            <div class="components-base-control__field">
+                                {!! uio('uiobject/board@select', [
+                                    'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
+                                    'label' => xe_trans($taxonomy->name),
+                                    'items' => app('xe.blog.taxonomyHandler')->getTaxonomyItems($taxonomy->id),
+                                ]) !!}
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="components-base-control">
+                <div class="components-base-control__field">
                     <span class="components-base-control__label">Slug</span>
                     <input type="text" id="__f-slug" class="components-text-control__input" name="f_slug" value="{{ Request::old('slug') }}">
                 </div>
@@ -160,25 +184,38 @@
         </div>
     </form>
 </div>
+{{--
+<div id="meta-normal-container" style="display: none;">
+    <form class="metabox-location-normal" onsubmit="return false">
+
+    </form>
+</div> --}}
 
 <script>
     $(function () {
         wp.data.dispatch('core/edit-post').setAvailableMetaBoxesPerLocation({
             "side": [{
-                "id": "sidebar-container",
+                "id": "meta-sidebar-container",
                 "title": "documents"
             }],
-            "normal": [],
+            "normal": [{
+                id: 'meta-normal-container',
+                title: 'dynamic fileds'
+            }],
             "advanced": []
         });
 
         wp.data.dispatch('core/edit-post').toggleFeature('welcomeGuide')
-        $('.editor-post-publish-button, .editor-post-trash').hide()
+
+        wp.data.subscribe(function (select) {
+            var publishedAt = wp.data.select('core/editor').getEditedPostAttribute('date')
+            var dateString = XE.moment(publishedAt).format('YYYY-MM-DD HH:mm:ss')
+            var title = wp.data.select('core/editor').getEditedPostAttribute('title')
+            var $field = $('[name=published_at]').val(dateString)
+            $('[name=title]').val(title)
+        })
 
         // 폼채우기
-        $(document).on('change', '#__f-title', function () {
-            $('[name=title]').val($(this).val())
-        })
         $(document).on('change', '#__f-sub-title', function () {
             $('[name=sub_title]').val($(this).val())
         })
