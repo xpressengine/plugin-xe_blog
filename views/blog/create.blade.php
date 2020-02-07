@@ -126,6 +126,12 @@
             </h2>
             <div class="components-base-control">
                 <div class="components-base-control__field">
+                    <span class="components-base-control__label">제목</span>
+                    <input type="text" id="__f-title" class="components-text-control__input" name="f_title" value="{{ Request::old('title') }}" placeholder="title">
+                </div>
+            </div>
+            <div class="components-base-control">
+                <div class="components-base-control__field">
                     <span class="components-base-control__label">부제목</span>
                     <input type="text" id="__f-sub-title" class="components-text-control__input" name="f_sub_title" value="{{ Request::old('sub_title') }}" placeholder="sub_title">
                 </div>
@@ -212,10 +218,13 @@
             var dateString = XE.moment(publishedAt).format('YYYY-MM-DD HH:mm:ss')
             var title = wp.data.select('core/editor').getEditedPostAttribute('title')
             var $field = $('[name=published_at]').val(dateString)
-            $('[name=title]').val(title)
+            {{-- $('[name=title]').val(title) --}}
         })
 
         // 폼채우기
+        $(document).on('change', '#__f-title', function () {
+            $('[name=title]').val($(this).val())
+        })
         $(document).on('change', '#__f-sub-title', function () {
             $('[name=sub_title]').val($(this).val())
         })
