@@ -91,9 +91,11 @@
             <input type="text" class="xe-form-control" name="slug">
         </div> --}}
 
+        {{--TODO 스킨으로 이동--}}
         <div class="xe-form-group">
-            <label>Gallery Banner Group ID</label>
-            <input type="text" class="xe-form-control" name="gallery_group_id">
+            <input type="hidden" class="xe-form-control" name="gallery_group_id">
+            <button id="createBannerGroup" type="button" class="xe-btn" data-url="{{ route('boldjournal.gallery.store_banner_group') }}">배너 생성</button>
+{{--            <a href="{{ route('boldjournal.gallery.edit_banner_group', ['groupId' => $groupId]) }}">수정</a>--}}
         </div>
     </fieldset>
 
@@ -199,6 +201,21 @@
 
 <script>
     $(function () {
+        //배너 만들기 ajax
+        $('#createBannerGroup').click(function () {
+            var url = $(this).data('url')
+
+            XE.ajax({
+                type: 'post',
+                dataType: 'json',
+                data: {},
+                url: url,
+                success: function(response) {
+                    $('[name=gallery_group_id]').val(response.groupId)
+                }
+            });
+        })
+
         wp.data.dispatch('core/edit-post').setAvailableMetaBoxesPerLocation({
             "side": [{
                 "id": "meta-sidebar-container",
