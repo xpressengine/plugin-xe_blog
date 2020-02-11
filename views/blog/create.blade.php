@@ -1,6 +1,8 @@
 {{ XeFrontend::css('plugins/xe_blog/assets/block-editor-dynamic-fields.css')->load() }}
 {{ XeFrontend::js('plugins/xe_blog/assets/js/boldjournal-block-style.js')->load() }}
 
+@expose_route('boldjournal.gallery.edit_banner_group')
+
 <form method="post" class="metabox-base-form" action="{{ route('blog.store') }}" enctype="multipart/form-data" style="padding-bottom: 40px;">
     {!! editor('xe_blog', [
         'content' => Request::old('content'),
@@ -17,6 +19,7 @@
         <input type="text" name="background_color" value="{{ Request::old('background_color') }}">
         <input type="text" name="slug" value="{{ Request::old('slug') }}">
         <input type="text" name="published_at" value="{{ Request::old('published_at') }}">
+        <input type="text" name="gallery_group_id" value="{{ Request::old('gallery_group_id') }}">
     </div>
 
     <fieldset style="margin: 40px;">
@@ -28,13 +31,6 @@
         <div class="xe-form-group">
             <label>커버 이미지</label>
             <input class="xe-form-control" type="file" name="cover_image">
-        </div>
-
-        {{--TODO 스킨으로 이동--}}
-        <div class="xe-form-group">
-            <input type="hidden" class="xe-form-control" name="gallery_group_id">
-            <button id="createBannerGroup" type="button" class="xe-btn" data-url="{{ route('boldjournal.gallery.store_banner_group') }}">배너 생성</button>
-{{--            <a href="{{ route('boldjournal.gallery.edit_banner_group', ['groupId' => $groupId]) }}">수정</a>--}}
         </div>
     </fieldset>
 
@@ -139,24 +135,69 @@
                 </div>
             </div>
         </div>
+
+        <div class="components-panel__body is-opened">
+            <h2 class="components-panel__body-title">
+                <button type="button" aria-expanded="true" class="components-button components-panel__body-toggle">갤러리</button>
+            </h2>
+            <div class="components-base-control">
+                <div class="components-base-control__field">
+                    <div class="__f-banner-group">
+                        <input type="hidden" class="__banner-group-id" value="{{ Request::old('gallery_group_id') }}">
+                        <button type="button" class="xe-btn xe-btn-sm __banner-group-create" data-url="{{ route('boldjournal.gallery.store_banner_group') }}">갤러리 생성</button>
+                        <button type="button" class="xe-btn xe-btn-sm __banner-group-edit" style="display:none">편집</button>
+                        <button type="button" class="xe-btn xe-btn-sm __banner-group-delete" style="display:none">삭제</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 
 <script>
     $(function () {
-        //배너 만들기 ajax
-        $('#createBannerGroup').click(function () {
-            var url = $(this).data('url')
 
-            XE.ajax({
-                type: 'post',
-                dataType: 'json',
-                data: {},
-                url: url,
-                success: function(response) {
-                    $('[name=gallery_group_id]').val(response.groupId)
-                }
-            });
+        var $bannerGroups = $('.__f-banner-group')
+        $bannerGroups.each(function () {
+            var $container = $(this)
+            var $field = $container.find('.__banner-group-id')
+            var $btnCreate = $('.__banner-group-create');
+            var $btnEdit = $('.__banner-group-edit');
+            var $btnDelete = $('.__banner-group-delete');
+            var groupId = null;
+
+            if ($field.val()) {
+                groupId = $field.val()
+                $btnCreate.hide()
+                $btnEdit.show()
+                $btnDelete.show()
+            }
+
+            $field.on('change', function () {
+                $('[name=gallery_group_id]').val($(this).val())
+            })
+
+            $container.on('click', '.__banner-group-create', function () {
+                var url = $(this).data('url')
+                $btnCreate.hide()
+                XE.post(url).then(function (res) {
+                    $field.val(res.data.groupId)
+                    groupId = res.data.groupId
+                    $btnEdit.show()
+                    $btnDelete.show()
+                })
+            })
+            $container.on('click', '.__banner-group-edit', function (e) {
+                e.preventDefault()
+                window.open(XE.route('boldjournal.gallery.edit_banner_group', { groupId: groupId } ), 'bannerEditor', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes')
+            })
+            $container.on('click', '.__banner-group-delete', function (e) {
+                e.preventDefault()
+                $field.val('')
+                $btnCreate.show()
+                $btnEdit.hide()
+                $btnDelete.hide()
+            })
         })
 
         wp.data.dispatch('core/edit-post').setAvailableMetaBoxesPerLocation({

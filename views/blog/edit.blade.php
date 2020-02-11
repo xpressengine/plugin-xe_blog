@@ -1,6 +1,8 @@
 {{ XeFrontend::css('plugins/xe_blog/assets/block-editor-dynamic-fields.css')->load() }}
 {{ XeFrontend::js('plugins/xe_blog/assets/js/boldjournal-block-style.js')->load() }}
 
+@expose_route('boldjournal.gallery.edit_banner_group')
+
 <form method="post" action="{{ route('blog.update') }}" enctype="multipart/form-data">
     {!! csrf_field() !!}
     <input type="hidden" name="blogId" value="{{ $blog->id }}">
@@ -28,35 +30,10 @@
         <input type="text" name="background_color" value="{{ $metaDataHandler->getBackgroundColor($blog) }}">
         <input type="text" name="slug" @if ($blog->slug !== null) value="{{ $blog->slug['slug'] }}" @endif>
         <input type="text" name="published_at" value="{{ $blog->published_at }}">
+        <input type="text" name="gallery_group_id" value="{{ $metaDataHandler->getGalleryGroupId($blog) }}">
     </div>
 
     <fieldset style="margin: 40px;">
-        <legend>문서 설정 (사이드바로 이동 예정)</legend>
-
-        {{-- <div class="xe-form-group">
-            <label for="f-title">제목</label>
-            <input type="text" id="f-title" class="xe-form-control" name="title" value="{{ $blog->title }}" placeholder="title">
-        </div> --}}
-
-        {{-- <div class="xe-form-group">
-            <label for="f-sub-title">부제목</label>
-            <input type="text" id="f-sub-title" class="xe-form-control" name="sub_title" value="{{ $metaDataHandler->getSubTitle($blog) }}" placeholder="sub_title">
-        </div> --}}
-
-        {{-- <div class="xe-form-group">
-            <label>발행시간 (Y-m-d H:i:s)</label>
-            <input type="text" class="xe-form-control" name="published_at" value="{{ $blog->published_at }}" placeholder="예약 발행(Y-m-d H:i:s)">
-        </div> --}}
-
-        {{-- <div class="xe-form-group">
-            <label>공개 속성</label>
-            <select name="blog_status" class="xe-form-control">
-                <option value="public" @if ($blog->isPublic() === true) selected @endif>공개</option>
-                <option value="private" @if ($blog->isPrivate() === true) selected @endif>비공개</option>
-                <option value="temp" @if ($blog->isTemp() === true) selected @endif>임시</option>
-            </select>
-        </div> --}}
-
         <div class="xe-form-group">
             <label>썸네일 @if ($metaDataHandler->getThumbnail($blog) !== null) <small>{{ \Xpressengine\Storage\File::find($metaDataHandler->getThumbnail($blog)['origin_id'])->clientname }}</small> @endif </label>
             <input class="xe-form-control" type="file" name="thumbnail">
@@ -65,49 +42,6 @@
         <div class="xe-form-group">
             <label>커버 이미지 @if ($metaDataHandler->getCoverImage($blog) !== null) <small>{{ \Xpressengine\Storage\File::find($metaDataHandler->getCoverImage($blog)['id'])->clientname }}</small> @endif </label>
             <input class="xe-form-control" type="file" name="cover_image">
-        </div>
-
-        {{-- <div class="xe-form-group">
-            <label>배경 컬러</label>
-            <input type="text" class="xe-form-control" name="background_color" value="{{ $metaDataHandler->getBackgroundColor($blog) }}">
-        </div> --}}
-
-        {{-- <div class="xe-form-group">
-            <label>태그</label>
-            {!! uio('uiobject/board@tag', [
-                'tags' => $blog->tags->toArray()
-            ]) !!}
-        </div> --}}
-
-        {{-- <div class="xe-form-group">
-            <label>Taxonomy</label>
-            <div class="xe-row">
-                @foreach ($taxonomies as $taxonomy)
-                <div class="xe-col-md-2">
-                    @if (app('xe.blog.taxonomyHandler')->getTaxonomyInstanceConfig($taxonomy->id)->get('require', false) === true)
-                        <span style="color: red;">(필수)</span>
-                    @else
-                        <span>(선택)</span>
-                    @endif
-                    {!! uio('uiobject/board@select', [
-                        'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
-                        'label' => xe_trans($taxonomy->name),
-                        'items' => app('xe.blog.taxonomyHandler')->getTaxonomyItems($taxonomy->id),
-                        'value' => app('xe.blog.taxonomyHandler')->getBlogTaxonomyItem($blog, $taxonomy->id)['id']
-                    ]) !!}
-                </div>
-                @endforeach
-            </div>
-        </div> --}}
-
-        {{-- <div class="xe-form-group">
-            <label>Slug</label>
-            <input type="text" class="xe-form-control" name="slug" @if ($blog->slug !== null) value="{{ $blog->slug['slug'] }}" @endif>
-        </div> --}}
-
-        <div class="xe-form-group">
-            <label>Gallery Banner Group ID</label>
-            <input type="text" class="xe-form-control" name="gallery_group_id" value="{{ $metaDataHandler->getGalleryGroupId($blog) }}">
         </div>
     </fieldset>
 
@@ -159,32 +93,22 @@
                     </select>
                 </div>
             </div>
-            <div class="components-base-control">
-                <div class="components-base-control__field">
-                    <span class="components-base-control__label">배경 컬러</span>
-                    <input type="text" id="__f-background-color" class="components-text-control__input" name="f_background_color" value="{{ $metaDataHandler->getBackgroundColor($blog) }}">
-                </div>
-            </div>
-            <div class="components-base-control">
-                <div class="components-base-control__field">
-                    <span class="components-base-control__label">태그</span>
-                    {!! uio('uiobject/board@tag', [
-                        'tags' => $blog->tags->toArray()
-                    ]) !!}
-                </div>
-            </div>
+        </div>
 
+        <div class="components-panel__body is-opened">
+            <h2 class="components-panel__body-title">
+                <button type="button" aria-expanded="true" class="components-button components-panel__body-toggle">카테고리 &amp; 태그</button>
+            </h2>
             <div class="components-base-control">
                 <div class="components-base-control__field">
-                    <span class="components-base-control__label">Taxonomy</span>
                     @foreach ($taxonomies as $taxonomy)
                         <div class="__taxonomy-field">
-                            <label>{{ xe_trans($taxonomy->name) }}</label>
-                            @if (app('xe.blog.taxonomyHandler')->getTaxonomyInstanceConfig($taxonomy->id)->get('require', false) === true)
-                                <span class="components-base-control__label"><span style="color: red;">(필수)</span></span>
-                            @else
-                                <span class="components-base-control__label">(선택)</span>
-                            @endif
+                            <label class="components-base-control__label">
+                                {{ xe_trans($taxonomy->name) }}
+                                @if (app('xe.blog.taxonomyHandler')->getTaxonomyInstanceConfig($taxonomy->id)->get('require', false) === true)
+                                    <em style="color: red;">(필수)</em>
+                                @endif
+                            </label>
                             <div class="components-base-control__field">
                                 {!! uio('uiobject/board@select', [
                                     'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
@@ -197,6 +121,29 @@
                     @endforeach
                 </div>
             </div>
+            <div class="components-base-control">
+                <div class="components-base-control__field">
+                    <span class="components-base-control__label">태그</span>
+                    {!! uio('uiobject/board@tag', [
+                        'tags' => $blog->tags->toArray()
+                    ]) !!}
+                </div>
+            </div>
+        </div>
+
+        <div class="components-panel__body is-opened">
+            <h2 class="components-panel__body-title">
+                <button type="button" aria-expanded="true" class="components-button components-panel__body-toggle">기타</button>
+            </h2>
+
+
+            <div class="components-base-control">
+                <div class="components-base-control__field">
+                    <span class="components-base-control__label">배경 컬러</span>
+                    <input type="text" id="__f-background-color" class="components-text-control__input" name="f_background_color" value="{{ $metaDataHandler->getBackgroundColor($blog) }}">
+                </div>
+            </div>
+
 
             <div class="components-base-control">
                 <div class="components-base-control__field">
@@ -205,11 +152,70 @@
                 </div>
             </div>
         </div>
+        <div class="components-panel__body is-opened">
+            <h2 class="components-panel__body-title">
+                <button type="button" aria-expanded="true" class="components-button components-panel__body-toggle">갤러리</button>
+            </h2>
+            <div class="components-base-control">
+                <div class="components-base-control__field">
+                    {{-- <span class="components-base-control__label">배경 컬러</span> --}}
+                    <div class="__f-banner-group">
+                        <input type="hidden" class="__banner-group-id" value="{{ $metaDataHandler->getGalleryGroupId($blog) }}">
+                        <button type="button" class="xe-btn xe-btn-sm __banner-group-create" data-url="{{ route('boldjournal.gallery.store_banner_group') }}">갤러리 생성</button>
+                        <button type="button" class="xe-btn xe-btn-sm __banner-group-edit" style="display:none">편집</button>
+                        <button type="button" class="xe-btn xe-btn-sm __banner-group-delete" style="display:none">삭제</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 
 <script>
     $(function () {
+        var $bannerGroups = $('.__f-banner-group')
+        $bannerGroups.each(function () {
+            var $container = $(this)
+            var $field = $container.find('.__banner-group-id')
+            var $btnCreate = $('.__banner-group-create');
+            var $btnEdit = $('.__banner-group-edit');
+            var $btnDelete = $('.__banner-group-delete');
+            var groupId = null;
+
+            if ($field.val()) {
+                groupId = $field.val()
+                $btnCreate.hide()
+                $btnEdit.show()
+                $btnDelete.show()
+            }
+
+            $field.on('change', function () {
+                $('[name=gallery_group_id]').val($(this).val())
+            })
+
+            $container.on('click', '.__banner-group-create', function () {
+                var url = $(this).data('url')
+                $btnCreate.hide()
+                XE.post(url).then(function (res) {
+                    $field.val(res.data.groupId)
+                    groupId = res.data.groupId
+                    $btnEdit.show()
+                    $btnDelete.show()
+                })
+            })
+            $container.on('click', '.__banner-group-edit', function (e) {
+                e.preventDefault()
+                window.open(XE.route('boldjournal.gallery.edit_banner_group', { groupId: groupId } ), 'bannerEditor', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes')
+            })
+            $container.on('click', '.__banner-group-delete', function (e) {
+                e.preventDefault()
+                $field.val('')
+                $btnCreate.show()
+                $btnEdit.hide()
+                $btnDelete.hide()
+            })
+        })
+
         wp.data.dispatch('core/edit-post').setAvailableMetaBoxesPerLocation({
             "side": [{
                 "id": "sidebar-container",
