@@ -34,26 +34,26 @@
         </div>
     </fieldset>
 
+    <section class="section-blog-block-editor-field" style="margin: 40px 0;">
+        <div class="blog-block-editor-field__title-box">
+            <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }}</h2>
+        </div>
+
+        <div class="blog-block-editor-filed-content">
+            <div class="inner">
+                @foreach ($dynamicFields as $dynamicField)
+                    @if ($dynamicField->getConfig()->get('use') === true)
+                        {!! df_create($dynamicField->getConfig()->get('group'), $dynamicField->getConfig()->get('id'), Request::all()) !!}
+                    @endif
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     <div style="padding: 40px;">
         <button type="submit" class="pull-right xe-btn xe-btn-lg xe-btn-primary"> 저장 </button>
     </div>
 </form>
-
-<section class="section-blog-block-editor-field" style="margin: 40px 0;">
-    <div class="blog-block-editor-field__title-box">
-        <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }}</h2>
-    </div>
-
-    <div class="blog-block-editor-filed-content">
-        <div class="inner">
-            @foreach ($dynamicFields as $dynamicField)
-                @if ($dynamicField->getConfig()->get('use') === true)
-                    {!! df_create($dynamicField->getConfig()->get('group'), $dynamicField->getConfig()->get('id'), Request::all()) !!}
-                @endif
-            @endforeach
-        </div>
-    </div>
-</section>
 
 <div id="meta-sidebar-container" style="display: none;">
     <form class="metabox-location-side" onsubmit="return false">
