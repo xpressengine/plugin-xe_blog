@@ -37,6 +37,12 @@ class BlogFavoriteHandler implements Searchable, Jsonable
             $query->where('user_id', auth()->user()->getId());
         }]);
 
+        if (isset($attributes['only_favorite']) === true) {
+            $query->whereHas('favorite', function ($query) {
+                $query->where('user_id', auth()->user()->getId());
+            });
+        }
+
         return $query;
     }
 
