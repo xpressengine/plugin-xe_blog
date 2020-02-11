@@ -166,6 +166,7 @@
                     <span class="components-base-control__label">Taxonomy</span>
                     @foreach ($taxonomies as $taxonomy)
                         <div class="__taxonomy-field">
+                            <label>{{ xe_trans($taxonomy->name) }}</label>
                             @if (app('xe.blog.taxonomyHandler')->getTaxonomyInstanceConfig($taxonomy->id)->get('require', false) === true)
                                 <span class="components-base-control__label"><span style="color: red;">(필수)</span></span>
                             @else
