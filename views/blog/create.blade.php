@@ -20,10 +20,12 @@
         <input type="text" name="slug" value="{{ Request::old('slug') }}">
         <input type="text" name="published_at" value="{{ Request::old('published_at') }}">
         <input type="text" name="gallery_group_id" value="{{ Request::old('gallery_group_id') }}">
+        <input type="text" name="thumbnail">
+        <input type="text" name="cover_image">
     </div>
 
     <fieldset style="margin: 40px;">
-        <div class="xe-form-group">
+        {{-- <div class="xe-form-group">
             <label>썸네일</label>
             <input class="xe-form-control" type="file" name="thumbnail">
         </div>
@@ -31,7 +33,7 @@
         <div class="xe-form-group">
             <label>커버 이미지</label>
             <input class="xe-form-control" type="file" name="cover_image">
-        </div>
+        </div> --}}
     </fieldset>
 
     <section class="section-blog-block-editor-field" style="margin: 40px 0;">
@@ -114,6 +116,24 @@
                 <div class="components-base-control__field">
                     <span class="components-base-control__label">태그</span>
                     {!! uio('uiobject/board@tag') !!}
+                </div>
+            </div>
+        </div>
+
+        <div class="components-panel__body is-opened">
+            <h2 class="components-panel__body-title">
+                <button type="button" aria-expanded="true" class="components-button components-panel__body-toggle">이미지</button>
+            </h2>
+            <div class="components-base-control">
+                <div class="components-base-control__field">
+                    <span class="components-base-control__label">썸네일</span>
+                    {!! uio('formMedialibraryImage', [ 'name' => 'thumbnail' ]) !!}
+                </div>
+            </div>
+            <div class="components-base-control">
+                <div class="components-base-control__field">
+                    <span class="components-base-control__label">커버 이미지</span>
+                    {!! uio('formMedialibraryImage', [ 'name' => 'cover_image' ]) !!}
                 </div>
             </div>
         </div>

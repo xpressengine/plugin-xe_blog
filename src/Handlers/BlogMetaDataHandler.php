@@ -77,7 +77,7 @@ class BlogMetaDataHandler implements Searchable, Jsonable
         $coverMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_IMAGE)->get()->first();
 
         if ($coverMetaData === null) {
-             return null;
+            return null;
         }
 
         $coverImageFile = XeStorage::find($coverMetaData['meta_data']);
@@ -160,12 +160,12 @@ class BlogMetaDataHandler implements Searchable, Jsonable
         if (isset($inputs['thumbnail']) === true) {
             $thumbnailFile = $inputs['thumbnail'];
 
-            $file = XeStorage::upload($thumbnailFile, self::UPLOAD_PATH);
+            // $file = XeStorage::upload($thumbnailFile, self::UPLOAD_PATH);
 
-            if (XeMedia::is($file) === true) {
-                $media = XeMedia::make($file);
-                $thumbnail = XeMedia::createThumbnails($media, $thumbnailType);
-            }
+            // if (XeMedia::is($file) === true) {
+            //     $media = XeMedia::make($file);
+            //     $thumbnail = XeMedia::createThumbnails($media, $thumbnailType);
+            // }
 
             $thumbnailMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_THUMBNAIL)->get()->first();
             if ($thumbnailMetaData === null) {
@@ -173,10 +173,10 @@ class BlogMetaDataHandler implements Searchable, Jsonable
                 $thumbnailMetaData->fill([
                     'blog_id' => $blog->id,
                     'type' => BlogMetaData::TYPE_COVER_THUMBNAIL,
-                    'meta_data' => $file->id
+                    'meta_data' => $thumbnailFile
                 ]);
             } else {
-                $thumbnailMetaData['meta_data'] = $file->id;
+                $thumbnailMetaData['meta_data'] = $thumbnailFile;
             }
 
             $thumbnailMetaData->save();
@@ -188,7 +188,7 @@ class BlogMetaDataHandler implements Searchable, Jsonable
         if (isset($inputs['cover_image']) === true) {
             $coverImageFile = $inputs['cover_image'];
 
-            $file = XeStorage::upload($coverImageFile, self::UPLOAD_PATH);
+            // $file = XeStorage::upload($coverImageFile, self::UPLOAD_PATH);
 
             $coverImageMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_IMAGE)->get()->first();
             if ($coverImageMetaData === null) {
@@ -196,10 +196,10 @@ class BlogMetaDataHandler implements Searchable, Jsonable
                 $coverImageMetaData->fill([
                     'blog_id' => $blog->id,
                     'type' => BlogMetaData::TYPE_COVER_IMAGE,
-                    'meta_data' => $file->id
+                    'meta_data' => $coverImageFile
                 ]);
             } else {
-                $coverImageMetaData['meta_data'] = $file->id;
+                $coverImageMetaData['meta_data'] = $coverImageFile;
             }
 
             $coverImageMetaData->save();

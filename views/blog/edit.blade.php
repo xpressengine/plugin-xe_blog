@@ -31,19 +31,9 @@
         <input type="text" name="slug" @if ($blog->slug !== null) value="{{ $blog->slug['slug'] }}" @endif>
         <input type="text" name="published_at" value="{{ $blog->published_at }}">
         <input type="text" name="gallery_group_id" value="{{ $metaDataHandler->getGalleryGroupId($blog) }}">
+        <input type="text" name="thumbnail">
+        <input type="text" name="cover_image">
     </div>
-
-    <fieldset style="margin: 40px;">
-        <div class="xe-form-group">
-            <label>썸네일 @if ($metaDataHandler->getThumbnail($blog) !== null) <small>{{ \Xpressengine\Storage\File::find($metaDataHandler->getThumbnail($blog)['origin_id'])->clientname }}</small> @endif </label>
-            <input class="xe-form-control" type="file" name="thumbnail">
-        </div>
-
-        <div class="xe-form-group">
-            <label>커버 이미지 @if ($metaDataHandler->getCoverImage($blog) !== null) <small>{{ \Xpressengine\Storage\File::find($metaDataHandler->getCoverImage($blog)['id'])->clientname }}</small> @endif </label>
-            <input class="xe-form-control" type="file" name="cover_image">
-        </div>
-    </fieldset>
 
     <section class="section-blog-block-editor-field">
         <div class="blog-block-editor-field__title-box">
@@ -127,6 +117,42 @@
                     {!! uio('uiobject/board@tag', [
                         'tags' => $blog->tags->toArray()
                     ]) !!}
+                </div>
+            </div>
+        </div>
+
+        <div class="components-panel__body is-opened">
+            <h2 class="components-panel__body-title">
+                <button type="button" aria-expanded="true" class="components-button components-panel__body-toggle">이미지</button>
+            </h2>
+            <div class="components-base-control">
+                <div class="components-base-control__field">
+                    <span class="components-base-control__label">썸네일</span>
+                    @php
+                        $thumbnail = $metaDataHandler->getThumbnail($blog);
+                        if ($thumbnail !== null)
+                        $files = [[
+                            'file_id' => $thumbnail['id'],
+                            'mime' => $thumbnail['mime'],
+                            'preview' => $thumbnail->url()
+                        ]];
+                    @endphp
+                    {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=thumbnail]', 'name' => 'thumbnail', 'files' => $files ]) !!}
+                </div>
+            </div>
+            <div class="components-base-control">
+                <div class="components-base-control__field">
+                    <span class="components-base-control__label">커버 이미지</span>
+                    @php
+                        $cover_image = $metaDataHandler->getCoverImage($blog);
+                        if ($cover_image !== null)
+                        $files = [[
+                            'file_id' => $cover_image['id'],
+                            'mime' => $cover_image['mime'],
+                            'preview' => $cover_image->url()
+                        ]];
+                    @endphp
+                    {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=cover_image]', 'name' => 'cover_image', 'files' => $files ]) !!}
                 </div>
             </div>
         </div>
