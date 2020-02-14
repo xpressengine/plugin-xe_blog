@@ -130,12 +130,14 @@
                     <span class="components-base-control__label">썸네일</span>
                     @php
                         $thumbnail = $metaDataHandler->getThumbnail($blog);
-                        if ($thumbnail !== null)
-                        $files = [[
-                            'file_id' => $thumbnail['id'],
-                            'mime' => $thumbnail['mime'],
-                            'preview' => $thumbnail->url()
-                        ]];
+                        $files = [];
+                        if ($thumbnail !== null) {
+                            $files = [[
+                                'file_id' => $thumbnail['id'],
+                                'mime' => $thumbnail['mime'],
+                                'preview' => $thumbnail->url()
+                            ]];
+                        }
                     @endphp
                     {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=thumbnail]', 'name' => 'thumbnail', 'files' => $files ]) !!}
                 </div>
@@ -146,11 +148,14 @@
                     @php
                         $cover_image = $metaDataHandler->getCoverImage($blog);
                         if ($cover_image !== null)
-                        $files = [[
-                            'file_id' => $cover_image['id'],
-                            'mime' => $cover_image['mime'],
-                            'preview' => $cover_image->url()
-                        ]];
+                        $files = [];
+                        if ($cover_image !== null) {
+                            $files = [[
+                                'file_id' => $cover_image['id'],
+                                'mime' => $cover_image['mime'],
+                                'preview' => $cover_image->url()
+                            ]];
+                        }
                     @endphp
                     {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=cover_image]', 'name' => 'cover_image', 'files' => $files ]) !!}
                 </div>
