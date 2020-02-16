@@ -163,6 +163,15 @@
   color: #989898;
 }
 
+.widget-bold-xe-blog-board-title__category a {
+  color: #989898;
+}
+
+.widget-bold-xe-blog-board-title__category a:hover, .widget-bold-xe-blog-board-title__category a:focus {
+  text-decoration: none;
+  color: #989898;
+}
+
 .widget-bold-xe-blog-board-title__title {
   margin: 0;
   padding: 0 0 10px;

@@ -28,6 +28,16 @@
   line-height: 18px;
   font-weight: 400;
   color: $brown-grey;
+
+  a {
+    color: $brown-grey;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: $brown-grey;
+    }
+  }
 }
 
 .widget-bold-xe-blog-board-title__title {
