@@ -12,10 +12,7 @@
         'cover' => true,
     ]) !!}
 
-    <br>
-    <br>
-
-    <div id="metaboxes" style="padding: 40px; display: none;">
+    <div id="metaboxes" style="display: none;">
         <input type="text" name="title" value="{{ $blog->title }}">
         <input type="text" name="sub_title" value="{{ $metaDataHandler->getSubTitle($blog) }}">
         @if ($blog->isPublic() === true)
@@ -37,8 +34,9 @@
 
     <section class="section-blog-block-editor-field">
         <div class="blog-block-editor-field__title-box">
-            <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }}</h2>
+            <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }} <i class="xi-angle-down"></i></h2>
         </div>
+
         <div class="blog-block-editor-filed-content">
             <div class="inner">
                 @foreach ($dynamicFields as $dynamicField)
@@ -49,10 +47,6 @@
             </div>
         </div>
     </section>
-
-    <div style="padding: 40px;">
-        <button type="submit" class="pull-right xe-btn xe-btn-lg xe-btn-primary"> 저장 </button>
-    </div>
 </form>
 
 <div id="sidebar-container" style="display: none;">
@@ -281,6 +275,18 @@
         })
         $(document).on('change', '#__f-slug', function () {
             $('[name=slug]').val($(this).val())
+        })
+
+        $('.blog-block-editor-field__title-box').on('click', function () {
+            $('.section-blog-block-editor-field').toggleClass('section-blog-block-editor-field--open')
+            $('body, html').animate({
+                scrollTop: $('.blog-block-editor-field__title-box').offset().top
+            });
+        })
+        var $btnSubmit = $('<div style="padding: 0 4px;"><button type="submit" class="components-button is-button is-primary is-large"> 저장 </button></div>')
+        $('.edit-post-header__settings').prepend($btnSubmit)
+        $btnSubmit.on('click', function () {
+            $(this).closest('form').submit()
         })
     })
 </script>

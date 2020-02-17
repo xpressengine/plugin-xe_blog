@@ -3,16 +3,13 @@
 
 @expose_route('boldjournal.gallery.edit_banner_group')
 
-<form method="post" class="metabox-base-form" action="{{ route('blog.store') }}" enctype="multipart/form-data" style="padding-bottom: 40px;">
+<form method="post" class="metabox-base-form" action="{{ route('blog.store') }}" enctype="multipart/form-data">
     {!! editor('xe_blog', [
         'content' => Request::old('content'),
         'cover' => true,
     ]) !!}
 
-    <br>
-    <br>
-
-    <div id="metaboxes" style="padding: 40px; display: none;">
+    <div id="metaboxes" style="display: none;">
         <input type="text" name="title" value="{{ Request::old('title') }}">
         <input type="text" name="sub_title" value="{{ Request::old('sub_title') }}">
         <input type="text" name="blog_status" value="public">
@@ -24,9 +21,9 @@
         <input type="text" name="cover_image">
     </div>
 
-    <section class="section-blog-block-editor-field" style="margin: 40px 0;">
+    <section class="section-blog-block-editor-field">
         <div class="blog-block-editor-field__title-box">
-            <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }}</h2>
+            <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }} <i class="xi-angle-down"></i></h2>
         </div>
 
         <div class="blog-block-editor-filed-content">
@@ -39,10 +36,6 @@
             </div>
         </div>
     </section>
-
-    <div style="padding: 40px;">
-        <button type="submit" class="pull-right xe-btn xe-btn-lg xe-btn-primary"> 저장 </button>
-    </div>
 </form>
 
 <div id="meta-sidebar-container" style="display: none;">
@@ -245,6 +238,18 @@
         })
         $(document).on('change', '#__f-slug', function () {
             $('[name=slug]').val($(this).val())
+        })
+
+        $('.blog-block-editor-field__title-box').on('click', function () {
+            $('.section-blog-block-editor-field').toggleClass('section-blog-block-editor-field--open')
+            $('body, html').animate({
+                scrollTop: $('.blog-block-editor-field__title-box').offset().top
+            });
+        })
+        var $btnSubmit = $('<div style="padding: 0 4px;"><button type="submit" class="components-button is-button is-primary is-large"> 저장 </button></div>')
+        $('.edit-post-header__settings').prepend($btnSubmit)
+        $btnSubmit.on('click', function () {
+            $(this).closest('form').submit()
         })
     })
 </script>
