@@ -139,7 +139,7 @@
                             ]];
                         }
                     @endphp
-                    {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=thumbnail]', 'name' => 'thumbnail', 'files' => $files ]) !!}
+                    {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=thumbnail]', 'name' => 'thumbnail', 'limit' => 1, 'files' => $files ]) !!}
                 </div>
             </div>
             <div class="components-base-control">
@@ -157,7 +157,7 @@
                             ]];
                         }
                     @endphp
-                    {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=cover_image]', 'name' => 'cover_image', 'files' => $files ]) !!}
+                    {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=cover_image]', 'name' => 'cover_image', 'limit' => 1, 'files' => $files ]) !!}
                 </div>
             </div>
         </div>
