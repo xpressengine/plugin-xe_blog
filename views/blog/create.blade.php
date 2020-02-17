@@ -24,18 +24,6 @@
         <input type="text" name="cover_image">
     </div>
 
-    <fieldset style="margin: 40px;">
-        {{-- <div class="xe-form-group">
-            <label>썸네일</label>
-            <input class="xe-form-control" type="file" name="thumbnail">
-        </div>
-
-        <div class="xe-form-group">
-            <label>커버 이미지</label>
-            <input class="xe-form-control" type="file" name="cover_image">
-        </div> --}}
-    </fieldset>
-
     <section class="section-blog-block-editor-field" style="margin: 40px 0;">
         <div class="blog-block-editor-field__title-box">
             <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }}</h2>
