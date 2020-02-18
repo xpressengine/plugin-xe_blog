@@ -19,6 +19,7 @@
         <input type="text" name="gallery_group_id" value="{{ Request::old('gallery_group_id') }}">
         <input type="text" name="thumbnail">
         <input type="text" name="cover_image">
+        <button type="submit" class="">저장</button>
     </div>
 
     <section class="section-blog-block-editor-field">
@@ -44,12 +45,6 @@
             <h2 class="components-panel__body-title">
                 <button type="button" aria-expanded="true" class="components-button components-panel__body-toggle">글 설정</button>
             </h2>
-            <div class="components-base-control">
-                <div class="components-base-control__field">
-                    <span class="components-base-control__label">제목</span>
-                    <input type="text" id="__f-title" class="components-text-control__input" name="f_title" value="{{ Request::old('title') }}" placeholder="title">
-                </div>
-            </div>
             <div class="components-base-control">
                 <div class="components-base-control__field">
                     <span class="components-base-control__label">부제목</span>
@@ -215,12 +210,15 @@
 
         wp.data.dispatch('core/edit-post').toggleFeature('welcomeGuide')
 
+        var $fieldPublishedAt = $('[name=published_at]')
+        var $fieldTitle = $('[name=title]')
+
         wp.data.subscribe(function (select) {
+            var title = wp.data.select('core/editor').getEditedPostAttribute('title')
             var publishedAt = wp.data.select('core/editor').getEditedPostAttribute('date')
             var dateString = XE.moment(publishedAt).format('YYYY-MM-DD HH:mm:ss')
-            var title = wp.data.select('core/editor').getEditedPostAttribute('title')
-            var $field = $('[name=published_at]').val(dateString)
-            {{-- $('[name=title]').val(title) --}}
+            $fieldTitle.val(title)
+            $fieldPublishedAt.val(dateString)
         })
 
         // 폼채우기
@@ -246,10 +244,10 @@
                 scrollTop: $('.blog-block-editor-field__title-box').offset().top
             });
         })
-        var $btnSubmit = $('<div style="padding: 0 4px;"><button type="submit" class="components-button is-button is-primary is-large"> 저장 </button></div>')
+        var $btnSubmit = $('<div style="padding: 0 4px;"><button type="button" class="components-button is-button is-primary is-large"> 저장 </button></div>')
         $('.edit-post-header__settings').prepend($btnSubmit)
         $btnSubmit.on('click', function () {
-            $(this).closest('form').submit()
+            $(this).closest('form')[0].submit()
         })
     })
 </script>
