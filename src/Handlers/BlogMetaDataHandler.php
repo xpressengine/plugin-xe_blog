@@ -58,7 +58,7 @@ class BlogMetaDataHandler implements Searchable, Jsonable
     public function getThumbnail($blog, $thumbnailType = 'spill', $dimension = 'L')
     {
         $thumbnailMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_THUMBNAIL)->get()->first();
-        if ($thumbnailMetaData === null) {
+        if ($thumbnailMetaData === null || !array_get($thumbnailMetaData, 'meta_data', false)) {
             return null;
         }
 
@@ -76,7 +76,7 @@ class BlogMetaDataHandler implements Searchable, Jsonable
     {
         $coverMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_IMAGE)->get()->first();
 
-        if ($coverMetaData === null) {
+        if ($coverMetaData === null || !array_get($coverMetaData, 'meta_data', false)) {
             return null;
         }
 

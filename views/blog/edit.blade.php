@@ -10,12 +10,11 @@
     {!! editor('xe_blog', [
         'content' => $blog->content,
         'cover' => true,
+        'title' => $blog->title,
+        'publishedAt' => $blog->published_at,
     ]) !!}
 
-    <br>
-    <br>
-
-    <div id="metaboxes" style="padding: 40px; display: none;">
+    <div id="metaboxes" style="display: none;">
         <input type="text" name="title" value="{{ $blog->title }}">
         <input type="text" name="sub_title" value="{{ $metaDataHandler->getSubTitle($blog) }}">
         @if ($blog->isPublic() === true)
@@ -33,12 +32,14 @@
         <input type="text" name="gallery_group_id" value="{{ $metaDataHandler->getGalleryGroupId($blog) }}">
         <input type="text" name="thumbnail">
         <input type="text" name="cover_image">
+        <button type="submit" class="__btn-submit">저장</button>
     </div>
 
     <section class="section-blog-block-editor-field">
         <div class="blog-block-editor-field__title-box">
-            <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }}</h2>
+            <h2 class="blog-block-editor-field__title">{{ xe_trans('xe::dynamicField') }} <i class="xi-angle-down"></i></h2>
         </div>
+
         <div class="blog-block-editor-filed-content">
             <div class="inner">
                 @foreach ($dynamicFields as $dynamicField)
@@ -49,10 +50,6 @@
             </div>
         </div>
     </section>
-
-    <div style="padding: 40px;">
-        <button type="submit" class="pull-right xe-btn xe-btn-lg xe-btn-primary"> 저장 </button>
-    </div>
 </form>
 
 <div id="sidebar-container" style="display: none;">
@@ -61,12 +58,6 @@
             <h2 class="components-panel__body-title">
                 <button type="button" aria-expanded="true" class="components-button components-panel__body-toggle">글 설정</button>
             </h2>
-            <div class="components-base-control">
-                <div class="components-base-control__field">
-                    <span class="components-base-control__label">제목</span>
-                    <input type="text" id="__f-title" class="components-text-control__input" name="f_title" value="{{ $blog->title }}" placeholder="title">
-                </div>
-            </div>
             <div class="components-base-control">
                 <div class="components-base-control__field">
                     <span class="components-base-control__label">부제목</span>
@@ -139,7 +130,7 @@
                             ]];
                         }
                     @endphp
-                    {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=thumbnail]', 'name' => 'thumbnail', 'files' => $files ]) !!}
+                    {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=thumbnail]', 'name' => 'thumbnail', 'limit' => 1, 'files' => $files ]) !!}
                 </div>
             </div>
             <div class="components-base-control">
@@ -147,7 +138,6 @@
                     <span class="components-base-control__label">커버 이미지</span>
                     @php
                         $cover_image = $metaDataHandler->getCoverImage($blog);
-                        if ($cover_image !== null)
                         $files = [];
                         if ($cover_image !== null) {
                             $files = [[
@@ -157,7 +147,7 @@
                             ]];
                         }
                     @endphp
-                    {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=cover_image]', 'name' => 'cover_image', 'files' => $files ]) !!}
+                    {!! uio('formMedialibraryImage', [ 'valueTarget' => 'file_id', 'field' => '#metaboxes [name=cover_image]', 'name' => 'cover_image', 'limit' => 1, 'files' => $files ]) !!}
                 </div>
             </div>
         </div>
@@ -258,18 +248,21 @@
 
         wp.data.dispatch('core/edit-post').toggleFeature('welcomeGuide')
 
+        var $fieldPublishedAt = $('[name=published_at]')
+        var $fieldTitle = $('[name=title]')
+
         wp.data.subscribe(function (select) {
-            var publishedAt = wp.data.select('core/editor').getEditedPostAttribute('date')
-            var dateString = XE.moment(publishedAt).format('YYYY-MM-DD HH:mm:ss')
             var title = wp.data.select('core/editor').getEditedPostAttribute('title')
-            var $field = $('[name=published_at]').val(dateString)
-            {{-- $('[name=title]').val(title) --}}
+            var publishedAt = wp.data.select('core/editor').getEditedPostAttribute('date')
+            var momentDate = window.XE.moment(publishedAt)
+
+            $fieldTitle.val(title)
+            if (momentDate.isValid()) {
+                $fieldPublishedAt.val(momentDate.format('YYYY-MM-DD HH:mm:ss'))
+            }
         })
 
         // 폼채우기
-        $(document).on('change', '#__f-title', function () {
-            $('[name=title]').val($(this).val())
-        })
         $(document).on('change', '#__f-sub-title', function () {
             $('[name=sub_title]').val($(this).val())
         })
@@ -281,6 +274,18 @@
         })
         $(document).on('change', '#__f-slug', function () {
             $('[name=slug]').val($(this).val())
+        })
+
+        $('.blog-block-editor-field__title-box').on('click', function () {
+            $('.section-blog-block-editor-field').toggleClass('section-blog-block-editor-field--open')
+            $('body, html').animate({
+                scrollTop: $('.blog-block-editor-field__title-box').offset().top
+            });
+        })
+        var $btnSubmit = $('<div style="padding: 0 4px;"><button type="submit" class="components-button is-button is-primary is-large"> 저장 </button></div>')
+        $('.edit-post-header__settings').prepend($btnSubmit)
+        $btnSubmit.on('click', function () {
+            $('.__btn-submit').click()
         })
     })
 </script>
