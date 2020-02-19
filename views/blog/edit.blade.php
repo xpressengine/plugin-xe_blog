@@ -32,7 +32,7 @@
         <input type="text" name="gallery_group_id" value="{{ $metaDataHandler->getGalleryGroupId($blog) }}">
         <input type="text" name="thumbnail">
         <input type="text" name="cover_image">
-        <button type="submit" class="">저장</button>
+        <button type="submit" class="__btn-submit">저장</button>
     </div>
 
     <section class="section-blog-block-editor-field">
@@ -138,7 +138,6 @@
                     <span class="components-base-control__label">커버 이미지</span>
                     @php
                         $cover_image = $metaDataHandler->getCoverImage($blog);
-                        if ($cover_image !== null)
                         $files = [];
                         if ($cover_image !== null) {
                             $files = [[
@@ -286,7 +285,7 @@
         var $btnSubmit = $('<div style="padding: 0 4px;"><button type="submit" class="components-button is-button is-primary is-large"> 저장 </button></div>')
         $('.edit-post-header__settings').prepend($btnSubmit)
         $btnSubmit.on('click', function () {
-            $(this).closest('form')[0].submit()
+            $('.__btn-submit').click()
         })
     })
 </script>

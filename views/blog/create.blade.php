@@ -19,7 +19,7 @@
         <input type="text" name="gallery_group_id" value="{{ Request::old('gallery_group_id') }}">
         <input type="text" name="thumbnail">
         <input type="text" name="cover_image">
-        <button type="submit" class="">저장</button>
+        <button type="submit" class="__btn-submit">저장</button>
     </div>
 
     <section class="section-blog-block-editor-field">
@@ -250,7 +250,7 @@
         var $btnSubmit = $('<div style="padding: 0 4px;"><button type="button" class="components-button is-button is-primary is-large"> 저장 </button></div>')
         $('.edit-post-header__settings').prepend($btnSubmit)
         $btnSubmit.on('click', function () {
-            $(this).closest('form')[0].submit()
+            $('.__btn-submit').click()
         })
     })
 </script>
