@@ -56,7 +56,7 @@ class BlogHandler extends DocumentHandler implements Searchable, Jsonable, Order
 
         if (isset($attributes['titleWithContent']) === true) {
             $query = $query->where('title', 'like', '%' . $attributes['titleWithContent'] . '%')
-                ->orWhere('content', 'like', '%' . $attributes['titleWithContent'] . '%');
+                ->orWhere('pure_content', 'like', '%' . $attributes['titleWithContent'] . '%');
         }
 
         if (isset($attributes['title']) === true) {
