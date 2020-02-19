@@ -255,7 +255,7 @@
         wp.data.subscribe(function (select) {
             var title = wp.data.select('core/editor').getEditedPostAttribute('title')
             var publishedAt = wp.data.select('core/editor').getEditedPostAttribute('date')
-            var momentDate = window.XE.moment(date)
+            var momentDate = window.XE.moment(publishedAt)
 
             $fieldTitle.val(title)
             if (momentDate.isValid()) {
