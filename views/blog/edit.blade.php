@@ -255,9 +255,12 @@
         wp.data.subscribe(function (select) {
             var title = wp.data.select('core/editor').getEditedPostAttribute('title')
             var publishedAt = wp.data.select('core/editor').getEditedPostAttribute('date')
-            var dateString = XE.moment(publishedAt).format('YYYY-MM-DD HH:mm:ss')
+            var momentDate = window.XE.moment(date)
+
             $fieldTitle.val(title)
-            $fieldPublishedAt.val(dateString)
+            if (momentDate.isValid()) {
+                $fieldPublishedAt.val(momentDate.format('YYYY-MM-DD HH:mm:ss'))
+            }
         })
 
         // 폼채우기
