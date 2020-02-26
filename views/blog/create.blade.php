@@ -19,6 +19,7 @@
         <input type="text" name="gallery_group_id" value="{{ Request::old('gallery_group_id') }}">
         <input type="text" name="thumbnail">
         <input type="text" name="cover_image">
+        <textarea name="summary">{{ Request::old('summary') }}</textarea>
         <button type="submit" class="__btn-submit">저장</button>
     </div>
 
@@ -53,6 +54,18 @@
             </div>
             <div class="components-base-control">
                 <div class="components-base-control__field">
+                    <span class="components-base-control__label">Slug</span>
+                    <input type="text" id="__f-slug" class="components-text-control__input" name="f_slug" value="{{ Request::old('slug') }}">
+                </div>
+            </div>
+            <div class="components-base-control">
+                <div class="components-base-control__field">
+                    <span class="components-base-control__label">요약 (optional)</span>
+                    <textarea id="__f-summary" class="components-text-control__input" name="f_summary">{{ Request::old('summary') }}</textarea>
+                </div>
+            </div>
+            <div class="components-base-control">
+                <div class="components-base-control__field">
                     <span class="components-base-control__label">공개 속성</span>
                     <select id="__f-blog-status" class="components-select-control__input">
                         <option value="public">공개</option>
@@ -77,7 +90,7 @@
                             @endif
                         </label>
                         <div class="__taxonomy-field">
-                            <div class="components-base-control__field">
+                            <div class="components-base-control__field" data-required="required">
                                 {!! uio('uiobject/board@select', [
                                     'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
                                     'label' => xe_trans($taxonomy->name),
@@ -122,12 +135,6 @@
                 <div class="components-base-control__field">
                     <span class="components-base-control__label">배경 컬러</span>
                     <input type="text" id="__f-background-color" class="components-text-control__input" name="f_background_color" value="{{ Request::old('background_color') }}">
-                </div>
-            </div>
-            <div class="components-base-control">
-                <div class="components-base-control__field">
-                    <span class="components-base-control__label">Slug</span>
-                    <input type="text" id="__f-slug" class="components-text-control__input" name="f_slug" value="{{ Request::old('slug') }}">
                 </div>
             </div>
         </div>
@@ -225,20 +232,24 @@
         })
 
         // 폼채우기
+        var $metaboxes = $('#metaboxes')
         $(document).on('change', '#__f-title', function () {
-            $('[name=title]').val($(this).val())
+            $metaboxes.find('[name=title]').val($(this).val())
         })
         $(document).on('change', '#__f-sub-title', function () {
-            $('[name=sub_title]').val($(this).val())
+            $metaboxes.find('[name=sub_title]').val($(this).val())
         })
         $(document).on('change', '#__f-blog-status', function () {
-            $('[name=blog_status]').val($(this).val())
+            $metaboxes.find('[name=blog_status]').val($(this).val())
         })
         $(document).on('change', '#__f-background-color', function () {
-            $('[name=background_color]').val($(this).val())
+            $metaboxes.find('[name=background_color]').val($(this).val())
         })
         $(document).on('change', '#__f-slug', function () {
-            $('[name=slug]').val($(this).val())
+            $metaboxes.find('[name=slug]').val($(this).val())
+        })
+        $(document).on('change', '#__f-summary', function () {
+            $metaboxes.find('[name=summary]').val($(this).val())
         })
 
         $('.blog-block-editor-field__title-box').on('click', function () {
