@@ -90,7 +90,7 @@
                             @endif
                         </label>
                         <div class="__taxonomy-field">
-                            <div class="components-base-control__field" data-required="required">
+                            <div class="components-base-control__field" @if (app('xe.blog.taxonomyHandler')->getTaxonomyInstanceConfig($taxonomy->id)->get('require', false) === true) data-required="required" @endif data-required-title="{{ xe_trans($taxonomy->name) }}">
                                 {!! uio('uiobject/board@select', [
                                     'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
                                     'label' => xe_trans($taxonomy->name),
@@ -159,8 +159,8 @@
 
 <script>
     $(function () {
-
         var $bannerGroups = $('.__f-banner-group')
+        var $metaboxes = $('#metaboxes')
         $bannerGroups.each(function () {
             var $container = $(this)
             var $field = $container.find('.__banner-group-id')
@@ -217,22 +217,25 @@
 
         wp.data.dispatch('core/edit-post').toggleFeature('welcomeGuide')
 
-        var $fieldPublishedAt = $('[name=published_at]')
-        var $fieldTitle = $('[name=title]')
+        var $fieldPublishedAt = $metaboxes.find('[name=published_at]')
+        var $fieldTitle = $metaboxes.find('[name=title]')
 
         wp.data.subscribe(function (select) {
             var title = wp.data.select('core/editor').getEditedPostAttribute('title')
             var publishedAt = wp.data.select('core/editor').getEditedPostAttribute('date')
             var momentDate = window.XE.moment(publishedAt)
 
-            $fieldTitle.val(title)
+            if (typeof title !== 'undefined' && title) {
+                $fieldTitle.val(title)
+            }
+
             if (momentDate.isValid()) {
                 $fieldPublishedAt.val(momentDate.format('YYYY-MM-DD HH:mm:ss'))
             }
         })
 
         // 폼채우기
-        var $metaboxes = $('#metaboxes')
+
         $(document).on('change', '#__f-title', function () {
             $metaboxes.find('[name=title]').val($(this).val())
         })

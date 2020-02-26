@@ -103,7 +103,7 @@
                                     <em style="color: red;">(필수)</em>
                                 @endif
                             </label>
-                            <div class="components-base-control__field">
+                            <div class="components-base-control__field"@if (app('xe.blog.taxonomyHandler')->getTaxonomyInstanceConfig($taxonomy->id)->get('require', false) === true) data-required="required" @endif data-required-title="{{ xe_trans($taxonomy->name) }}">
                                 {!! uio('uiobject/board@select', [
                                     'name' => app('xe.blog.taxonomyHandler')->getTaxonomyItemAttributeName($taxonomy->id),
                                     'label' => xe_trans($taxonomy->name),
@@ -261,7 +261,9 @@
             var publishedAt = wp.data.select('core/editor').getEditedPostAttribute('date')
             var momentDate = window.XE.moment(publishedAt)
 
-            $fieldTitle.val(title)
+            if (typeof title !== 'undefined' && title) {
+                $fieldTitle.val(title)
+            }
             if (momentDate.isValid()) {
                 $fieldPublishedAt.val(momentDate.format('YYYY-MM-DD HH:mm:ss'))
             }
