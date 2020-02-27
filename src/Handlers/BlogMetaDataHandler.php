@@ -30,6 +30,10 @@ class BlogMetaDataHandler implements Searchable, Jsonable
             $data['sub_title'] = $subTitle;
         }
 
+        if ($summary = $this->getSummary($blog)) {
+            $data['summary'] = $summary;
+        }
+
         if ($thumbnail = $this->getThumbnail($blog)) {
             $data['thumbnail_url'] = $thumbnail->url();
         }
@@ -53,6 +57,16 @@ class BlogMetaDataHandler implements Searchable, Jsonable
         }
 
         return $subTitleMetaData['meta_data'];
+    }
+
+    public function getSummary($blog)
+    {
+        $summaryMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_SUMMARY)->get()->first();
+        if ($summaryMetaData === null) {
+            return '';
+        }
+
+        return $summaryMetaData['meta_data'];
     }
 
     public function getThumbnail($blog, $thumbnailType = 'spill', $dimension = 'L')
@@ -109,6 +123,7 @@ class BlogMetaDataHandler implements Searchable, Jsonable
     public function saveMetaData($blog, $inputs)
     {
         $this->saveSubTitle($blog, $inputs);
+        $this->saveSummary($blog, $inputs);
         $this->saveThumbnail($blog, $inputs);
         $this->saveCoverImage($blog, $inputs);
         $this->saveBackgroundColor($blog, $inputs);
@@ -132,6 +147,26 @@ class BlogMetaDataHandler implements Searchable, Jsonable
             }
 
             $subTitle->save();
+        }
+    }
+
+    protected function saveSummary($blog, $inputs)
+    {
+        if (isset($inputs['summary']) === true && $inputs['summary'] !== '') {
+            $summary = $blog->getMetaDataQuery(BlogMetaData::TYPE_SUMMARY)->get()->first();
+
+            if ($summary === null) {
+                $summary = new BlogMetaData();
+                $summary->fill([
+                    'blog_id' => $blog->id,
+                    'type' => BlogMetaData::TYPE_SUMMARY,
+                    'meta_data' => $inputs['summary']
+                ]);
+            } else {
+                $summary['meta_data'] = $inputs['summary'];
+            }
+
+            $summary->save();
         }
     }
 
@@ -229,6 +264,7 @@ class BlogMetaDataHandler implements Searchable, Jsonable
     public function deleteMetaData($blog)
     {
         $this->deleteSubTitle($blog);
+        $this->deleteSummary($blog);
         $this->deleteThumbnail($blog);
         $this->deleteCoverImage($blog);
         $this->deleteBackgroundColor($blog);
@@ -237,6 +273,11 @@ class BlogMetaDataHandler implements Searchable, Jsonable
     protected function deleteSubTitle($blog)
     {
         $blog->getMetaDataQuery(BlogMetaData::TYPE_SUB_TITLE)->delete();
+    }
+
+    protected function deleteSummary($blog)
+    {
+        $blog->getMetaDataQuery(BlogMetaData::TYPE_SUMMARY)->delete();
     }
 
     protected function deleteThumbnail($blog)

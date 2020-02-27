@@ -32,7 +32,7 @@
         <input type="text" name="gallery_group_id" value="{{ $metaDataHandler->getGalleryGroupId($blog) }}">
         <input type="text" name="thumbnail">
         <input type="text" name="cover_image">
-        <textarea name="summary">@if ($blog->summary !== null){{ $metaDataHandler->getSummary($blog) }}@endif</textarea>
+        <textarea name="summary">{{ $metaDataHandler->getSummary($blog) }}</textarea>
         <button type="submit" class="__btn-submit">저장</button>
     </div>
 
@@ -74,7 +74,7 @@
             <div class="components-base-control">
                 <div class="components-base-control__field">
                     <span class="components-base-control__label">요약 (optional)</span>
-                    <textarea id="__f-summary" class="components-text-control__input" name="f_summary">@if ($blog->summary !== null){{ $metaDataHandler->getSummary($blog) }}@endif</textarea>
+                    <textarea id="__f-summary" class="components-text-control__input" name="f_summary">{{ $metaDataHandler->getSummary($blog) }}</textarea>
                 </div>
             </div>
             <div class="components-base-control">
