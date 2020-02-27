@@ -116,13 +116,13 @@
             <div class="components-base-control">
                 <div class="components-base-control__field">
                     <span class="components-base-control__label">썸네일</span>
-                    {!! uio('formMedialibraryImage', [ 'name' => 'thumbnail', 'limit' => 1 ]) !!}
+                    {!! uio('formMedialibraryImage', [ 'name' => 'thumbnail', 'field' => '#metaboxes [name=thumbnail]', 'limit' => 1 ]) !!}
                 </div>
             </div>
             <div class="components-base-control">
                 <div class="components-base-control__field">
                     <span class="components-base-control__label">커버 이미지</span>
-                    {!! uio('formMedialibraryImage', [ 'name' => 'cover_image', 'limit' => 1 ]) !!}
+                    {!! uio('formMedialibraryImage', [ 'name' => 'cover_image', 'field' => '#metaboxes [name=thumbnail]', 'limit' => 1 ]) !!}
                 </div>
             </div>
         </div>
