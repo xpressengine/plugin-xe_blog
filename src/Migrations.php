@@ -69,9 +69,9 @@ class Migrations
     protected function createMetaTable()
     {
         Schema::create(self::META_TABLE_NAME, function (Blueprint $table) {
-            $table->increments('id');
+            $table->string('id', 36);
 
-            $table->string('blog_id', 36);
+            $table->string('blog_id', 36)->primary();
             $table->string('type');
             $table->text('meta_data');
 

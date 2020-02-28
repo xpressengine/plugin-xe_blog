@@ -17,5 +17,7 @@ class BlogMetaData extends DynamicModel
 
     protected $fillable = ['blog_id', 'type', 'meta_data'];
 
+    public $incrementing = false;
+
     public $timestamps = false;
 }

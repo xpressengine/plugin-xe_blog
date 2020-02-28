@@ -210,11 +210,26 @@ class BlogMetaDataHandler implements Searchable, Jsonable
                     'type' => BlogMetaData::TYPE_COVER_THUMBNAIL,
                     'meta_data' => $thumbnailFile
                 ]);
-            } else {
-                $thumbnailMetaData['meta_data'] = $thumbnailFile;
-            }
+                $thumbnailMetaData->save();
 
-            $thumbnailMetaData->save();
+                $file = XeStorage::find($thumbnailFile);
+                if ($file !== null) {
+                    XeStorage::bind($thumbnailMetaData->id, $file);
+                }
+            } else {
+                $file = XeStorage::find($thumbnailFile);
+                if ($file !== null && $thumbnailMetaData['meta_data'] !== $thumbnailFile) {
+                    XeStorage::bind($thumbnailMetaData->id, $file);
+
+                    $oldFile = XeStorage::find($thumbnailMetaData['meta_data']);
+                    if ($oldFile !== null) {
+                        XeStorage::unbind($thumbnailMetaData->id, $oldFile, true);
+                    }
+                }
+
+                $thumbnailMetaData['meta_data'] = $thumbnailFile;
+                $thumbnailMetaData->save();
+            }
         }
     }
 
@@ -222,8 +237,6 @@ class BlogMetaDataHandler implements Searchable, Jsonable
     {
         if (isset($inputs['cover_image']) === true) {
             $coverImageFile = $inputs['cover_image'];
-
-            // $file = XeStorage::upload($coverImageFile, self::UPLOAD_PATH);
 
             $coverImageMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_IMAGE)->get()->first();
             if ($coverImageMetaData === null) {
@@ -233,11 +246,26 @@ class BlogMetaDataHandler implements Searchable, Jsonable
                     'type' => BlogMetaData::TYPE_COVER_IMAGE,
                     'meta_data' => $coverImageFile
                 ]);
-            } else {
-                $coverImageMetaData['meta_data'] = $coverImageFile;
-            }
+                $coverImageMetaData->save();
 
-            $coverImageMetaData->save();
+                $file = XeStorage::find($coverImageFile);
+                if ($file !== null) {
+                    XeStorage::bind($coverImageMetaData->id, $file);
+                }
+            } else {
+                $file = XeStorage::find($coverImageFile);
+                if ($file !== null && $coverImageMetaData['meta_data'] !== $coverImageFile) {
+                    XeStorage::bind($coverImageMetaData->id, $file);
+
+                    $oldFile = XeStorage::find($coverImageMetaData['meta_data']);
+                    if ($oldFile !== null) {
+                        XeStorage::unbind($coverImageMetaData->id, $oldFile, true);
+                    }
+                }
+
+                $coverImageMetaData['meta_data'] = $coverImageFile;
+                $coverImageMetaData->save();
+            }
         }
     }
 
@@ -268,6 +296,7 @@ class BlogMetaDataHandler implements Searchable, Jsonable
         $this->deleteThumbnail($blog);
         $this->deleteCoverImage($blog);
         $this->deleteBackgroundColor($blog);
+        $this->deleteGroupId($blog);
     }
 
     protected function deleteSubTitle($blog)
@@ -288,7 +317,9 @@ class BlogMetaDataHandler implements Searchable, Jsonable
         }
 
         $file = XeStorage::find($thumbnailMetaData['meta_data']);
-        XeStorage::delete($file);
+        if ($file !== null) {
+            XeStorage::unbind($thumbnailMetaData->id, $file, true);
+        }
 
         $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_THUMBNAIL)->delete();
     }
@@ -301,7 +332,9 @@ class BlogMetaDataHandler implements Searchable, Jsonable
         }
 
         $file = XeStorage::find($coverImageMetaData['meta_data']);
-        XeStorage::delete($file);
+        if ($file !== null) {
+            XeStorage::unbind($coverImageMetaData->id, $file, true);
+        }
 
         $blog->getMetaDataQuery(BlogMetaData::TYPE_COVER_IMAGE)->delete();
     }
@@ -309,5 +342,10 @@ class BlogMetaDataHandler implements Searchable, Jsonable
     protected function deleteBackgroundColor($blog)
     {
         $blog->getMetaDataQuery(BlogMetaData::TYPE_BACKGROUND_COLOR)->delete();
+    }
+
+    protected function deleteGroupId($blog)
+    {
+        $blog->getMetaDataQuery(BlogMetaData::TYPE_GALLERY_GROUP_ID)->delete();
     }
 }
