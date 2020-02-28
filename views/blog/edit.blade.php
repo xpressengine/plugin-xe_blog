@@ -200,6 +200,7 @@
 <script>
     $(function () {
         var $bannerGroups = $('.__f-banner-group')
+        var $metaboxes = $('#metaboxes')
         $bannerGroups.each(function () {
             var $container = $(this)
             var $field = $container.find('.__banner-group-id')
@@ -272,7 +273,7 @@
         })
 
         // 폼채우기
-        var $metaboxes = $('#metaboxes')
+
         $(document).on('change', '#__f-sub-title', function () {
             $metaboxes.find('[name=sub_title]').val($(this).val())
         })
