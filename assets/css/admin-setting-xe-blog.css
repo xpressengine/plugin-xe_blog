@@ -174,9 +174,6 @@
     cursor: pointer;
     background-color: #f4f5f7;
   }
-  .admin-table-list > li:hover .item-content__item .item-content__item-info-text {
-    display: block;
-  }
   .admin-table-list > li:hover .item-content__item .item-content__item-meta {
     display: block;
   }
@@ -241,7 +238,6 @@
     padding-right: 0;
   }
   .admin-table-list .item-content__item .item-content__item-info-text {
-    display: none;
     position: absolute;
     top: 0;
   }
