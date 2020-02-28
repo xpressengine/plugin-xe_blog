@@ -64,12 +64,12 @@ class BlogSettingController extends Controller
         $dateFilterList = array_keys($dateFilterList);
 
         $stateTypeCounts = [
-            'all' => Blog::withTrashed()->count(),
-            'published' => Blog::published()->public()->count(),
-            'publishReserved' => Blog::publishReserved()->public()->count(),
-            'tempBlog' => Blog::temp()->count(),
-            'private' => Blog::private()->count(),
-            'trash' => Blog::onlyTrashed()->count()
+            'all' => Blog::blog()->withTrashed()->count(),
+            'published' => Blog::blog()->published()->public()->count(),
+            'publishReserved' => Blog::blog()->publishReserved()->public()->count(),
+            'tempBlog' => Blog::blog()->temp()->count(),
+            'private' => Blog::blog()->private()->count(),
+            'trash' => Blog::blog()->onlyTrashed()->count()
         ];
 
         return XePresenter::make('xe_blog::views.setting.blogs', compact(

@@ -5,6 +5,7 @@ namespace Xpressengine\Plugins\XeBlog\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Xpressengine\Document\Models\Document;
 use Xpressengine\Plugins\XeBlog\Handlers\BlogMetaDataHandler;
+use Xpressengine\Plugins\XeBlog\Plugin;
 use Xpressengine\Seo\SeoUsable;
 use Xpressengine\Tag\Tag;
 use Xpressengine\User\Models\Guest;
@@ -88,6 +89,11 @@ class Blog extends Document implements SeoUsable
     public function content()
     {
         return compile($this->instance_id, $this->content, $this->format === static::FORMAT_HTML);
+    }
+
+    public function scopeBlog($query)
+    {
+        return $query->where('type', Plugin::getId());
     }
 
     public function scopePublic($query)
