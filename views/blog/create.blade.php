@@ -176,16 +176,13 @@
                 $btnDelete.show()
             }
 
-            $field.on('change', function () {
-                $('[name=gallery_group_id]').val($(this).val())
-            })
-
             $container.on('click', '.__banner-group-create', function () {
                 var url = $(this).data('url')
                 $btnCreate.hide()
                 XE.post(url).then(function (res) {
                     $field.val(res.data.groupId)
                     groupId = res.data.groupId
+                    $metaboxes.find('[name=gallery_group_id]').val(groupId)
                     $btnEdit.show()
                     $btnDelete.show()
                 })
@@ -201,6 +198,11 @@
                 $btnEdit.hide()
                 $btnDelete.hide()
             })
+            if ($metaboxes.find('[name=gallery_group_id]').val()) {
+                $btnCreate.hide()
+                $btnEdit.show()
+                $btnDelete.show()
+            }
         })
 
         wp.data.dispatch('core/edit-post').setAvailableMetaBoxesPerLocation({
