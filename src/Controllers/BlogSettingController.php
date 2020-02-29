@@ -154,7 +154,7 @@ class BlogSettingController extends Controller
     public function editSetting(Request $request, $type = 'config')
     {
         $config = $this->configHandler->getBlogConfig();
-        $skinSection = new SkinSection('blog/show');
+        $skinSection = new SkinSection('blog');
 
         $dynamicFieldSection = new DynamicFieldSection(
             'documents_' . Plugin::getId(),

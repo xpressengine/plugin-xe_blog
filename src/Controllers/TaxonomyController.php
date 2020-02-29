@@ -23,6 +23,8 @@ class TaxonomyController extends Controller
     {
         $this->blogService = $blogService;
         $this->taxonomyHandler = $taxonomyHandler;
+
+        XePresenter::setSkinTargetId('blog');
     }
 
     protected function getTaxonomyConfigBySlug($segment)
@@ -67,6 +69,6 @@ class TaxonomyController extends Controller
         XePresenter::share('favoriteHandler', new BlogFavoriteHandler());
         XePresenter::share('taxonomyHandler', $this->taxonomyHandler);
 
-        return \XePresenter::make('xe_blog::views.blog.index', compact('blogs', 'taxonomies', 'blogConfig'));
+        return \XePresenter::make('index', compact('blogs', 'taxonomies', 'blogConfig'));
     }
 }

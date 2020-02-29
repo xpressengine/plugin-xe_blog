@@ -58,6 +58,8 @@ class BlogController extends Controller
 
         XePresenter::share('metaDataHandler', new BlogMetaDataHandler());
         XePresenter::share('favoriteHandler', $favoriteHandler);
+
+        XePresenter::setSkinTargetId('blog');
     }
 
     private function checkAllowPermission($action)
@@ -88,7 +90,7 @@ class BlogController extends Controller
 
         $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
 
-        return XePresenter::make('xe_blog::views.blog.create', compact('taxonomies', 'dynamicFields'));
+        return XePresenter::make('create', compact('taxonomies', 'dynamicFields'));
     }
 
     public function store(Request $request)
@@ -140,8 +142,6 @@ class BlogController extends Controller
             throw new AccessDeniedHttpException;
         }
 
-        XePresenter::setSkinTargetId('blog/show');
-
         $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
 
         return XePresenter::make('show', compact('blog', 'dynamicFields'));
@@ -164,7 +164,7 @@ class BlogController extends Controller
         $taxonomies = app('xe.blog.taxonomyHandler')->getTaxonomies();
         $dynamicFields = $this->dynamicFieldConfigHandler->gets('documents_' . Plugin::getId());
 
-        return XePresenter::make('xe_blog::views.blog.edit', compact('blog', 'dynamicFields', 'taxonomies'));
+        return XePresenter::make('edit', compact('blog', 'dynamicFields', 'taxonomies'));
     }
 
     public function update(Request $request)
