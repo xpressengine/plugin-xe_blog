@@ -111,6 +111,7 @@
                                 <div class="widget-bold-xe-blog-card-item-content__image-wrap" {{if meta_data.background_color}} style="background-color: {{:meta_data.background_color}};" {{/if}}>
                                     <div class="widget-bold-xe-blog-card-item-content__image-box">
                                         <div class="widget-bold-xe-blog-card-item-content__image" {{if meta_data.thumbnail_url}} style="background-image: url({{:meta_data.thumbnail_url}});"{{/if}}></div>
+                                        <img src="{{:meta_data.thumbnail_url}}" style="display:none;" />
                                     </div>
                                 </div>
                             {{/if}}
