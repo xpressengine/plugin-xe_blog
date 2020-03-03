@@ -50,6 +50,7 @@
                                     <div class="widget-bold-xe-blog-card-item-content__image-wrap" style="background-color: {{ $metaDataHandler->getBackgroundColor($blog) }} ;">
                                         <div class="widget-bold-xe-blog-card-item-content__image-box">
                                             <div class="widget-bold-xe-blog-card-item-content__image" style="background-image: url({{ $thumbnail->url() }});"></div>
+                                            <img src="{{ $thumbnail->url() }}" style="display:none;" />
                                         </div>
                                     </div>
                                 @endif
