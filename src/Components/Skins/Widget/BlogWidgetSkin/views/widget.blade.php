@@ -237,6 +237,7 @@
 
 <script>
 
+
     function FastAverageColorElement($element)
     {
         var $box = $element.closest('.widget-bold-xe-blog-card-item-content')
@@ -244,24 +245,24 @@
         var $image = $('<img />')
         $image.attr('src', imageUrl)
 
-        fac.getColorAsync($image[0], {
-            ignoredColor: [[0,0,0,255], [255,255,255,255]]
-        })
-            .then(function(color) {
-                $box.css('background-color', color.rgba)
-                console.log('Average color', color);
+        XE.DynamicLoadManager.jsLoad('https://unpkg.com/fast-average-color/dist/index.min.js', function () {
+                var fac = new FastAverageColor();
+                fac.getColorAsync($image[0], {
+                    ignoredColor: [[0,0,0,255], [255,255,255,255]]
+                })
+                    .then(function(color) {
+                        $box.css('background-color', color.rgba)
+                        console.log('Average color', color);
+                    })
+                    .catch(function(e) {
+                        console.log(e);
+                    });
             })
-            .catch(function(e) {
-                console.log(e);
-            });
     }
 
-    XE.DynamicLoadManager.jsLoad('https://unpkg.com/fast-average-color/dist/index.min.js', function () {
-        var fac = new FastAverageColor();
-        $(function() {
-            $('.widget-bold-xe-blog-card-item-content__image').each(function () {
-                FastAverageColorElement($(this))
-            })
+    $(function() {
+        $('.widget-bold-xe-blog-card-item-content__image').each(function () {
+            FastAverageColorElement($(this))
         })
     })
 </script>
