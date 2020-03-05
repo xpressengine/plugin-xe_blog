@@ -1,6 +1,9 @@
 {{ \XeFrontend::css([
     'plugins/xe_blog/src/Components/Skins/Widget/BlogWidgetSkin/assets/css/widget-xe-blog-list.css'
 ])->load() }}
+{{ \XeFrontend::js([
+    'https://unpkg.com/fast-average-color/dist/index.min.js'
+])->appendTo('head')->load() }}
 
 <section class="section-widget-bold-xe-blog-list-story">
     <div class="widget-bold-xe-blog-category clearfix">
@@ -236,12 +239,6 @@
 </script>
 
 <script>
-    var facLoaded = false
-    if (typeof FastAverageColor !== 'function') {
-        facLoaded = true
-        XE.DynamicLoadManager.jsLoad('https://unpkg.com/fast-average-color/dist/index.min.js')
-    }
-
     function FastAverageColorElement($element)
     {
         var $box = $element.closest('.widget-bold-xe-blog-card-item-content')
@@ -249,16 +246,12 @@
         var $image = $('<img />')
         $image.attr('src', imageUrl)
 
-        if (!facLoaded && typeof FastAverageColor !== 'function') {
-            XE.DynamicLoadManager.jsLoad('https://unpkg.com/fast-average-color/dist/index.min.js')
-        }
-
         var fac = new FastAverageColor();
         fac.getColorAsync($image[0], {
             ignoredColor: [[0,0,0,255], [255,255,255,255]]
         })
             .then(function(color) {
-                $box.css('background-color', color.rgba)
+                $box.css('background-color', color.hex)
                 console.log('Average color', color);
             })
             .catch(function(e) {
