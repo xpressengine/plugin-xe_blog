@@ -229,21 +229,23 @@
 </script>
 
 <script>
-    var fac = new FastAverageColor();
-    $(function() {
-        $('.widget-bold-xe-blog-card-item-content__image').each(function () {
-            var $this = $(this)
-            var $box = $this.closest('.widget-bold-xe-blog-card-item-content')
-            var imageUrl = $this.data('image-url')
+    XE.DynamicLoadManager.jsLoad('https://unpkg.com/fast-average-color/dist/index.min.js', function () {
+        var fac = new FastAverageColor();
+        $(function() {
+            $('.widget-bold-xe-blog-card-item-content__image').each(function () {
+                var $this = $(this)
+                var $box = $this.closest('.widget-bold-xe-blog-card-item-content')
+                var imageUrl = $this.data('image-url')
 
-            fac.getColorAsync(imageUrl)
-                .then(function(color) {
-                    $box.css('background-color', color.rgba)
-                    console.log('Average color', color);
-                })
-                .catch(function(e) {
-                    console.log(e);
-                });
+                fac.getColorAsync(imageUrl)
+                    .then(function(color) {
+                        $box.css('background-color', color.rgba)
+                        console.log('Average color', color);
+                    })
+                    .catch(function(e) {
+                        console.log(e);
+                    });
+            })
         })
     })
 </script>
