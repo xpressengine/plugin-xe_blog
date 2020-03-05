@@ -251,7 +251,11 @@
             ignoredColor: [[0,0,0,255], [255,255,255,255]]
         })
             .then(function(color) {
-                $box.css('background-color', color.hex)
+                if(color.hex !== '#000000') {
+                    $box.css('background-color', color.hex)
+                } else {
+                    $box.css('background-color', '#fafafa')
+                }
                 console.log('Average color', color);
             })
             .catch(function(e) {
