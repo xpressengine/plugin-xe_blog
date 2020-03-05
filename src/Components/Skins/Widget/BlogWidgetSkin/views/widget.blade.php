@@ -49,8 +49,7 @@
                                 @if ($thumbnail !== null)
                                     <div class="widget-bold-xe-blog-card-item-content__image-wrap" style="background-color: {{ $metaDataHandler->getBackgroundColor($blog) }} ;">
                                         <div class="widget-bold-xe-blog-card-item-content__image-box">
-                                            <div class="widget-bold-xe-blog-card-item-content__image" style="background-image: url({{ $thumbnail->url() }});"></div>
-                                            <img src="{{ $thumbnail->url() }}" style="display:none;" />
+                                            <div class="widget-bold-xe-blog-card-item-content__image" data-image-url="{{ $thumbnail->url() }}" style="background-image: url({{ $thumbnail->url() }});"></div>
                                         </div>
                                     </div>
                                 @endif
@@ -110,8 +109,7 @@
                             {{if meta_data.thumbnail_url}}
                                 <div class="widget-bold-xe-blog-card-item-content__image-wrap" {{if meta_data.background_color}} style="background-color: {{:meta_data.background_color}};" {{/if}}>
                                     <div class="widget-bold-xe-blog-card-item-content__image-box">
-                                        <div class="widget-bold-xe-blog-card-item-content__image" {{if meta_data.thumbnail_url}} style="background-image: url({{:meta_data.thumbnail_url}});"{{/if}}></div>
-                                        <img src="{{:meta_data.thumbnail_url}}" style="display:none;" />
+                                        <div class="widget-bold-xe-blog-card-item-content__image" {{if meta_data.thumbnail_url}} data-image-url="{{:meta_data.thumbnail_url}}" style="background-image: url({{:meta_data.thumbnail_url}});"{{/if}}></div>
                                     </div>
                                 </div>
                             {{/if}}
@@ -226,6 +224,26 @@
                     filterOptions.page = res.data.page.currentPage
                 }
             })
+        })
+    })
+</script>
+
+<script>
+    var fac = new FastAverageColor();
+    $(function() {
+        $('.widget-bold-xe-blog-card-item-content__image').each(function () {
+            var $this = $(this)
+            var $box = $this.closest('.widget-bold-xe-blog-card-item-content')
+            var imageUrl = $this.data('image-url')
+
+            fac.getColorAsync(imageUrl)
+                .then(function(color) {
+                    $box.css('background-color', color.rgba)
+                    console.log('Average color', color);
+                })
+                .catch(function(e) {
+                    console.log(e);
+                });
         })
     })
 </script>
