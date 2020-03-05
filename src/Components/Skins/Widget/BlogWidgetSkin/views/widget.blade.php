@@ -252,11 +252,7 @@
         })
             .then(function(color) {
                 $box.css('background-color', color.hex)
-                console.log('Average color', color);
             })
-            .catch(function(e) {
-                console.log(e);
-            });
     }
 
     $(function() {
