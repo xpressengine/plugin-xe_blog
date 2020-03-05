@@ -190,6 +190,9 @@
                 })
 
                 $blogListStory.find('.widget-bold-xe-blog-card-list').html(tmpl(res.data))
+                $blogListStory.find('.widget-bold-xe-blog-card-item-content__image').each(function () {
+                    FastAverageColorElement($(this))
+                })
                 {{-- 더보기 영역 토글 --}}
                 if (!res.data.page.hasMorePages) {
                     $blogListStory.find('.__blog-more-wrap').hide()
@@ -215,6 +218,10 @@
                 })
 
                 $blogListStory.find('.widget-bold-xe-blog-card-list').append(tmpl(res.data))
+                $blogListStory.find('.widget-bold-xe-blog-card-item-content__image').each(function () {
+                    FastAverageColorElement($(this))
+                })
+
                 {{-- 더보기 영역 토글 --}}
                 if (!res.data.page.hasMorePages) {
                     $blogListStory.find('.__blog-more-wrap').hide()
@@ -229,26 +236,31 @@
 </script>
 
 <script>
+
+    function FastAverageColorElement($element)
+    {
+        var $box = $element.closest('.widget-bold-xe-blog-card-item-content')
+        var imageUrl = $element.data('image-url')
+        var $image = $('<img />')
+        $image.attr('src', imageUrl)
+
+        fac.getColorAsync($image[0], {
+            ignoredColor: [[0,0,0,255], [255,255,255,255]]
+        })
+            .then(function(color) {
+                $box.css('background-color', color.rgba)
+                console.log('Average color', color);
+            })
+            .catch(function(e) {
+                console.log(e);
+            });
+    }
+
     XE.DynamicLoadManager.jsLoad('https://unpkg.com/fast-average-color/dist/index.min.js', function () {
         var fac = new FastAverageColor();
         $(function() {
             $('.widget-bold-xe-blog-card-item-content__image').each(function () {
-                var $this = $(this)
-                var $box = $this.closest('.widget-bold-xe-blog-card-item-content')
-                var imageUrl = $this.data('image-url')
-                var $image = $('<img />')
-                $image.attr('src', imageUrl)
-
-                fac.getColorAsync($image, {
-                    ignoredColor: [[0,0,0,255], [255,255,255,255]]
-                })
-                    .then(function(color) {
-                        $box.css('background-color', color.rgba)
-                        console.log('Average color', color);
-                    })
-                    .catch(function(e) {
-                        console.log(e);
-                    });
+                FastAverageColorElement($(this))
             })
         })
     })
