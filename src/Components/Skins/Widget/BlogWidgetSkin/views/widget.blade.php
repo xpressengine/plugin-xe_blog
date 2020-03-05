@@ -236,7 +236,11 @@
 </script>
 
 <script>
-
+    var facLoaded = false
+    if (typeof FastAverageColor !== 'function') {
+        facLoaded = true
+        XE.DynamicLoadManager.jsLoad('https://unpkg.com/fast-average-color/dist/index.min.js')
+    }
 
     function FastAverageColorElement($element)
     {
@@ -245,19 +249,21 @@
         var $image = $('<img />')
         $image.attr('src', imageUrl)
 
-        XE.DynamicLoadManager.jsLoad('https://unpkg.com/fast-average-color/dist/index.min.js', function () {
-                var fac = new FastAverageColor();
-                fac.getColorAsync($image[0], {
-                    ignoredColor: [[0,0,0,255], [255,255,255,255]]
-                })
-                    .then(function(color) {
-                        $box.css('background-color', color.rgba)
-                        console.log('Average color', color);
-                    })
-                    .catch(function(e) {
-                        console.log(e);
-                    });
+        if (!facLoaded && typeof FastAverageColor !== 'function') {
+            XE.DynamicLoadManager.jsLoad('https://unpkg.com/fast-average-color/dist/index.min.js')
+        }
+
+        var fac = new FastAverageColor();
+        fac.getColorAsync($image[0], {
+            ignoredColor: [[0,0,0,255], [255,255,255,255]]
+        })
+            .then(function(color) {
+                $box.css('background-color', color.rgba)
+                console.log('Average color', color);
             })
+            .catch(function(e) {
+                console.log(e);
+            });
     }
 
     $(function() {
