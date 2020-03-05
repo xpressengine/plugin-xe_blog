@@ -256,11 +256,7 @@
                 } else {
                     $box.css('background-color', '#fafafa')
                 }
-                console.log('Average color', color);
             })
-            .catch(function(e) {
-                console.log(e);
-            });
     }
 
     $(function() {
