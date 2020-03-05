@@ -236,8 +236,12 @@
                 var $this = $(this)
                 var $box = $this.closest('.widget-bold-xe-blog-card-item-content')
                 var imageUrl = $this.data('image-url')
+                var $image = $('<img />')
+                $image.attr('src', imageUrl)
 
-                fac.getColorAsync(imageUrl)
+                fac.getColorAsync($image, {
+                    ignoredColor: [[0,0,0,255], [255,255,255,255]]
+                })
                     .then(function(color) {
                         $box.css('background-color', color.rgba)
                         console.log('Average color', color);
