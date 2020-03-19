@@ -69,6 +69,6 @@ class TaxonomyController extends Controller
         XePresenter::share('favoriteHandler', new BlogFavoriteHandler());
         XePresenter::share('taxonomyHandler', $this->taxonomyHandler);
 
-        return \XePresenter::make('index', compact('blogs', 'taxonomies', 'blogConfig'));
+        return \XePresenter::make('index', compact('blogs', 'taxonomies', 'blogConfig', 'targetTaxonomyItemConfig'));
     }
 }
