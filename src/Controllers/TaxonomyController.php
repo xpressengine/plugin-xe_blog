@@ -57,6 +57,7 @@ class TaxonomyController extends Controller
         }
 
         $blogs = $this->blogService->getItems([
+            'perPage' => 1000,
             'taxonomy_id' => $taxonomyConfig->get('taxonomy_id'),
             'taxonomy_item_id' => $targetTaxonomyItemConfig->get('taxonomyItemId')
         ]);
