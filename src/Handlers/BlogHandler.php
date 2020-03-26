@@ -63,6 +63,23 @@ class BlogHandler extends DocumentHandler implements Searchable, Jsonable, Order
             $query = $query->where('title', 'like', '%' . $attributes['title'] . '%');
         }
 
+        if (isset($attributes['tagName']) === true) {
+            $targetTags = \XeTag::similar($attributes['tagName'], 15, Plugin::getId());
+
+            $tagUsingBlogItemIds = [];
+            foreach ($targetTags as $targetTag) {
+                $tagUsingBlogItems = \XeTag::fetchByTag($targetTag['id']);
+
+                foreach ($tagUsingBlogItems as $tagUsingBlogItem) {
+                    $tagUsingBlogItemIds[] = $tagUsingBlogItem->taggable_id;
+                }
+            }
+
+            $tagUsingBlogItemIds = array_unique($tagUsingBlogItemIds);
+
+            $query = $query->whereIn('id', $tagUsingBlogItemIds);
+        }
+        
         return $query;
     }
 
