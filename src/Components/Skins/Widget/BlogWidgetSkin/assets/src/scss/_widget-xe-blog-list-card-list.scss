@@ -113,7 +113,16 @@
 
 .widget-bold-xe-blog-card-item-meta__category-text {
   font-family: 'Spoqa Han Sans', sans-serif;
-  font-size: 14px;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 400;
+  color: $black;
+}
+
+.widget-bold-xe-blog-card-item__category-character {
+  display: inline-block;
+  margin: 0 6px;
+  font-size: 8px;
   line-height: 18px;
   font-weight: 400;
   color: $black;
