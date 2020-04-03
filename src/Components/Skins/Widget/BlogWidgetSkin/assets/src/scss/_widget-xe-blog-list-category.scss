@@ -14,6 +14,12 @@
   padding: 25px 0;
   list-style: none;
   -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 
   > li {
     display: inline-block;

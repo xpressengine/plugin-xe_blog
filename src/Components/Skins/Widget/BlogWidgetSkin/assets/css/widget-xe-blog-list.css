@@ -157,6 +157,15 @@
   padding: 25px 0;
   list-style: none;
   -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.widget-bold-xe-blog-category-list::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera*/
 }
 
 .widget-bold-xe-blog-category-list > li {
