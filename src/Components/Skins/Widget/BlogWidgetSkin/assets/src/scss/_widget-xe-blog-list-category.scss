@@ -18,8 +18,12 @@
   > li {
     display: inline-block;
     margin: 5px 0;
-    padding: 0 30px;
+    padding: 0 12px;
     list-style: none;
+
+    &:first-child {
+      padding-left: 0;
+    }
 
     &.on {
       .widget-bold-xe-blog-category-list__link {
@@ -58,7 +62,12 @@
     overflow-x: visible;
 
     > li {
+      padding: 0 30px;
       margin: 10px 0;
+
+      &:first-child {
+        padding-left: 30px;
+      }
     }
   }
 }

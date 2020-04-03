@@ -162,8 +162,12 @@
 .widget-bold-xe-blog-category-list > li {
   display: inline-block;
   margin: 5px 0;
-  padding: 0 30px;
+  padding: 0 12px;
   list-style: none;
+}
+
+.widget-bold-xe-blog-category-list > li:first-child {
+  padding-left: 0;
 }
 
 .widget-bold-xe-blog-category-list > li.on .widget-bold-xe-blog-category-list__link {
@@ -200,7 +204,11 @@
     overflow-x: visible;
   }
   .widget-bold-xe-blog-category-list > li {
+    padding: 0 30px;
     margin: 10px 0;
+  }
+  .widget-bold-xe-blog-category-list > li:first-child {
+    padding-left: 30px;
   }
 }
 
