@@ -4,6 +4,8 @@
 @expose_route('boldjournal.gallery.edit_banner_group')
 
 <form method="post" class="metabox-base-form" action="{{ route('blog.store') }}" enctype="multipart/form-data">
+    {!! csrf_field() !!}
+    
     {!! editor('xe_blog', [
         'content' => Request::old('content'),
         'cover' => true,
