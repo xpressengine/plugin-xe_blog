@@ -271,7 +271,7 @@ class BlogMetaDataHandler implements Searchable, Jsonable
 
     protected function saveBackgroundColor($blog, $inputs)
     {
-        if (isset($inputs['background_color']) === true && $inputs['background_color'] !== '') {
+        if (isset($inputs['background_color']) === true) {
             $backgroundColorMetaData = $blog->getMetaDataQuery(BlogMetaData::TYPE_BACKGROUND_COLOR)->get()->first();
 
             if ($backgroundColorMetaData === null) {
