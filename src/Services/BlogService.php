@@ -201,10 +201,9 @@ class BlogService
             $this->metaDataHandler->saveMetaData($blog, $inputs);
             $this->taxonomyHandler->updateTaxonomy($blog, $inputs);
             $this->blogSlugHandler->updateSlug($blog, $inputs);
-
-            if (isset($inputs['_tags']) && empty($inputs['_tags']) === false) {
-                $this->tagHandler->set($blog->id, $inputs['_tags'], Plugin::getId());
-            }
+            
+            $inputTags = $inputs['_tags'] ?? [];
+            $this->tagHandler->set($blog->id, $inputTags, Plugin::getId());
         } catch (\Exception $e) {
             XeDB::rollback();
 
