@@ -58,7 +58,7 @@ class BlogSettingController extends Controller
         $blogs = $this->getSettingBlogs($request);
         $taxonomies = $this->taxonomyHandler->getTaxonomies();
 
-        $dateFilterList = Blog::withTrashed()->orderByDesc('created_at')->get()->groupBy(function ($item) {
+        $dateFilterList = Blog::withTrashed()->orderByDesc('published_at')->get()->groupBy(function ($item) {
             return $item->created_at->format('Y-m');
         })->toArray();
         $dateFilterList = array_keys($dateFilterList);

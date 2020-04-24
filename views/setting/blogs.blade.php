@@ -96,7 +96,8 @@
                             @foreach ($taxonomies as $taxonomy)
                                 <div class="item-content__item">{{ xe_trans($taxonomy->name) }}</div>
                             @endforeach
-                            <div class="item-content__item item-content__item--date">일자</div>
+                            <div class="item-content__item item-content__item--date">발행일</div>
+                            <div class="item-content__item item-content__item--date">수정일</div>
                         </div>
                     </li>
 
@@ -159,7 +160,17 @@
 
                                     <div class="item-content__item item-content__item--date">
                                         <div class="item-content__item-inner">
-                                            <span class="item-content__item-text-item">일자</span>
+                                            <span class="item-content__item-text-item">발행일</span>
+
+                                            <span class="item-content__item-text">
+                                                <span class="item-content__item-text-date">{{ $blog->published_at->format('Y-m-d H:i:s') }}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="item-content__item item-content__item--date">
+                                        <div class="item-content__item-inner">
+                                            <span class="item-content__item-text-item">수정일</span>
 
                                             <span class="item-content__item-text">
                                                 @if ($blog->isPublished() === true)
