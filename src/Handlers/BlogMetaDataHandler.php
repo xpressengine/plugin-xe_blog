@@ -132,7 +132,7 @@ class BlogMetaDataHandler implements Searchable, Jsonable
 
     protected function saveSubTitle($blog, $inputs)
     {
-        if (isset($inputs['sub_title']) === true && $inputs['sub_title'] !== '') {
+        if (isset($inputs['sub_title']) === true) {
             $subTitle = $blog->getMetaDataQuery(BlogMetaData::TYPE_SUB_TITLE)->get()->first();
 
             if ($subTitle === null) {
@@ -152,7 +152,7 @@ class BlogMetaDataHandler implements Searchable, Jsonable
 
     protected function saveSummary($blog, $inputs)
     {
-        if (isset($inputs['summary']) === true && $inputs['summary'] !== '') {
+        if (isset($inputs['summary']) === true) {
             $summary = $blog->getMetaDataQuery(BlogMetaData::TYPE_SUMMARY)->get()->first();
 
             if ($summary === null) {
@@ -172,21 +172,22 @@ class BlogMetaDataHandler implements Searchable, Jsonable
 
     protected function saveGalleryGroupId($blog, $inputs)
     {
+        //TODO 갤러리 삭제 
         if (isset($inputs['gallery_group_id']) === true && $inputs['gallery_group_id'] !== '') {
-            $subTitle = $blog->getMetaDataQuery(BlogMetaData::TYPE_GALLERY_GROUP_ID)->get()->first();
+            $galleryGroup = $blog->getMetaDataQuery(BlogMetaData::TYPE_GALLERY_GROUP_ID)->get()->first();
 
-            if ($subTitle === null) {
-                $subTitle = new BlogMetaData();
-                $subTitle->fill([
+            if ($galleryGroup === null) {
+                $galleryGroup = new BlogMetaData();
+                $galleryGroup->fill([
                     'blog_id' => $blog->id,
                     'type' => BlogMetaData::TYPE_GALLERY_GROUP_ID,
                     'meta_data' => $inputs['gallery_group_id']
                 ]);
             } else {
-                $subTitle['meta_data'] = $inputs['gallery_group_id'];
+                $galleryGroup['meta_data'] = $inputs['gallery_group_id'];
             }
 
-            $subTitle->save();
+            $galleryGroup->save();
         }
     }
 
