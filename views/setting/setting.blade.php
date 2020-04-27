@@ -41,59 +41,59 @@
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <div class="clearfix">
-                                                    <label>새 글 표시</label>
+                                                    <label>새 글 표시 기준 시간</label>
                                                 </div>
                                                 <input type="text" name="newBlogTime" class="form-control" value="{{ $config->get('newBlogTime') }}" />
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <div class="clearfix">
-                                                    <label>추천</label>
-                                                </div>
-                                                <select name="assent" class="form-control">
-                                                    <option value=true @if ($config->get('assent') === true) selected @endif>사용함</option>
-                                                    <option value=false @if ($config->get('assent') === false) selected @endif>사용안함</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <div class="clearfix">
-                                                    <label>비추천</label>
-                                                </div>
-                                                <select name="dissent" class="form-control">
-                                                    <option value=true @if ($config->get('dissent') === true) selected @endif>사용함</option>
-                                                    <option value=false @if ($config->get('dissent') === false) selected @endif>사용안함</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+{{--                                    <div class="row">--}}
+{{--                                        <div class="col-sm-6">--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <div class="clearfix">--}}
+{{--                                                    <label>추천</label>--}}
+{{--                                                </div>--}}
+{{--                                                <select name="assent" class="form-control">--}}
+{{--                                                    <option value=true @if ($config->get('assent') === true) selected @endif>사용함</option>--}}
+{{--                                                    <option value=false @if ($config->get('assent') === false) selected @endif>사용안함</option>--}}
+{{--                                                </select>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-sm-6">--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <div class="clearfix">--}}
+{{--                                                    <label>비추천</label>--}}
+{{--                                                </div>--}}
+{{--                                                <select name="dissent" class="form-control">--}}
+{{--                                                    <option value=true @if ($config->get('dissent') === true) selected @endif>사용함</option>--}}
+{{--                                                    <option value=false @if ($config->get('dissent') === false) selected @endif>사용안함</option>--}}
+{{--                                                </select>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
 
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <div class="clearfix">
-                                                    <label>글 등록 알림 메일</label>
-                                                </div>
-                                                <input type="text" class="form-control" name="alertMail" value="{{ $config->get('alertMail') }}">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <div class="clearfix">
-                                                    <label>글 삭제</label>
-                                                </div>
-                                                <select name="deleteToTrash" class="form-control">
-                                                    <option value=true @if ($config->get('deleteToTrash') === true) selected @endif>휴지통으로 이동</option>
-                                                    <option value=false @if ($config->get('deleteToTrash') === false) selected @endif>영구 삭제</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+{{--                                    <div class="row">--}}
+{{--                                        <div class="col-sm-6">--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <div class="clearfix">--}}
+{{--                                                    <label>글 등록 알림 메일</label>--}}
+{{--                                                </div>--}}
+{{--                                                <input type="text" class="form-control" name="alertMail" value="{{ $config->get('alertMail') }}">--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-sm-6">--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <div class="clearfix">--}}
+{{--                                                    <label>글 삭제</label>--}}
+{{--                                                </div>--}}
+{{--                                                <select name="deleteToTrash" class="form-control">--}}
+{{--                                                    <option value=true @if ($config->get('deleteToTrash') === true) selected @endif>휴지통으로 이동</option>--}}
+{{--                                                    <option value=false @if ($config->get('deleteToTrash') === false) selected @endif>영구 삭제</option>--}}
+{{--                                                </select>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
                                 </div>
                             </div>
                         </div>
