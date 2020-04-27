@@ -23,11 +23,6 @@
     "xpressengine": {
       "title": "XeBlog",
       "component": {
-        "module/xe_blog@xe_blog": {
-          "class": "Xpressengine\\Plugins\\XeBlog\\Components\\Modules\\BlogModule\\BlogModule",
-          "name": "XeBlog 모듈",
-          "description": "XeBlog 모듈"
-        },
         "widget/xe_blog@xe_blog": {
           "class": "Xpressengine\\Plugins\\XeBlog\\Components\\Widgets\\BlogWidget\\BlogWidget",
           "name": "XeBlog 위젯",
