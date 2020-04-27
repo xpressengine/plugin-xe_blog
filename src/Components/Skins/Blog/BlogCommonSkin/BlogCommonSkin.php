@@ -9,13 +9,19 @@ class BlogCommonSkin extends GenericSkin
 {
     protected static $path = 'xe_blog/src/Components/Skins/Blog/BlogCommonSkin';
     
-    public function show($view)
+    public function render()
     {
         \XeFrontend::css([
+            self::asset('css/bootstrap.css'),
             self::asset('css/boldjournal-widget.css'),
-            self::asset('css/widget-xe-blog-board.css')            
+            self::asset('css/widget-xe-blog-board.css')
         ])->load();
+        
+        return parent::render();
+    }
 
+    public function show($view)
+    {
         $data = $this->data;
 
         $blog = $this->data['blog'];
