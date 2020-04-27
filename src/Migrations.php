@@ -71,11 +71,11 @@ class Migrations
         Schema::create(self::META_TABLE_NAME, function (Blueprint $table) {
             $table->string('id', 36);
 
-            $table->string('blog_id', 36)->primary();
+            $table->string('blog_id', 36);
             $table->string('type');
             $table->text('meta_data');
 
-            $table->index('blog_id');
+            $table->index(['blog_id', 'type']);
         });
     }
 
