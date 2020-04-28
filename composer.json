@@ -43,7 +43,8 @@
     }
   },
   "require": {
-    "xpressengine/xpressengine": "~3.0.9"
+    "xpressengine/xpressengine": "~3.0.9",
+    "xpressengine-plugin/xe_blockeditor": "*"
   },
   "autoload": {
     "psr-4": {
