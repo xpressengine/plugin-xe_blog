@@ -73,7 +73,7 @@
 {{--                                        </div>--}}
 {{--                                    </div>--}}
 
-{{--                                    <div class="row">--}}
+                                    <div class="row">
 {{--                                        <div class="col-sm-6">--}}
 {{--                                            <div class="form-group">--}}
 {{--                                                <div class="clearfix">--}}
@@ -82,18 +82,18 @@
 {{--                                                <input type="text" class="form-control" name="alertMail" value="{{ $config->get('alertMail') }}">--}}
 {{--                                            </div>--}}
 {{--                                        </div>--}}
-{{--                                        <div class="col-sm-6">--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <div class="clearfix">--}}
-{{--                                                    <label>글 삭제</label>--}}
-{{--                                                </div>--}}
-{{--                                                <select name="deleteToTrash" class="form-control">--}}
-{{--                                                    <option value=true @if ($config->get('deleteToTrash') === true) selected @endif>휴지통으로 이동</option>--}}
-{{--                                                    <option value=false @if ($config->get('deleteToTrash') === false) selected @endif>영구 삭제</option>--}}
-{{--                                                </select>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <div class="clearfix">
+                                                    <label>글 삭제</label>
+                                                </div>
+                                                <select name="deleteToTrash" class="form-control">
+                                                    <option value=true @if ($config->get('deleteToTrash') === true) selected @endif>휴지통으로 이동</option>
+                                                    <option value=false @if ($config->get('deleteToTrash') === false) selected @endif>영구 삭제</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
