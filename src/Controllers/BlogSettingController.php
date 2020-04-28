@@ -245,7 +245,7 @@ class BlogSettingController extends Controller
 
         $taxonomyItem = $this->taxonomyHandler->createTaxonomy($taxonomyAttribute);
 
-        return redirect()->route('manage.category.show', ['id' => $taxonomyItem->id]);
+        return redirect()->route('blog.setting.edit_taxonomy_config', ['taxonomyId' => $taxonomyItem->id]);
     }
 
     public function updatePermission(Request $request, BlogPermissionHandler $blogPermissionHandler)
