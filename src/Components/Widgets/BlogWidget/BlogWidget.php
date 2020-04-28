@@ -9,7 +9,7 @@ use Xpressengine\Widget\AbstractWidget;
 
 class BlogWidget extends AbstractWidget
 {
-    const DEFAULT_PER_PAGE = 5;
+    const DEFAULT_PER_PAGE = 12;
 
     protected static $path = 'xe_blog/src/Components/Widgets/BlogWidget';
 
@@ -24,8 +24,8 @@ class BlogWidget extends AbstractWidget
 
         $widgetSetting = $this->setting();
         $perPage = self::DEFAULT_PER_PAGE;
-        if (isset($widgetSetting['perPage']) === true && $widgetSetting['perPage'] !== '' && $widgetSetting['perPage'] !== null) {
-            $perPage = $widgetSetting['perPage'];
+        if (isset($widgetSetting['blogPerPage']) === true && $widgetSetting['blogPerPage'] !== '' && $widgetSetting['blogPerPage'] !== null) {
+            $perPage = $widgetSetting['blogPerPage'];
         }
 
         $blogs = $blogService->getItems(['perPage' => $perPage]);
