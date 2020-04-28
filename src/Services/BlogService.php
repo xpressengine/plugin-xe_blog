@@ -64,8 +64,11 @@ class BlogService
     public function getItem($id, $force = false)
     {
         $query = Blog::division(Plugin::getId());
+
         if ($force === true) {
             $query = $query->withTrashed();
+        } else {
+            $query = $query->visible();
         }
 
         return $query->find($id);

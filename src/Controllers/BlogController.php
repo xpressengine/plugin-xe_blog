@@ -109,7 +109,10 @@ class BlogController extends Controller
 
     public function showId(Request $request, $blogId)
     {
-        $blog = $this->blogService->getItem($blogId);
+        $blog = $this->blogService->getItem(
+            $blogId,
+            $this->checkAllowPermission(BlogPermissionHandler::ACTION_MANAGE)
+        );
         if ($blog === null) {
             throw new NotFoundBlogException;
         }
@@ -130,7 +133,14 @@ class BlogController extends Controller
             throw new NotFoundBlogException;
         }
 
-        $blog = $this->blogService->getItem($blogSlug->target_id);
+        $blog = $this->blogService->getItem(
+            $blogSlug->target_id,
+            $this->checkAllowPermission(BlogPermissionHandler::ACTION_MANAGE)
+        );
+        if ($blog === null) {
+            throw new NotFoundBlogException;
+        }
+        
         $blog->setCanonical(route('blog.show_slug', ['slug' => $slug]));
 
         return $this->show($request, $blog);
