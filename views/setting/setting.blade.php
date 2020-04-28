@@ -122,15 +122,41 @@
                 </div>
 
                 <div class="panel">
-                    <ul>
+                    <ul class="tx-list">
                         @foreach ($taxonomies as $taxonomy)
-                            <li><a href="{{ route('blog.setting.edit_taxonomy_config', ['taxonomyId' => $taxonomy->id]) }}">{{ xe_trans($taxonomy->name) }}</a></li>
+                            <li>  <a href="{{ route('blog.setting.edit_taxonomy_config', ['taxonomyId' => $taxonomy->id]) }}"><i class="icon-arrow xi-angle-right-thin"></i>{{ xe_trans($taxonomy->name) }}</a></li>
                         @endforeach
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+    
+    <style>
+        .tx-list{
+            margin: 0;
+            padding: 0;
+        }
+        .tx-list li{
+            list-style: none;
+            border-bottom: 1px solid #eee;
+        }
+        .tx-list li a i.icon-arrow{
+            font-size: 16px;
+            color: #0f74a8;
+            padding-right: 8px;
+        }
+        .tx-list li a{
+            display: block;
+            padding: 15px;
+            width: 100%;
+            font-size: 18px;
+        }
+        .tx-list li a:hover{
+            text-decoration: none;
+            background-color: #f8fafd;
+        }
+    </style>
 @elseif ($type === 'skin')
     <div class="row">
         <div class="col-sm-12">
