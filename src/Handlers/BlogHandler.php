@@ -48,7 +48,7 @@ class BlogHandler extends DocumentHandler implements Searchable, Jsonable, Order
         return parent::add($attributes);
     }
 
-    public function getItems($query, $attributes)
+    public function getItems($query, array $attributes)
     {
         if (isset($attributes['force']) === false || $attributes['force'] === false) {
             $query = $query->visible();
