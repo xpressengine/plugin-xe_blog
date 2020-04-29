@@ -1,6 +1,6 @@
 {
   "name": "xpressengine-plugin/xe_blog",
-  "description": "This Package is Xpressengine Plugin - XeBlog plugin.",
+  "description": "WP의 Gutenberg를 사용한 블록에디터를 활용하여 멋진 글을 발행하는 경험",
   "keywords": [
     "xpressengine",
     "plugin"
