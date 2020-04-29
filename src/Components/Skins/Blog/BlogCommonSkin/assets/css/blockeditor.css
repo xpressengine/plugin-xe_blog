@@ -1,0 +1,939 @@
+@charset "UTF-8";
+/* ellipsis */
+/* break point, bootstrap 4.4.1 기준 */
+/* xe-col-lg- */
+/* xe-col-md- */
+/* xe-col-sm- */
+/* xe-col-xs- */
+/* webfont, font-weight: 100 은 임시 삭제 */
+@import 'https://fonts.googleapis.com/earlyaccess/nanummyeongjo.css';
+@font-face {
+  font-family: 'Spoqa Han Sans';
+  font-weight: 300;
+  src: local("Spoqa Han Sans Light"), url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansLight.woff2) format("woff2"), url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansLight.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Spoqa Han Sans';
+  font-weight: 400;
+  src: local("Spoqa Han Sans Regular"), url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansRegular.woff2) format("woff2"), url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansRegular.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Spoqa Han Sans';
+  font-weight: 700;
+  src: local("Spoqa Han Sans Bold"), url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansBold.woff2) format("woff2"), url(//cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@01ff0283e4f36e159ffbf744b36e16ef742da6d8/Subset/SpoqaHanSans/SpoqaHanSansBold.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 300;
+  src: local("NotoSansKR-Light"), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.woff2) format("woff2"), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Light.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 400;
+  src: local("NotoSansKR-Regular"), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2) format("woff2"), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 500;
+  src: local("NotoSansKR-Medium"), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff2) format("woff2"), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Medium.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 700;
+  src: local("NotoSansKR-Bold"), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff2) format("woff2"), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Bold.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 900;
+  src: local("NotoSansKR-Black"), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.woff2) format("woff2"), url(//fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Black.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local("Roboto Light"), local("Roboto-Light"), url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmSU5fBBc4.woff2) format("woff2"), url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmSU5fBBc-.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local("Roboto"), local("Roboto-Regular"), url(//fonts.gstatic.com/s/roboto/v19/KFOmCnqEu92Fr1Mu4mxK.woff2) format("woff2"), url(//fonts.gstatic.com/s/roboto/v19/KFOmCnqEu92Fr1Mu4mxM.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: local("Roboto Medium"), local("Roboto-Medium"), url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmEU9fBBc4.woff2) format("woff2"), url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmEU9fBBc-.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local("Roboto Bold"), local("Roboto-Bold"), url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmWUlfBBc4.woff2) format("woff2"), url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmWUlfBBc-.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 900;
+  src: local("Roboto Black"), local("Roboto-Black"), url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmYUtfBBc4.woff2) format("woff2"), url(//fonts.gstatic.com/s/roboto/v19/KFOlCnqEu92Fr1MmYUtfBBc-.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Avenir LT Std';
+  font-weight: 300;
+  font-style: normal;
+  src: local("Avenir LT Std 45 Book"), url("../src/fonts/AvenirLTStd/AvenirLTStd-Book.woff2") format("woff2"), url("../src/fonts/AvenirLTStd/AvenirLTStd-Book.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Avenir LT Std';
+  font-weight: 400;
+  font-style: normal;
+  src: local("Avenir LT Std 55 Roman"), url("../src/fonts/AvenirLTStd/AvenirLTStd-Roman.woff2") format("woff2"), url("../src/fonts/AvenirLTStd/AvenirLTStd-Roman.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Avenir LT Std';
+  font-weight: 500;
+  font-style: normal;
+  src: local("Avenir LT Std 65 Medium"), url("../src/fonts/AvenirLTStd/AvenirLTStd-Medium.woff2") format("woff2"), url("../src/fonts/AvenirLTStd/AvenirLTStd-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Avenir LT Std';
+  font-weight: 700;
+  font-style: normal;
+  src: local("Avenir LT Std 85 Heavy"), url("../src/fonts/AvenirLTStd/AvenirLTStd-Heavy.woff2") format("woff2"), url("../src/fonts/AvenirLTStd/AvenirLTStd-Heavy.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Avenir LT Std';
+  font-weight: 900;
+  font-style: normal;
+  src: local("Avenir LT Std 95 Black"), url("../src/fonts/AvenirLTStd/AvenirLTStd-Black.woff2") format("woff2"), url("../src/fonts/AvenirLTStd/AvenirLTStd-Black.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'LarishAlte-Semibold';
+  font-weight: 200;
+  src: url("src/fonts/LarishAlte/LarishAlte-Semibold.woff2") format("woff2"), url("src/fonts/LarishAlte/LarishAlte-Semibold.woff") format("woff");
+}
+
+.xe-blockeditor__editor .edit-post-editor-regions__content {
+  font-family: 'Spoqa Han Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.xe-blockeditor__editor a, .xe-blockeditor__editor div {
+  outline: none;
+}
+
+.xe-blockeditor__editor .block-editor-block-list__block[data-type="core/paragraph"] p {
+  min-height: auto;
+  margin-top: 0;
+  margin-bottom: 28px;
+  line-height: inherit;
+  font-weight: 300;
+}
+
+@media (min-width: 992px) {
+  .xe-blockeditor__editor .edit-post-editor-regions__content {
+    font-size: 18px;
+    line-height: 2;
+  }
+}
+
+.components-panel__header.edit-post-sidebar__panel-tabs ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xe-blockeditor__editor .block-editor-rich-text__editable a {
+  text-decoration: underline;
+  color: #ff4300;
+}
+
+.xe-blockeditor__editor .block-editor-rich-text__editable a:hover {
+  text-decoration: underline;
+  color: #ff4300;
+}
+
+.xe-blockeditor__editor .wp-block-columns {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.xe-blockeditor__editor .wp-block-columns > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/column"] {
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.xe-blockeditor__editor .wp-block-columns .block-editor-inner-blocks > .block-editor-block-list__layout {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.xe-blockeditor__editor .wp-block-columns .wp-block-column:last-child .wp-block-image {
+  margin-bottom: 12px;
+}
+
+@media (min-width: 992px) {
+  .xe-blockeditor__editor .wp-block-columns {
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+  }
+  .xe-blockeditor__editor .wp-block-columns > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/column"] {
+    -ms-flex-preferred-size: calc(50% - (12px));
+        flex-basis: calc(50% - (12px));
+  }
+  .xe-blockeditor__editor .wp-block-columns > .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="core/column"]:not(:first-child) {
+    margin-left: 12px;
+  }
+  .xe-blockeditor__editor .wp-block-columns .wp-block-image {
+    margin-bottom: 32px;
+  }
+}
+
+.xe-blockeditor__editor .wp-block-image {
+  margin-bottom: 40px;
+}
+
+.xe-blockeditor__editor .wp-block-image figcaption {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #989898;
+}
+
+@media (min-width: 992px) {
+  .xe-blockeditor__editor .wp-block-image {
+    margin-bottom: 60px;
+  }
+  .xe-blockeditor__editor .wp-block-image figcaption {
+    font-size: 14px;
+    line-height: 1.43;
+  }
+}
+
+.xe-blockeditor__editor h1, .xe-blockeditor__editor h2, .xe-blockeditor__editor h3, .xe-blockeditor__editor h4, .xe-blockeditor__editor h5, .xe-blockeditor__editor h6 {
+  font-weight: 500;
+}
+
+.xe-blockeditor__editor h2 {
+  margin-bottom: 40px;
+  font-size: 18px;
+  line-height: 1.44;
+  letter-spacing: -0.0277em;
+}
+
+.xe-blockeditor__editor h3 {
+  margin-bottom: 20px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .xe-blockeditor__editor h2 {
+    margin-bottom: 60px;
+    font-size: 24px;
+    line-height: 1.5;
+    letter-spacing: -0.0208em;
+  }
+  .xe-blockeditor__editor h3 {
+    margin-bottom: 30px;
+    font-size: 18px;
+    line-height: 1.78;
+  }
+}
+
+.components-notice.is-error {
+  display: none;
+}
+
+.block-editor-block-list__layout .block-editor-block-list__block .block-editor-block-drop-zone {
+  bottom: -3px;
+  margin: 0 14px;
+  top: -4px;
+}
+
+/* Width of the editor column */
+.xe-blockeditor__editor .editor-post-title__block,
+.xe-blockeditor__editor .block-editor-default-block-appender,
+.xe-blockeditor__editor .block-editor-block-list__block {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1056px;
+  /* width of page (1034px) plus 2 x 6px padding */
+}
+
+.xe-blockeditor__editor .edit-post-text-editor {
+  margin-left: 20px;
+  margin-right: 0;
+}
+
+.xe-blockeditor__editor .wp-block[data-align=full] {
+  max-width: none;
+}
+
+.xe-blockeditor__editor .block-editor-block-list__layout {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.new-tag-input-wrapper {
+  padding: 2px !important;
+}
+
+.new-tag-input-wrapper input {
+  padding: 8px 6px !important;
+}
+
+.gutenberg__content .xe-content-xe_blog {
+  font-family: 'Spoqa Han Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.gutenberg__content p {
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+@media (min-width: 992px) {
+  .gutenberg__content .xe-content-xe_blog {
+    font-size: 18px;
+    line-height: 2;
+  }
+}
+
+.gutenberg__content p a {
+  text-decoration: underline;
+  color: #ff4300;
+}
+
+.gutenberg__content p a:hover {
+  color: #ff4300;
+  text-decoration: underline;
+}
+
+.gutenberg__content .wp-block-columns {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.gutenberg__content .wp-block-columns .wp-block-column:last-child .wp-block-image {
+  margin-bottom: 12px;
+}
+
+.gutenberg__content .wp-block-column {
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  margin: 0;
+}
+
+@media (min-width: 992px) {
+  .gutenberg__content .wp-block-columns {
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+  }
+  .gutenberg__content .wp-block-columns .wp-block-column .wp-block-image {
+    margin-bottom: 32px;
+  }
+  .gutenberg__content .wp-block-columns .wp-block-column:last-child .wp-block-image {
+    margin-bottom: 32px;
+  }
+  .gutenberg__content .wp-block-column:not(:first-child) {
+    margin-left: 12px;
+  }
+}
+
+.gutenberg__content .wp-block-image {
+  margin-bottom: 40px;
+}
+
+.gutenberg__content .wp-block-image img {
+  height: auto;
+}
+
+.gutenberg__content .wp-block-image figcaption {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #989898;
+}
+
+@media (min-width: 992px) {
+  .gutenberg__content .wp-block-image {
+    margin-bottom: 60px;
+  }
+  .gutenberg__content .wp-block-image figcaption {
+    font-size: 14px;
+    line-height: 1.43;
+  }
+}
+
+.gutenberg__content h1, .gutenberg__content h2, .gutenberg__content h3, .gutenberg__content h4, .gutenberg__content h5, .gutenberg__content h6 {
+  font-weight: 500;
+}
+
+.gutenberg__content h2 {
+  margin-bottom: 40px;
+  font-size: 18px;
+  line-height: 1.44;
+  letter-spacing: -0.0277em;
+}
+
+.gutenberg__content h3 {
+  margin-bottom: 20px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+@media (min-width: 992px) {
+  .gutenberg__content h2 {
+    margin-bottom: 60px;
+    font-size: 24px;
+    line-height: 1.5;
+    letter-spacing: -0.0208em;
+  }
+  .gutenberg__content h3 {
+    margin-bottom: 30px;
+    font-size: 18px;
+    line-height: 1.78;
+  }
+}
+
+.gutenberg__content .is-style-block-editor__text-lead,
+.xe-blockeditor__editor .is-style-block-editor__text-lead {
+  position: relative;
+  margin-bottom: 40px;
+  padding-top: 26px;
+  font-family: 'Nanum Myeongjo', sans-serif;
+  font-size: 18px;
+  line-height: 1.78;
+  color: #9f845b;
+}
+
+.gutenberg__content .is-style-block-editor__text-lead:before,
+.xe-blockeditor__editor .is-style-block-editor__text-lead:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  background-color: #9f845b;
+}
+
+.gutenberg__content .is-style-block-editor__text-lead:after,
+.xe-blockeditor__editor .is-style-block-editor__text-lead:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 14px;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  background-color: #9f845b;
+}
+
+.gutenberg__content .is-style-block-editor__text-quote,
+.xe-blockeditor__editor .is-style-block-editor__text-quote {
+  padding-left: 18px;
+  border-left: 2px solid #a48355;
+  font-size: 18px;
+  line-height: 1.44;
+  letter-spacing: -0.0277em;
+  color: #a48355;
+}
+
+.gutenberg__content .wp-block-separator.is-style-block-editor__text-separator,
+.xe-blockeditor__editor .wp-block-separator.is-style-block-editor__text-separator {
+  max-width: 100%;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  border-color: #d8d8d8;
+}
+
+.gutenberg__content .is-style-block-editor__text-type--subtitle em,
+.xe-blockeditor__editor .is-style-block-editor__text-type--subtitle em {
+  font-family: 'LarishAlte-Semibold', sans-serif;
+  font-style: normal;
+  font-size: 0.8em;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: 0.2em;
+  color: #989898;
+}
+
+.gutenberg__content .wp-block-group.is-style-block-editor__group-type--tip,
+.xe-blockeditor__editor .wp-block-group.is-style-block-editor__group-type--tip {
+  padding: 40px 40px 12px;
+}
+
+.gutenberg__content .wp-block-group.is-style-block-editor__group-type--tip p,
+.xe-blockeditor__editor .wp-block-group.is-style-block-editor__group-type--tip p {
+  color: #989898;
+}
+
+.xe-blockeditor__editor .block-editor-block-list__block[data-type="core/paragraph"] .is-style-block-editor__text-lead {
+  margin-bottom: 40px;
+  padding-top: 26px;
+  font-size: 18px;
+  line-height: 1.78;
+}
+
+.xe-blockeditor__editor .wp-block-group.is-style-block-editor__group-type--tip {
+  padding: 40px 18px;
+}
+
+@media (min-width: 992px) {
+  .gutenberg__content .is-style-block-editor__text-lead,
+  .xe-blockeditor__editor .is-style-block-editor__text-lead {
+    margin-bottom: 60px;
+    font-size: 28px;
+    line-height: 1.57;
+  }
+  .gutenberg__content .is-style-block-editor__text-indent,
+  .xe-blockeditor__editor .is-style-block-editor__text-indent {
+    margin-left: 8.33333%;
+    margin-right: 8.33333%;
+  }
+  .gutenberg__content .is-style-block-editor__text-quote,
+  .xe-blockeditor__editor .is-style-block-editor__text-quote {
+    padding-left: 24px;
+    font-size: 30px;
+    line-height: 1.6;
+    letter-spacing: -0.0333em;
+    color: #a48355;
+  }
+  .gutenberg__content .is-style-block-editor__text-quote.block-editor__text-indent,
+  .xe-blockeditor__editor .is-style-block-editor__text-quote.block-editor__text-indent {
+    margin-left: calc(8.33333% - 26px);
+  }
+  .xe-blockeditor__editor .block-editor-block-list__block[data-type="core/paragraph"] .is-style-block-editor__text-lead {
+    margin-bottom: 60px;
+    font-size: 28px;
+    line-height: 1.57;
+  }
+}
+
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-lead,
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-lead--indent,
+.xe-blockeditor__editor .is-style-boldjournal__text-lead,
+.xe-blockeditor__editor .is-style-boldjournal__text-lead--indent {
+  position: relative;
+  margin-bottom: 40px;
+  padding-top: 26px;
+  font-family: 'Nanum Myeongjo', sans-serif;
+  font-size: 18px;
+  line-height: 1.78;
+  color: #9f845b;
+}
+
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-lead:before,
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-lead--indent:before,
+.xe-blockeditor__editor .is-style-boldjournal__text-lead:before,
+.xe-blockeditor__editor .is-style-boldjournal__text-lead--indent:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  background-color: #9f845b;
+}
+
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-lead:after,
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-lead--indent:after,
+.xe-blockeditor__editor .is-style-boldjournal__text-lead:after,
+.xe-blockeditor__editor .is-style-boldjournal__text-lead--indent:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 14px;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  background-color: #9f845b;
+}
+
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote,
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--indent,
+.xe-blockeditor__editor .is-style-boldjournal__text-quote,
+.xe-blockeditor__editor .is-style-boldjournal__text-quote--indent {
+  padding-left: 18px;
+  border-left: 2px solid #a48355;
+  font-size: 18px;
+  line-height: 1.44;
+  letter-spacing: -0.0277em;
+  color: #a48355;
+}
+
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer,
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer-indent,
+.xe-blockeditor__editor .is-style-boldjournal__text-quote--writer,
+.xe-blockeditor__editor .is-style-boldjournal__text-quote--writer-indent {
+  position: relative;
+  margin-top: 40px;
+  padding: 10px 0 0 0;
+  border-left: 0 none;
+  font-size: 16px;
+  line-height: 1.75;
+  letter-spacing: 0;
+  color: #000;
+}
+
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer:before,
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer-indent:before,
+.xe-blockeditor__editor .is-style-boldjournal__text-quote--writer:before,
+.xe-blockeditor__editor .is-style-boldjournal__text-quote--writer-indent:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120px;
+  height: 4px;
+  background-color: #181307;
+}
+
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer p,
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer-indent p,
+.xe-blockeditor__editor .is-style-boldjournal__text-quote--writer p,
+.xe-blockeditor__editor .is-style-boldjournal__text-quote--writer-indent p {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer cite,
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer-indent cite,
+.xe-blockeditor__editor .is-style-boldjournal__text-quote--writer cite,
+.xe-blockeditor__editor .is-style-boldjournal__text-quote--writer-indent cite {
+  font-size: 14px;
+  line-height: 1.71;
+  color: #666;
+}
+
+.theme-boldjournal .gutenberg__content .wp-block-separator.is-style-boldjournal__text-separator, .theme-boldjournal .gutenberg__content .wp-block-separator.is-style-boldjournal__text-separator--indent,
+.xe-blockeditor__editor .wp-block-separator.is-style-boldjournal__text-separator,
+.xe-blockeditor__editor .wp-block-separator.is-style-boldjournal__text-separator--indent {
+  max-width: 100%;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  border-color: #d8d8d8;
+}
+
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-type--subtitle em,
+.theme-boldjournal .gutenberg__content .is-style-boldjournal__text-type--subtitle-indent em,
+.xe-blockeditor__editor .is-style-boldjournal__text-type--subtitle em,
+.xe-blockeditor__editor .is-style-boldjournal__text-type--subtitle-indent em {
+  font-family: 'LarishAlte-Semibold', sans-serif;
+  font-style: normal;
+  font-size: 0.8em;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: 0.2em;
+  color: #989898;
+}
+
+.theme-boldjournal .gutenberg__content .wp-block-group.is-style-boldjournal__group-type--tip, .theme-boldjournal .gutenberg__content .wp-block-group.is-style-boldjournal__group-type--tip-indent,
+.xe-blockeditor__editor .wp-block-group.is-style-boldjournal__group-type--tip,
+.xe-blockeditor__editor .wp-block-group.is-style-boldjournal__group-type--tip-indent {
+  margin-bottom: 28px;
+  padding: 40px 40px 12px;
+}
+
+.theme-boldjournal .gutenberg__content .wp-block-group.is-style-boldjournal__group-type--tip p, .theme-boldjournal .gutenberg__content .wp-block-group.is-style-boldjournal__group-type--tip-indent p,
+.xe-blockeditor__editor .wp-block-group.is-style-boldjournal__group-type--tip p,
+.xe-blockeditor__editor .wp-block-group.is-style-boldjournal__group-type--tip-indent p {
+  color: #989898;
+}
+
+.xe-blockeditor__editor .block-editor-block-list__block[data-type="core/paragraph"] .is-style-boldjournal__text-lead,
+.xe-blockeditor__editor .block-editor-block-list__block[data-type="core/paragraph"] .is-style-boldjournal__text-lead--indent {
+  margin-bottom: 40px;
+  padding-top: 26px;
+  font-size: 18px;
+  line-height: 1.78;
+}
+
+.xe-blockeditor__editor .wp-block-group.is-style-boldjournal__group-type--tip, .xe-blockeditor__editor .wp-block-group.is-style-boldjournal__group-type--tip-indent {
+  padding: 40px 18px;
+}
+
+.xe-blockeditor__editor .is-style-boldjournal__text-quote--writer .wp-block-quote__citation,
+.xe-blockeditor__editor .is-style-boldjournal__text-quote--writer-indent .wp-block-quote__citation {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.71;
+  color: #666;
+}
+
+@media (min-width: 992px) {
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-lead,
+  .xe-blockeditor__editor .is-style-boldjournal__text-lead {
+    margin-bottom: 60px;
+    font-size: 28px;
+    line-height: 1.57;
+  }
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-lead--indent,
+  .xe-blockeditor__editor .is-style-boldjournal__text-lead--indent {
+    margin-left: 8.33333%;
+    margin-right: 8.33333%;
+    margin-bottom: 60px;
+    font-size: 28px;
+    line-height: 1.57;
+  }
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-indent,
+  .xe-blockeditor__editor .is-style-boldjournal__text-indent {
+    margin-left: 8.33333%;
+    margin-right: 8.33333%;
+    margin-bottom: 60px;
+  }
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote {
+    margin-left: -26px;
+    padding-left: 24px;
+    font-size: 30px;
+    line-height: 1.6;
+    letter-spacing: -0.0333em;
+    color: #a48355;
+  }
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--indent,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--indent {
+    margin-left: calc(8.33333% - 26px);
+    padding-left: 24px;
+    font-size: 30px;
+    line-height: 1.6;
+    letter-spacing: -0.0333em;
+    color: #a48355;
+  }
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer,
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer-indent,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--writer,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--writer-indent {
+    position: relative;
+    margin-top: 56px;
+    padding: 30px 0 0 0;
+    border-left: 0 none;
+    font-size: 18px;
+    line-height: 1.78;
+    letter-spacing: 0;
+    color: #000;
+  }
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer:before,
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer-indent:before,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--writer:before,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--writer-indent:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 164px;
+    height: 4px;
+    background-color: #181307;
+  }
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer p,
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer-indent p,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--writer p,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--writer-indent p {
+    margin-bottom: 16px;
+  }
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer cite,
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer-indent cite,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--writer cite,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--writer-indent cite {
+    font-size: 16px;
+    line-height: 1.88;
+  }
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-quote--writer-indent,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--writer-indent {
+    margin-left: 8.33333%;
+    margin-right: 8.33333%;
+  }
+  .theme-boldjournal .gutenberg__content .wp-block-separator.is-style-boldjournal__text-separator--indent,
+  .xe-blockeditor__editor .wp-block-separator.is-style-boldjournal__text-separator--indent {
+    margin-left: 8.33333%;
+    margin-right: 8.33333%;
+  }
+  .theme-boldjournal .gutenberg__content .is-style-boldjournal__text-type--subtitle-indent,
+  .xe-blockeditor__editor .is-style-boldjournal__text-type--subtitle-indent {
+    margin-left: 8.33333%;
+    margin-right: 8.33333%;
+  }
+  .theme-boldjournal .gutenberg__content .wp-block-group.is-style-boldjournal__group-type--tip-indent,
+  .xe-blockeditor__editor .wp-block-group.is-style-boldjournal__group-type--tip-indent {
+    margin-left: 8.3333%;
+    margin-right: 8.3333%;
+  }
+  .xe-blockeditor__editor .block-editor-block-list__block[data-type="core/paragraph"] .is-style-boldjournal__text-lead {
+    margin-bottom: 60px;
+    font-size: 28px;
+    line-height: 1.57;
+  }
+  .xe-blockeditor__editor .block-editor-block-list__block[data-type="core/paragraph"] .is-style-boldjournal__text-lead--indent {
+    margin-left: 8.33333%;
+    margin-right: 8.33333%;
+    margin-bottom: 60px;
+    font-size: 28px;
+    line-height: 1.57;
+  }
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--writer .wp-block-quote__citation,
+  .xe-blockeditor__editor .is-style-boldjournal__text-quote--writer-indent .wp-block-quote__citation {
+    font-size: 16px;
+    line-height: 1.88;
+  }
+}
+
+.gutenberg__editor .block-editor-block-types-list__list-item {
+  width: 30%;
+}
+
+.gutenberg__editor .components-drop-zone__provider,
+.gutenberg__editor .components-navigate-regions {
+  height: auto;
+  position: static;
+}
+
+.gutenberg__editor .edit-post-layout__content {
+  position: static;
+  margin-left: 0;
+  min-height: calc(250px - 50px);
+  height: auto;
+  overflow-y: auto;
+}
+
+.gutenberg__editor .edit-post-layout {
+  height: auto;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.gutenberg__editor .edit-post-pinned-plugins {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.gutenberg__editor .edit-post-visual-editor {
+  padding-top: 25px;
+  padding-bottom: 75px;
+  height: auto;
+}
+
+@media (min-width: 600px) {
+  .gutenberg__editor .edit-post-header {
+    position: static;
+    top: 0;
+  }
+  .gutenberg__editor .edit-post-layout {
+    padding-top: 0;
+  }
+  .edit-post-sidebar > .components-panel {
+    overflow: auto;
+  }
+  .block-editor__container {
+    min-height: calc(100vh - 50px);
+    bottom: 50px;
+  }
+  .edit-post-editor-regions__body {
+    height: calc(100vh - 132px);
+  }
+}
+
+.edit-post-layout__metaboxes {
+  display: none;
+}
+
+.gutenberg__editor.fixed-height .components-drop-zone__provider,
+.gutenberg__editor.fixed-height .components-navigate-regions {
+  height: 100%;
+}
+
+.gutenberg__editor.fixed-height .edit-post-layout__content {
+  height: calc(100% - 56px);
+}
+
+.gutenberg__editor.fixed-height .edit-post-layout {
+  height: 100%;
+}
+
+.gutenberg__editor.fixed-height .editor-writing-flow {
+  height: auto;
+}
+
+.gutenberg__content .wp-block-columns {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+/**
+ * Colors
+ */
+/**
+ * Colors
+ */
+/**
+ * Often re-used variables
+ */
+.theme-boldjournal .gutenberg__content {
+  word-break: break-all;
+}
+
+.theme-boldjournal .gutenberg__content .alignfull {
+  max-width: none;
+  width: 100vw;
+  left: 50%;
+  margin-left: -50vw;
+  bottom: 0;
+}
+
+.theme-boldjournal .embed-responsive {
+  position: relative;
+  width: 100%;
+  margin-bottom: 28px;
+  padding-top: 56.6%;
+}
+
+.theme-boldjournal .embed-responsive iframe {
+  position: absolute;
+  top: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/*# sourceMappingURL=blockeditor.css.map */

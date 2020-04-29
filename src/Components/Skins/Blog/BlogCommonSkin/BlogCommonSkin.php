@@ -14,7 +14,9 @@ class BlogCommonSkin extends GenericSkin
         \XeFrontend::css([
             self::asset('css/bootstrap.css'),
             self::asset('css/boldjournal-widget.css'),
-            self::asset('css/widget-xe-blog-board.css')
+            self::asset('css/widget-xe-blog-board.css'),
+            self::asset('css/blockeditor.css'),
+            self::asset('css/xe-blockeditor-custom.css'),
         ])->load();
         
         return parent::render();
