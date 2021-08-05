@@ -3,6 +3,7 @@
 namespace Xpressengine\Plugins\XeBlog;
 
 use Route;
+use Artisan;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use XeInterception;
 use Xpressengine\Document\DocumentHandler;
@@ -259,6 +260,9 @@ class Plugin extends AbstractPlugin
         /** @var Translator $trans */
         $trans = app('xe.translator');
         $trans->putFromLangDataSource('xe_blog', base_path('plugins/xe_blog/langs/lang.php'));
+        
+        // active required plugins
+        Artisan::call('plugin:activate', ['plugin' => 'xe_blockeditor']);
     }
 
     /**
