@@ -283,11 +283,19 @@ class Plugin extends AbstractPlugin
 
         /** @var BlogConfigHandler $configHandler */
         $configHandler = app('xe.blog.configHandler');
-        $configHandler->storeBlogConfig();
+        try {
+            $configHandler->storeBlogConfig();
+        } catch (\Exception $e) {
+            \Log::debug($e->getMessage());
+        }
 
         /** @var DocumentHandler $documentConfigHandler */
         $documentConfigHandler = app('xe.document');
-        $documentConfigHandler->createInstance(Plugin::getId(), ['instanceId' => Plugin::getId(), 'group' => Plugin::getId()]);
+        try {
+            $documentConfigHandler->createInstance(Plugin::getId(), ['instanceId' => Plugin::getId(), 'group' => Plugin::getId()]);
+        } catch (\Exception $e) {
+            \Log::debug($e->getMessage());
+        }
     }
 
     /**
