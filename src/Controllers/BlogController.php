@@ -159,7 +159,10 @@ class BlogController extends Controller
 
     public function edit(Request $request, $blogId)
     {
-        $blog = $this->blogService->getItem($blogId);
+        $blog = $this->blogService->getItem(
+            $blogId,
+            $this->checkAllowPermission(BlogPermissionHandler::ACTION_MANAGE)
+        );
 
         if ($this->blogService->checkItemPermission(
                 $blog,
@@ -180,7 +183,10 @@ class BlogController extends Controller
     public function update(Request $request)
     {
         $blogId = $request->get('blogId');
-        $blog = $this->blogService->getItem($blogId);
+        $blog = $this->blogService->getItem(
+            $blogId,
+            $this->checkAllowPermission(BlogPermissionHandler::ACTION_MANAGE)
+        );
 
         if ($this->blogService->checkItemPermission(
                 $blog,
