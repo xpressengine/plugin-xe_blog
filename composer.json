@@ -44,6 +44,7 @@
   },
   "require": {
     "xpressengine/xpressengine": "~3.0.9",
+    "xpressengine-plugin/banner": "*",
     "xpressengine-plugin/xe_blockeditor": "*"
   },
   "autoload": {
