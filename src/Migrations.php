@@ -72,7 +72,7 @@ class Migrations
             $table->string('id', 36);
 
             $table->string('blog_id', 36);
-            $table->string('type');
+            $table->string('type', 100);
             $table->text('meta_data');
 
             $table->index(['blog_id', 'type']);
@@ -128,8 +128,8 @@ class Migrations
 
             $table->string('target_id', 36);
             $table->string('instance_id', 36);
-            $table->string('slug');
-            $table->string('title');
+            $table->string('slug', 190);
+            $table->string('title', 190);
 
             $table->unique('slug');
             $table->index('title');
